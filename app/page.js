@@ -652,7 +652,7 @@ export default function Home() {
   setLoadingHooks(true);
   setHooksState(s => ({ ...s, result: "", liked: [] }));
   if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
-  else if (!isPremium) setGenerationsLeft((g) => g - 1);
+  else if (!isPremium) setGenerationsLeft((g) => Math.max(0, g - 1));
 
   // Récupérer le token session
   const { data: { session } } = await supabase.auth.getSession();
