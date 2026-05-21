@@ -36,7 +36,7 @@ const T = {
     hookExplain3: "Sans bon hook personne ne regarde. Avec un bon hook l'algorithme te pousse.",
     example: "Exemple", hookExample: "Je gagnais 1500€/mois. Voilà comment j'ai tout changé.",
     restart: "← Recommencer", sawAll: "Tu as tout vu !", liked: "Tu as liké", hooks: "hook",
-    likedHooks: "Tes hooks likés", savedHooks: "Tes hooks sauvegardés", noSavedHooks: "Aucun hook sauvegardé pour l'instant.",
+    likedHooks: "Tes hooks likés", savedHooks: "Tes sauvegardes", noSavedHooks: "Aucune sauvegarde pour l'instant.",
     pass: "👎 Passer", like: "❤️ Liker",
     swipe: "Glisse pour passer · Like pour garder", legende: "Légende", hashtags: "Hashtags",
     copy: "📋 Copier", copied: "✅ Copié !", niche: "Ta niche (ex: fitness, finance...)",
@@ -46,9 +46,11 @@ const T = {
     limitFree: "générations gratuites restantes aujourd'hui",
     limitConnected: "générations restantes aujourd'hui",
     noMore: "Tu as atteint ta limite du jour !",
-    noMoreSub: "Connecte-toi pour 10 générations/jour", upgrade: "Se connecter →",
+    noMoreSub: "Connecte-toi pour plus de générations", upgrade: "Se connecter →",
     savedTab: "💾 Sauvegardés", delete: "🗑️",
-    loginToSave: "Connecte-toi pour sauvegarder tes hooks likés !",
+    loginToSave: "Connecte-toi pour sauvegarder tes contenus !",
+    savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
+    saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
   },
   English: {
     subtitle: "Generate viral hooks for your videos in seconds ⚡",
@@ -64,7 +66,7 @@ const T = {
     hookExplain3: "No good hook means nobody watches. Good hook means the algorithm pushes you.",
     example: "Example", hookExample: "I was making $1500/month. Here is how I changed everything.",
     restart: "← Start over", sawAll: "You have seen them all!", liked: "You liked", hooks: "hook",
-    likedHooks: "Your liked hooks", savedHooks: "Your saved hooks", noSavedHooks: "No saved hooks yet.",
+    likedHooks: "Your liked hooks", savedHooks: "Your saves", noSavedHooks: "No saves yet.",
     pass: "👎 Pass", like: "❤️ Like",
     swipe: "Swipe to pass · Like to keep", legende: "Caption", hashtags: "Hashtags",
     copy: "📋 Copy", copied: "✅ Copied!", niche: "Your niche (e.g: fitness, finance...)",
@@ -72,10 +74,12 @@ const T = {
     strengths: "✅ Strengths", weaknesses: "❌ Weaknesses", improved: "🚀 Improved version",
     login: "Login", logout: "Logout",
     limitFree: "free generations left today", limitConnected: "generations left today",
-    noMore: "You have reached your daily limit!", noMoreSub: "Login for 10 generations/day",
+    noMore: "You have reached your daily limit!", noMoreSub: "Login for more generations",
     upgrade: "Login →",
     savedTab: "💾 Saved", delete: "🗑️",
-    loginToSave: "Login to save your liked hooks!",
+    loginToSave: "Login to save your content!",
+    savedLegendes: "Saved captions", savedIdees: "Saved ideas", savedHooksTitle: "Saved hooks",
+    saveSuccess: "✅ Saved!", saveBrief: "💾 Save brief", saveLegende: "💾 Save",
   },
   Español: {
     subtitle: "Genera hooks virales para tus videos en segundos ⚡",
@@ -91,7 +95,7 @@ const T = {
     hookExplain3: "Sin buen hook nadie mira. Con buen hook el algoritmo te impulsa.",
     example: "Ejemplo", hookExample: "Ganaba 1500 euros al mes. Asi cambie todo.",
     restart: "← Volver", sawAll: "Los has visto todos!", liked: "Te gustaron", hooks: "hook",
-    likedHooks: "Tus hooks favoritos", savedHooks: "Tus hooks guardados", noSavedHooks: "No hay hooks guardados aún.",
+    likedHooks: "Tus hooks favoritos", savedHooks: "Tus guardados", noSavedHooks: "No hay guardados aún.",
     pass: "👎 Pasar", like: "❤️ Me gusta",
     swipe: "Desliza para pasar · Like para guardar", legende: "Leyenda", hashtags: "Hashtags",
     copy: "📋 Copiar", copied: "✅ Copiado!", niche: "Tu nicho (ej: fitness, finanzas...)",
@@ -99,10 +103,12 @@ const T = {
     strengths: "✅ Puntos fuertes", weaknesses: "❌ Puntos debiles", improved: "🚀 Version mejorada",
     login: "Iniciar sesion", logout: "Cerrar sesion",
     limitFree: "generaciones gratuitas hoy", limitConnected: "generaciones restantes hoy",
-    noMore: "Has alcanzado tu limite diario!", noMoreSub: "Inicia sesion para 10 generaciones/dia",
+    noMore: "Has alcanzado tu limite diario!", noMoreSub: "Inicia sesion para mas generaciones",
     upgrade: "Iniciar sesion →",
     savedTab: "💾 Guardados", delete: "🗑️",
-    loginToSave: "Inicia sesion para guardar tus hooks favoritos!",
+    loginToSave: "Inicia sesion para guardar tu contenido!",
+    savedLegendes: "Leyendas guardadas", savedIdees: "Ideas guardadas", savedHooksTitle: "Hooks guardados",
+    saveSuccess: "✅ Guardado!", saveBrief: "💾 Guardar brief", saveLegende: "💾 Guardar",
   },
   Português: {
     subtitle: "Gere hooks virais para seus videos em segundos ⚡",
@@ -118,7 +124,7 @@ const T = {
     hookExplain3: "Sem bom hook ninguem assiste. Com bom hook o algoritmo te impulsiona.",
     example: "Exemplo", hookExample: "Eu ganhava R$1500/mes. Veja como mudei tudo.",
     restart: "← Recomecar", sawAll: "Voce viu todos!", liked: "Voce curtiu", hooks: "hook",
-    likedHooks: "Seus hooks curtidos", savedHooks: "Seus hooks salvos", noSavedHooks: "Nenhum hook salvo ainda.",
+    likedHooks: "Seus hooks curtidos", savedHooks: "Seus salvos", noSavedHooks: "Nenhum salvo ainda.",
     pass: "👎 Passar", like: "❤️ Curtir",
     swipe: "Deslize para passar · Curta para guardar", legende: "Legenda", hashtags: "Hashtags",
     copy: "📋 Copiar", copied: "✅ Copiado!", niche: "Seu nicho (ex: fitness, financas...)",
@@ -126,10 +132,12 @@ const T = {
     strengths: "✅ Pontos fortes", weaknesses: "❌ Pontos fracos", improved: "🚀 Versao melhorada",
     login: "Entrar", logout: "Sair",
     limitFree: "geracoes gratuitas restantes hoje", limitConnected: "geracoes restantes hoje",
-    noMore: "Voce atingiu seu limite diario!", noMoreSub: "Entre para 10 geracoes/dia",
+    noMore: "Voce atingiu seu limite diario!", noMoreSub: "Entre para mais geracoes",
     upgrade: "Entrar →",
     savedTab: "💾 Salvos", delete: "🗑️",
-    loginToSave: "Entre para salvar seus hooks curtidos!",
+    loginToSave: "Entre para salvar seu conteudo!",
+    savedLegendes: "Legendas salvas", savedIdees: "Ideias salvas", savedHooksTitle: "Hooks salvos",
+    saveSuccess: "✅ Salvo!", saveBrief: "💾 Salvar brief", saveLegende: "💾 Salvar",
   },
 };
 
@@ -205,7 +213,6 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   const [drag, setDrag] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [direction, setDirection] = useState(null);
-  const [saving, setSaving] = useState(false);
   const startX = useRef(null);
 
   const md = (e) => { startX.current = e.clientX; setDragging(true); };
@@ -216,15 +223,7 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
 
   const saveHookToSupabase = async (hookText) => {
     if (!user) return;
-    setSaving(true);
-    await supabase.from("liked_hooks").insert({
-      user_id: user.id,
-      hook: hookText,
-      platform,
-      tone,
-      langue,
-    });
-    setSaving(false);
+    await supabase.from("liked_hooks").insert({ user_id: user.id, hook: hookText, platform, tone, langue });
   };
 
   const hl = () => {
@@ -254,9 +253,7 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
             <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-5 rounded-full text-sm">{t.login} →</a>
           </div>
         )}
-        {user && liked.length > 0 && (
-          <p className="text-green-400 text-sm mb-4">✅ Hooks sauvegardés dans ton compte !</p>
-        )}
+        {user && liked.length > 0 && <p className="text-green-400 text-sm mb-4">{t.saveSuccess}</p>}
         {liked.length > 0 && (
           <div className="space-y-3 text-left">
             <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-3">{t.likedHooks}</p>
@@ -299,99 +296,36 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   );
 }
 
-function SavedHooksTab({ user, t }) {
-  const [savedHooks, setSavedHooks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [copied, setCopied] = useState(null);
-
-  useEffect(() => {
-    if (!user) { setLoading(false); return; }
-    const fetchHooks = async () => {
-      const { data } = await supabase
-        .from("liked_hooks")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setSavedHooks(data || []);
-      setLoading(false);
-    };
-    fetchHooks();
-  }, [user]);
-
-  const deleteHook = async (id) => {
-    await supabase.from("liked_hooks").delete().eq("id", id);
-    setSavedHooks((prev) => prev.filter((h) => h.id !== id));
-  };
-
-  const copy = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
-  };
-
-  if (!user) {
-    return (
-      <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
-        <p className="text-4xl mb-4">🔒</p>
-        <p className="text-white font-bold mb-2">{t.loginToSave}</p>
-        <a href="/auth" className="inline-block mt-3 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.login} →</a>
-      </div>
-    );
-  }
-
-  if (loading) return <div className="text-center text-gray-500 py-12">⏳</div>;
-
-  if (savedHooks.length === 0) {
-    return (
-      <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
-        <p className="text-4xl mb-4">💾</p>
-        <p className="text-gray-400">{t.noSavedHooks}</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-4">{t.savedHooks} ({savedHooks.length})</p>
-      {savedHooks.map((h) => (
-        <div key={h.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
-          <p className="text-white text-sm mb-3">{h.hook}</p>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2 flex-wrap">
-              {h.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{h.platform}</span>}
-              {h.tone && <span className="text-xs bg-pink-500/10 text-pink-400 px-2 py-1 rounded-full">{h.tone}</span>}
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => copy(h.hook, h.id)} className="text-xs text-gray-500 hover:text-pink-400 transition px-2 py-1">
-                {copied === h.id ? "✅" : "📋"}
-              </button>
-              <button onClick={() => deleteHook(h.id)} className="text-xs text-gray-500 hover:text-red-400 transition px-2 py-1">{t.delete}</button>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function LegendeTab({ platform, langue, t }) {
+function LegendeTab({ platform, langue, t, user }) {
   const [description, setDescription] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(null);
+  const [saved, setSaved] = useState(false);
+
   const generate = async () => {
     if (!description) return;
-    setLoading(true); setResult("");
+    setLoading(true); setResult(""); setSaved(false);
     const res = await fetch("/api/legende", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description, platform, langue }) });
     const data = await res.json();
     setResult(data.result); setLoading(false);
   };
+
   const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
+
+  const saveToSupabase = async () => {
+    if (!user || !legende) return;
+    await supabase.from("liked_legendes").insert({ user_id: user.id, legende, hashtags, platform, langue });
+    setSaved(true);
+  };
+
   const parseLegende = (text) => {
     if (!text) return { legende: "", hashtags: "" };
     const parts = text.split(/HASHTAGS:/i);
     return { legende: parts[0].replace(/LEGENDE:|CAPTION:|LEGENDA:|LEYENDA:/i, "").replace(/\*\*/g, "").trim(), hashtags: parts[1] ? parts[1].replace(/\*\*/g, "").trim() : "" };
   };
   const { legende, hashtags } = parseLegende(result);
+
   return (
     <div className="space-y-4">
       <div className="relative">
@@ -403,14 +337,21 @@ function LegendeTab({ platform, langue, t }) {
         <div className="space-y-3">
           {legende && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-3"><span className="text-xs font-black tracking-widest uppercase text-pink-400">{t.legende}</span><button onClick={() => copy(legende, "legende")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "legende" ? t.copied : t.copy}</button></div><p className="text-white text-sm leading-relaxed whitespace-pre-wrap">{legende}</p></div>)}
           {hashtags && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-3"><span className="text-xs font-black tracking-widest uppercase text-pink-400">{t.hashtags}</span><button onClick={() => copy(hashtags, "hashtags")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "hashtags" ? t.copied : t.copy}</button></div><p className="text-pink-300 text-sm leading-relaxed">{hashtags}</p></div>)}
-          <button onClick={() => setResult("")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
+          {user ? (
+            <button onClick={saveToSupabase} disabled={saved} className="w-full border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-3xl transition text-sm font-medium disabled:opacity-50">
+              {saved ? t.saveSuccess : t.saveLegende}
+            </button>
+          ) : (
+            <p className="text-center text-xs text-gray-500">{t.loginToSave}</p>
+          )}
+          <button onClick={() => { setResult(""); setSaved(false); }} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
         </div>
       )}
     </div>
   );
 }
 
-function IdeesTab({ platform, langue, t }) {
+function IdeesTab({ platform, langue, t, user }) {
   const [niche, setNiche] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
@@ -418,38 +359,30 @@ function IdeesTab({ platform, langue, t }) {
   const [selectedIdee, setSelectedIdee] = useState(null);
   const [prompt, setPrompt] = useState("");
   const [loadingPrompt, setLoadingPrompt] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const generate = async () => {
     if (!niche) return;
-    setLoading(true); setResult(""); setSelectedIdee(null); setPrompt("");
-    const res = await fetch("/api/idees", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ niche, platform, langue }),
-    });
+    setLoading(true); setResult(""); setSelectedIdee(null); setPrompt(""); setSaved(false);
+    const res = await fetch("/api/idees", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ niche, platform, langue }) });
     const data = await res.json();
     setResult(data.result); setLoading(false);
   };
 
   const generatePrompt = async (idee) => {
-    setSelectedIdee(idee);
-    setPrompt("");
-    setLoadingPrompt(true);
-    const res = await fetch("/api/prompt-idee", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idee, niche, platform, langue }),
-    });
+    setSelectedIdee(idee); setPrompt(""); setLoadingPrompt(true); setSaved(false);
+    const res = await fetch("/api/prompt-idee", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idee, niche, platform, langue }) });
     const data = await res.json();
-    setPrompt(data.result);
-    setLoadingPrompt(false);
+    setPrompt(data.result); setLoadingPrompt(false);
   };
 
-  const copy = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
+  const saveToSupabase = async () => {
+    if (!user || !selectedIdee) return;
+    await supabase.from("liked_idees").insert({ user_id: user.id, idee: selectedIdee, brief: prompt, platform, langue });
+    setSaved(true);
   };
+
+  const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
 
   const parsePrompt = (text) => {
     if (!text) return {};
@@ -461,13 +394,7 @@ function IdeesTab({ platform, langue, t }) {
     return { hook, angle, structure, cta, astuce };
   };
 
-  const idees = result
-    ? result.split("\n").map((l) => {
-        const m = l.match(/^\d+[\.\)]\s*(.+)$/);
-        return m ? m[1].replace(/\*\*/g, "").trim() : null;
-      }).filter(Boolean)
-    : [];
-
+  const idees = result ? result.split("\n").map((l) => { const m = l.match(/^\d+[\.\)]\s*(.+)$/); return m ? m[1].replace(/\*\*/g, "").trim() : null; }).filter(Boolean) : [];
   const { hook, angle, structure, cta, astuce } = parsePrompt(prompt);
 
   const labels = {
@@ -502,16 +429,12 @@ function IdeesTab({ platform, langue, t }) {
 
       {selectedIdee && (
         <div className="space-y-3">
-          <button onClick={() => { setSelectedIdee(null); setPrompt(""); }} className="text-xs text-gray-500 hover:text-pink-400 transition font-medium">{l.back}</button>
+          <button onClick={() => { setSelectedIdee(null); setPrompt(""); setSaved(false); }} className="text-xs text-gray-500 hover:text-pink-400 transition font-medium">{l.back}</button>
           <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-3xl p-4">
             <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-1">Idée</p>
             <p className="text-white text-sm font-bold">{selectedIdee}</p>
           </div>
-          {loadingPrompt && (
-            <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
-              <p className="text-gray-400 text-sm">{l.generating}</p>
-            </div>
-          )}
+          {loadingPrompt && <div className="border-2 border-gray-800 rounded-3xl p-8 text-center"><p className="text-gray-400 text-sm">{l.generating}</p></div>}
           {prompt && !loadingPrompt && (
             <div className="space-y-3">
               {hook && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-2"><p className="text-xs font-black tracking-widest uppercase text-pink-400">{l.hook}</p><button onClick={() => copy(hook, "hook")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "hook" ? t.copied : t.copy}</button></div><p className="text-white text-sm font-bold">{hook}</p></div>)}
@@ -519,6 +442,13 @@ function IdeesTab({ platform, langue, t }) {
               {structure && (<div className="border-2 border-gray-800 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{l.structure}</p><p className="text-white text-sm whitespace-pre-wrap">{structure}</p></div>)}
               {cta && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-2"><p className="text-xs font-black tracking-widest uppercase text-pink-400">{l.cta}</p><button onClick={() => copy(cta, "cta")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "cta" ? t.copied : t.copy}</button></div><p className="text-white text-sm font-bold">{cta}</p></div>)}
               {astuce && (<div className="border-2 border-violet-500/30 bg-violet-500/5 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-violet-400 mb-2">{l.astuce}</p><p className="text-white text-sm">{astuce}</p></div>)}
+              {user ? (
+                <button onClick={saveToSupabase} disabled={saved} className="w-full border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-3xl transition text-sm font-medium disabled:opacity-50">
+                  {saved ? t.saveSuccess : t.saveBrief}
+                </button>
+              ) : (
+                <p className="text-center text-xs text-gray-500">{t.loginToSave}</p>
+              )}
               <button onClick={() => copy(hook + "\n\n" + angle + "\n\n" + structure + "\n\n" + cta + "\n\n" + astuce, "all")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{copied === "all" ? t.copied : l.copyAll}</button>
             </div>
           )}
@@ -527,6 +457,7 @@ function IdeesTab({ platform, langue, t }) {
     </div>
   );
 }
+
 function AnalyseTab({ platform, langue, t }) {
   const [hook, setHook] = useState("");
   const [result, setResult] = useState("");
@@ -563,6 +494,126 @@ function AnalyseTab({ platform, langue, t }) {
           {faibles && <div className="border-2 border-red-500/30 bg-red-500/5 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-red-400 mb-3">{t.weaknesses}</p><p className="text-white text-sm leading-relaxed whitespace-pre-wrap">{faibles}</p></div>}
           {ameliore && (<div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-3xl p-5"><div className="flex justify-between items-center mb-3"><p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.improved}</p><button onClick={() => copy(ameliore, "ameliore")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "ameliore" ? t.copied : t.copy}</button></div><p className="text-white text-sm leading-relaxed font-bold">{ameliore}</p></div>)}
           <button onClick={() => setResult("")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SavedTab({ user, t }) {
+  const [hooks, setHooks] = useState([]);
+  const [idees, setIdees] = useState([]);
+  const [legendes, setLegendees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(null);
+  const [section, setSection] = useState("hooks");
+  const [expandedIdee, setExpandedIdee] = useState(null);
+
+  useEffect(() => {
+    if (!user) { setLoading(false); return; }
+    const fetch_ = async () => {
+      const [h, i, l] = await Promise.all([
+        supabase.from("liked_hooks").select("*").order("created_at", { ascending: false }),
+        supabase.from("liked_idees").select("*").order("created_at", { ascending: false }),
+        supabase.from("liked_legendes").select("*").order("created_at", { ascending: false }),
+      ]);
+      setHooks(h.data || []);
+      setIdees(i.data || []);
+      setLegendees(l.data || []);
+      setLoading(false);
+    };
+    fetch_();
+  }, [user]);
+
+  const deleteItem = async (table, id, setter) => {
+    await supabase.from(table).delete().eq("id", id);
+    setter((prev) => prev.filter((x) => x.id !== id));
+  };
+
+  const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
+
+  if (!user) return (
+    <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+      <p className="text-4xl mb-4">🔒</p>
+      <p className="text-white font-bold mb-2">{t.loginToSave}</p>
+      <a href="/auth" className="inline-block mt-3 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.login} →</a>
+    </div>
+  );
+
+  if (loading) return <div className="text-center text-gray-500 py-12">⏳</div>;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-1 bg-gray-900 p-1 rounded-3xl">
+        {[["hooks", `🎣 (${hooks.length})`], ["idees", `💡 (${idees.length})`], ["legendes", `📝 (${legendes.length})`]].map(([id, label]) => (
+          <button key={id} onClick={() => setSection(id)} className={`py-2.5 rounded-3xl text-xs font-bold transition ${section === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>{label}</button>
+        ))}
+      </div>
+
+      {section === "hooks" && (
+        <div className="space-y-3">
+          <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.savedHooksTitle} ({hooks.length})</p>
+          {hooks.length === 0 && <p className="text-gray-500 text-sm text-center py-8">{t.noSavedHooks}</p>}
+          {hooks.map((h) => (
+            <div key={h.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
+              <p className="text-white text-sm mb-3">{h.hook}</p>
+              <div className="flex justify-between items-center">
+                <div className="flex gap-2 flex-wrap">
+                  {h.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{h.platform}</span>}
+                  {h.tone && <span className="text-xs bg-pink-500/10 text-pink-400 px-2 py-1 rounded-full">{h.tone}</span>}
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => copy(h.hook, h.id)} className="text-xs text-gray-500 hover:text-pink-400 transition px-2 py-1">{copied === h.id ? "✅" : "📋"}</button>
+                  <button onClick={() => deleteItem("liked_hooks", h.id, setHooks)} className="text-xs text-gray-500 hover:text-red-400 transition px-2 py-1">{t.delete}</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {section === "idees" && (
+        <div className="space-y-3">
+          <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.savedIdees} ({idees.length})</p>
+          {idees.length === 0 && <p className="text-gray-500 text-sm text-center py-8">{t.noSavedHooks}</p>}
+          {idees.map((item) => (
+            <div key={item.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
+              <div className="flex justify-between items-start gap-2 mb-2">
+                <p className="text-white text-sm font-bold flex-1">{item.idee}</p>
+                <div className="flex gap-2 shrink-0">
+                  <button onClick={() => setExpandedIdee(expandedIdee === item.id ? null : item.id)} className="text-xs text-gray-500 hover:text-pink-400 transition px-2 py-1">{expandedIdee === item.id ? "▲" : "▼ Brief"}</button>
+                  <button onClick={() => deleteItem("liked_idees", item.id, setIdees)} className="text-xs text-gray-500 hover:text-red-400 transition px-2 py-1">{t.delete}</button>
+                </div>
+              </div>
+              {item.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{item.platform}</span>}
+              {expandedIdee === item.id && item.brief && (
+                <div className="mt-3 border-t border-gray-800 pt-3">
+                  <p className="text-gray-400 text-xs whitespace-pre-wrap">{item.brief}</p>
+                  <button onClick={() => copy(item.brief, item.id + "brief")} className="text-xs text-gray-500 hover:text-pink-400 transition mt-2">{copied === item.id + "brief" ? "✅" : "📋 " + t.copy}</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {section === "legendes" && (
+        <div className="space-y-3">
+          <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.savedLegendes} ({legendes.length})</p>
+          {legendes.length === 0 && <p className="text-gray-500 text-sm text-center py-8">{t.noSavedHooks}</p>}
+          {legendes.map((item) => (
+            <div key={item.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
+              <p className="text-white text-sm mb-2 whitespace-pre-wrap">{item.legende}</p>
+              {item.hashtags && <p className="text-pink-300 text-xs mb-3">{item.hashtags}</p>}
+              <div className="flex justify-between items-center">
+                {item.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{item.platform}</span>}
+                <div className="flex gap-2">
+                  <button onClick={() => copy(item.legende + "\n\n" + item.hashtags, item.id)} className="text-xs text-gray-500 hover:text-pink-400 transition px-2 py-1">{copied === item.id ? "✅" : "📋"}</button>
+                  <button onClick={() => deleteItem("liked_legendes", item.id, setLegendees)} className="text-xs text-gray-500 hover:text-red-400 transition px-2 py-1">{t.delete}</button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -702,10 +753,10 @@ export default function Home() {
             </div>
           )
         )}
-        {tab === "legende" && <LegendeTab platform={platform} langue={langue} t={t} />}
-        {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} />}
+        {tab === "legende" && <LegendeTab platform={platform} langue={langue} t={t} user={user} />}
+        {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} user={user} />}
         {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} />}
-        {tab === "saved" && <SavedHooksTab user={user} t={t} />}
+        {tab === "saved" && <SavedTab user={user} t={t} />}
       </div>
     </main>
   );
