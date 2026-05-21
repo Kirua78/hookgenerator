@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 
 const FREE_LIMIT = 3;
-const CONNECTED_LIMIT = 10;
+const CONNECTED_LIMIT = 3;
 const STORAGE_KEY = "hg_generations";
 
 function getLocalGenerations() {
