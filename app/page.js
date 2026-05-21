@@ -36,7 +36,8 @@ const T = {
     hookExplain3: "Sans bon hook personne ne regarde. Avec un bon hook l'algorithme te pousse.",
     example: "Exemple", hookExample: "Je gagnais 1500€/mois. Voilà comment j'ai tout changé.",
     restart: "← Recommencer", sawAll: "Tu as tout vu !", liked: "Tu as liké", hooks: "hook",
-    likedHooks: "Tes hooks likés", pass: "👎 Passer", like: "❤️ Liker",
+    likedHooks: "Tes hooks likés", savedHooks: "Tes hooks sauvegardés", noSavedHooks: "Aucun hook sauvegardé pour l'instant.",
+    pass: "👎 Passer", like: "❤️ Liker",
     swipe: "Glisse pour passer · Like pour garder", legende: "Légende", hashtags: "Hashtags",
     copy: "📋 Copier", copied: "✅ Copié !", niche: "Ta niche (ex: fitness, finance...)",
     tenIdeas: "10 idées de vidéos 💡", pasteHook: "Colle ton hook ici", note: "Note",
@@ -46,6 +47,8 @@ const T = {
     limitConnected: "générations restantes aujourd'hui",
     noMore: "Tu as atteint ta limite du jour !",
     noMoreSub: "Connecte-toi pour 10 générations/jour", upgrade: "Se connecter →",
+    savedTab: "💾 Sauvegardés", delete: "🗑️",
+    loginToSave: "Connecte-toi pour sauvegarder tes hooks likés !",
   },
   English: {
     subtitle: "Generate viral hooks for your videos in seconds ⚡",
@@ -61,7 +64,8 @@ const T = {
     hookExplain3: "No good hook means nobody watches. Good hook means the algorithm pushes you.",
     example: "Example", hookExample: "I was making $1500/month. Here is how I changed everything.",
     restart: "← Start over", sawAll: "You have seen them all!", liked: "You liked", hooks: "hook",
-    likedHooks: "Your liked hooks", pass: "👎 Pass", like: "❤️ Like",
+    likedHooks: "Your liked hooks", savedHooks: "Your saved hooks", noSavedHooks: "No saved hooks yet.",
+    pass: "👎 Pass", like: "❤️ Like",
     swipe: "Swipe to pass · Like to keep", legende: "Caption", hashtags: "Hashtags",
     copy: "📋 Copy", copied: "✅ Copied!", niche: "Your niche (e.g: fitness, finance...)",
     tenIdeas: "10 video ideas 💡", pasteHook: "Paste your hook here", note: "Score",
@@ -70,6 +74,8 @@ const T = {
     limitFree: "free generations left today", limitConnected: "generations left today",
     noMore: "You have reached your daily limit!", noMoreSub: "Login for 10 generations/day",
     upgrade: "Login →",
+    savedTab: "💾 Saved", delete: "🗑️",
+    loginToSave: "Login to save your liked hooks!",
   },
   Español: {
     subtitle: "Genera hooks virales para tus videos en segundos ⚡",
@@ -85,7 +91,8 @@ const T = {
     hookExplain3: "Sin buen hook nadie mira. Con buen hook el algoritmo te impulsa.",
     example: "Ejemplo", hookExample: "Ganaba 1500 euros al mes. Asi cambie todo.",
     restart: "← Volver", sawAll: "Los has visto todos!", liked: "Te gustaron", hooks: "hook",
-    likedHooks: "Tus hooks favoritos", pass: "👎 Pasar", like: "❤️ Me gusta",
+    likedHooks: "Tus hooks favoritos", savedHooks: "Tus hooks guardados", noSavedHooks: "No hay hooks guardados aún.",
+    pass: "👎 Pasar", like: "❤️ Me gusta",
     swipe: "Desliza para pasar · Like para guardar", legende: "Leyenda", hashtags: "Hashtags",
     copy: "📋 Copiar", copied: "✅ Copiado!", niche: "Tu nicho (ej: fitness, finanzas...)",
     tenIdeas: "10 ideas de videos 💡", pasteHook: "Pega tu hook aqui", note: "Puntuacion",
@@ -94,6 +101,8 @@ const T = {
     limitFree: "generaciones gratuitas hoy", limitConnected: "generaciones restantes hoy",
     noMore: "Has alcanzado tu limite diario!", noMoreSub: "Inicia sesion para 10 generaciones/dia",
     upgrade: "Iniciar sesion →",
+    savedTab: "💾 Guardados", delete: "🗑️",
+    loginToSave: "Inicia sesion para guardar tus hooks favoritos!",
   },
   Português: {
     subtitle: "Gere hooks virais para seus videos em segundos ⚡",
@@ -109,7 +118,8 @@ const T = {
     hookExplain3: "Sem bom hook ninguem assiste. Com bom hook o algoritmo te impulsiona.",
     example: "Exemplo", hookExample: "Eu ganhava R$1500/mes. Veja como mudei tudo.",
     restart: "← Recomecar", sawAll: "Voce viu todos!", liked: "Voce curtiu", hooks: "hook",
-    likedHooks: "Seus hooks curtidos", pass: "👎 Passar", like: "❤️ Curtir",
+    likedHooks: "Seus hooks curtidos", savedHooks: "Seus hooks salvos", noSavedHooks: "Nenhum hook salvo ainda.",
+    pass: "👎 Passar", like: "❤️ Curtir",
     swipe: "Deslize para passar · Curta para guardar", legende: "Legenda", hashtags: "Hashtags",
     copy: "📋 Copiar", copied: "✅ Copiado!", niche: "Seu nicho (ex: fitness, financas...)",
     tenIdeas: "10 ideias de videos 💡", pasteHook: "Cole seu hook aqui", note: "Nota",
@@ -118,6 +128,8 @@ const T = {
     limitFree: "geracoes gratuitas restantes hoje", limitConnected: "geracoes restantes hoje",
     noMore: "Voce atingiu seu limite diario!", noMoreSub: "Entre para 10 geracoes/dia",
     upgrade: "Entrar →",
+    savedTab: "💾 Salvos", delete: "🗑️",
+    loginToSave: "Entre para salvar seus hooks curtidos!",
   },
 };
 
@@ -188,26 +200,63 @@ function CustomSelect({ value, onChange, options, label }) {
   );
 }
 
-function TinderCard({ hooks, onLike, liked, t }) {
+function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   const [current, setCurrent] = useState(0);
   const [drag, setDrag] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [direction, setDirection] = useState(null);
+  const [saving, setSaving] = useState(false);
   const startX = useRef(null);
+
   const md = (e) => { startX.current = e.clientX; setDragging(true); };
   const mm = (e) => { if (!dragging) return; setDrag(e.clientX - startX.current); };
   const mu = () => { if (drag > 80) hl(); else if (drag < -80) hp(); setDrag(0); setDragging(false); };
   const ts = (e) => { startX.current = e.touches[0].clientX; setDragging(true); };
   const tm = (e) => { if (!dragging) return; setDrag(e.touches[0].clientX - startX.current); };
-  const hl = () => { if (current >= hooks.length) return; setDirection("right"); onLike(hooks[current]); setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300); };
-  const hp = () => { if (current >= hooks.length) return; setDirection("left"); setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300); };
+
+  const saveHookToSupabase = async (hookText) => {
+    if (!user) return;
+    setSaving(true);
+    await supabase.from("liked_hooks").insert({
+      user_id: user.id,
+      hook: hookText,
+      platform,
+      tone,
+      langue,
+    });
+    setSaving(false);
+  };
+
+  const hl = () => {
+    if (current >= hooks.length) return;
+    setDirection("right");
+    const hookText = hooks[current];
+    onLike(hookText);
+    saveHookToSupabase(hookText);
+    setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300);
+  };
+  const hp = () => {
+    if (current >= hooks.length) return;
+    setDirection("left");
+    setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300);
+  };
   const copy = (text) => navigator.clipboard.writeText(text);
+
   if (current >= hooks.length) {
     return (
       <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
         <p className="text-4xl mb-4">🎉</p>
         <h3 className="text-xl font-bold text-white mb-2">{t.sawAll}</h3>
         <p className="text-gray-400 text-sm mb-6">{t.liked} {liked.length} {t.hooks}{liked.length > 1 ? "s" : ""}</p>
+        {!user && liked.length > 0 && (
+          <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 mb-4">
+            <p className="text-pink-400 text-sm font-medium">{t.loginToSave}</p>
+            <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-5 rounded-full text-sm">{t.login} →</a>
+          </div>
+        )}
+        {user && liked.length > 0 && (
+          <p className="text-green-400 text-sm mb-4">✅ Hooks sauvegardés dans ton compte !</p>
+        )}
         {liked.length > 0 && (
           <div className="space-y-3 text-left">
             <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-3">{t.likedHooks}</p>
@@ -221,9 +270,11 @@ function TinderCard({ hooks, onLike, liked, t }) {
       </div>
     );
   }
+
   const rotate = drag / 15;
   const lo = Math.min(1, drag / 80);
   const po = Math.min(1, -drag / 80);
+
   return (
     <div className="relative">
       <div className="flex gap-1 mb-4">
@@ -244,6 +295,80 @@ function TinderCard({ hooks, onLike, liked, t }) {
         <button onClick={hp} className="flex-1 border-2 border-gray-800 hover:border-red-400 text-gray-400 hover:text-red-400 py-4 rounded-3xl font-bold transition text-xl">{t.pass}</button>
         <button onClick={hl} className="flex-1 border-2 border-gray-800 hover:border-green-400 text-gray-400 hover:text-green-400 py-4 rounded-3xl font-bold transition text-xl">{t.like}</button>
       </div>
+    </div>
+  );
+}
+
+function SavedHooksTab({ user, t }) {
+  const [savedHooks, setSavedHooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(null);
+
+  useEffect(() => {
+    if (!user) { setLoading(false); return; }
+    const fetchHooks = async () => {
+      const { data } = await supabase
+        .from("liked_hooks")
+        .select("*")
+        .order("created_at", { ascending: false });
+      setSavedHooks(data || []);
+      setLoading(false);
+    };
+    fetchHooks();
+  }, [user]);
+
+  const deleteHook = async (id) => {
+    await supabase.from("liked_hooks").delete().eq("id", id);
+    setSavedHooks((prev) => prev.filter((h) => h.id !== id));
+  };
+
+  const copy = (text, id) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  if (!user) {
+    return (
+      <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+        <p className="text-4xl mb-4">🔒</p>
+        <p className="text-white font-bold mb-2">{t.loginToSave}</p>
+        <a href="/auth" className="inline-block mt-3 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.login} →</a>
+      </div>
+    );
+  }
+
+  if (loading) return <div className="text-center text-gray-500 py-12">⏳</div>;
+
+  if (savedHooks.length === 0) {
+    return (
+      <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+        <p className="text-4xl mb-4">💾</p>
+        <p className="text-gray-400">{t.noSavedHooks}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-4">{t.savedHooks} ({savedHooks.length})</p>
+      {savedHooks.map((h) => (
+        <div key={h.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
+          <p className="text-white text-sm mb-3">{h.hook}</p>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2 flex-wrap">
+              {h.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{h.platform}</span>}
+              {h.tone && <span className="text-xs bg-pink-500/10 text-pink-400 px-2 py-1 rounded-full">{h.tone}</span>}
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => copy(h.hook, h.id)} className="text-xs text-gray-500 hover:text-pink-400 transition px-2 py-1">
+                {copied === h.id ? "✅" : "📋"}
+              </button>
+              <button onClick={() => deleteHook(h.id)} className="text-xs text-gray-500 hover:text-red-400 transition px-2 py-1">{t.delete}</button>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -290,15 +415,69 @@ function IdeesTab({ platform, langue, t }) {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(null);
+  const [selectedIdee, setSelectedIdee] = useState(null);
+  const [prompt, setPrompt] = useState("");
+  const [loadingPrompt, setLoadingPrompt] = useState(false);
+
   const generate = async () => {
     if (!niche) return;
-    setLoading(true); setResult("");
-    const res = await fetch("/api/idees", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ niche, platform, langue }) });
+    setLoading(true); setResult(""); setSelectedIdee(null); setPrompt("");
+    const res = await fetch("/api/idees", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ niche, platform, langue }),
+    });
     const data = await res.json();
     setResult(data.result); setLoading(false);
   };
-  const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
-  const idees = result ? result.split("\n").map((l) => { const m = l.match(/^\d+[\.\)]\s*(.+)$/); return m ? m[1].replace(/\*\*/g, "").trim() : null; }).filter(Boolean) : [];
+
+  const generatePrompt = async (idee) => {
+    setSelectedIdee(idee);
+    setPrompt("");
+    setLoadingPrompt(true);
+    const res = await fetch("/api/prompt-idee", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idee, niche, platform, langue }),
+    });
+    const data = await res.json();
+    setPrompt(data.result);
+    setLoadingPrompt(false);
+  };
+
+  const copy = (text, id) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  const parsePrompt = (text) => {
+    if (!text) return {};
+    const hook = text.match(/HOOK:\s*([\s\S]*?)(?=ANGLE:|$)/i)?.[1]?.trim() || "";
+    const angle = text.match(/ANGLE:\s*([\s\S]*?)(?=STRUCTURE:|$)/i)?.[1]?.trim() || "";
+    const structure = text.match(/STRUCTURE:\s*([\s\S]*?)(?=CALL TO ACTION:|$)/i)?.[1]?.trim() || "";
+    const cta = text.match(/CALL TO ACTION:\s*([\s\S]*?)(?=ASTUCE:|$)/i)?.[1]?.trim() || "";
+    const astuce = text.match(/ASTUCE:\s*([\s\S]*?)$/i)?.[1]?.trim() || "";
+    return { hook, angle, structure, cta, astuce };
+  };
+
+  const idees = result
+    ? result.split("\n").map((l) => {
+        const m = l.match(/^\d+[\.\)]\s*(.+)$/);
+        return m ? m[1].replace(/\*\*/g, "").trim() : null;
+      }).filter(Boolean)
+    : [];
+
+  const { hook, angle, structure, cta, astuce } = parsePrompt(prompt);
+
+  const labels = {
+    Français: { hook: "🎣 Hook", angle: "🎯 Angle", structure: "📋 Structure", cta: "📣 Call to action", astuce: "💡 Astuce viralité", back: "← Retour aux idées", generating: "⏳ Génération...", copyAll: "📋 Tout copier" },
+    English: { hook: "🎣 Hook", angle: "🎯 Angle", structure: "📋 Structure", cta: "📣 Call to action", astuce: "💡 Virality tip", back: "← Back to ideas", generating: "⏳ Generating...", copyAll: "📋 Copy all" },
+    Español: { hook: "🎣 Hook", angle: "🎯 Ángulo", structure: "📋 Estructura", cta: "📣 Call to action", astuce: "💡 Consejo viral", back: "← Volver a ideas", generating: "⏳ Generando...", copyAll: "📋 Copiar todo" },
+    Português: { hook: "🎣 Hook", angle: "🎯 Ângulo", structure: "📋 Estrutura", cta: "📣 Call to action", astuce: "💡 Dica viral", back: "← Voltar às ideias", generating: "⏳ Gerando...", copyAll: "📋 Copiar tudo" },
+  };
+  const l = labels[langue] || labels["Français"];
+
   return (
     <div className="space-y-4">
       <div className="relative">
@@ -306,17 +485,48 @@ function IdeesTab({ platform, langue, t }) {
         <label htmlFor="niche" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">{t.niche}</label>
       </div>
       <button onClick={generate} disabled={loading || !niche} className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">{loading ? t.generating : t.generateIdees}</button>
-      {idees.length > 0 && (
+
+      {idees.length > 0 && !selectedIdee && (
         <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-3">
           <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-4">{t.tenIdeas}</p>
-          {idees.map((idee, i) => (<div key={i} onClick={() => copy(idee, i)} className="flex items-start gap-3 border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 cursor-pointer transition group"><span className="text-pink-500 font-black text-lg shrink-0">{i + 1}</span><p className="text-white text-sm flex-1">{idee}</p><span className="text-gray-600 group-hover:text-pink-400 transition">{copied === i ? "✅" : "📋"}</span></div>))}
-          <button onClick={() => setResult("")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium mt-2">{t.restart}</button>
+          {idees.map((idee, i) => (
+            <div key={i} onClick={() => generatePrompt(idee)} className="flex items-start gap-3 border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 cursor-pointer transition group">
+              <span className="text-pink-500 font-black text-lg shrink-0">{i + 1}</span>
+              <p className="text-white text-sm flex-1">{idee}</p>
+              <span className="text-gray-600 group-hover:text-pink-400 transition text-xs shrink-0">✨ Brief</span>
+            </div>
+          ))}
+          <button onClick={() => { setResult(""); setSelectedIdee(null); setPrompt(""); }} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium mt-2">{t.restart}</button>
+        </div>
+      )}
+
+      {selectedIdee && (
+        <div className="space-y-3">
+          <button onClick={() => { setSelectedIdee(null); setPrompt(""); }} className="text-xs text-gray-500 hover:text-pink-400 transition font-medium">{l.back}</button>
+          <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-3xl p-4">
+            <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-1">Idée</p>
+            <p className="text-white text-sm font-bold">{selectedIdee}</p>
+          </div>
+          {loadingPrompt && (
+            <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+              <p className="text-gray-400 text-sm">{l.generating}</p>
+            </div>
+          )}
+          {prompt && !loadingPrompt && (
+            <div className="space-y-3">
+              {hook && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-2"><p className="text-xs font-black tracking-widest uppercase text-pink-400">{l.hook}</p><button onClick={() => copy(hook, "hook")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "hook" ? t.copied : t.copy}</button></div><p className="text-white text-sm font-bold">{hook}</p></div>)}
+              {angle && (<div className="border-2 border-gray-800 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{l.angle}</p><p className="text-white text-sm">{angle}</p></div>)}
+              {structure && (<div className="border-2 border-gray-800 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{l.structure}</p><p className="text-white text-sm whitespace-pre-wrap">{structure}</p></div>)}
+              {cta && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-2"><p className="text-xs font-black tracking-widest uppercase text-pink-400">{l.cta}</p><button onClick={() => copy(cta, "cta")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "cta" ? t.copied : t.copy}</button></div><p className="text-white text-sm font-bold">{cta}</p></div>)}
+              {astuce && (<div className="border-2 border-violet-500/30 bg-violet-500/5 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-violet-400 mb-2">{l.astuce}</p><p className="text-white text-sm">{astuce}</p></div>)}
+              <button onClick={() => copy(hook + "\n\n" + angle + "\n\n" + structure + "\n\n" + cta + "\n\n" + astuce, "all")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{copied === "all" ? t.copied : l.copyAll}</button>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
-
 function AnalyseTab({ platform, langue, t }) {
   const [hook, setHook] = useState("");
   const [result, setResult] = useState("");
@@ -405,7 +615,7 @@ export default function Home() {
   };
 
   const hooks = parseHooks(result);
-  const tabIds = ["hooks", "legende", "idees", "analyse"];
+  const tabIds = ["hooks", "legende", "idees", "analyse", "saved"];
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
   return (
@@ -439,11 +649,11 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-3xl">
+          <div className="grid grid-cols-5 gap-1 bg-gray-900 p-1 rounded-3xl">
             {tabIds.map((id, i) => (
               <button key={id} onClick={() => { setTab(id); setResult(""); }}
                 className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
-                {t.tabs[i]}
+                {id === "saved" ? t.savedTab : t.tabs[i]}
               </button>
             ))}
           </div>
@@ -487,7 +697,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-4">
-              <TinderCard hooks={hooks} onLike={(h) => setLiked((l) => [...l, h])} liked={liked} t={t} />
+              <TinderCard hooks={hooks} onLike={(h) => setLiked((l) => [...l, h])} liked={liked} t={t} user={user} platform={platform} tone={tone} langue={langue} />
               <button onClick={() => setResult("")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
             </div>
           )
@@ -495,6 +705,7 @@ export default function Home() {
         {tab === "legende" && <LegendeTab platform={platform} langue={langue} t={t} />}
         {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} />}
         {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} />}
+        {tab === "saved" && <SavedHooksTab user={user} t={t} />}
       </div>
     </main>
   );
