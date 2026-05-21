@@ -45,12 +45,14 @@ const T = {
     login: "Se connecter", logout: "Déconnexion",
     limitFree: "générations gratuites restantes aujourd'hui",
     limitConnected: "générations restantes aujourd'hui",
+    unlimited: "✨ Générations illimitées",
     noMore: "Tu as atteint ta limite du jour !",
     noMoreSub: "Connecte-toi pour plus de générations", upgrade: "Se connecter →",
     savedTab: "💾 Sauvegardés", delete: "🗑️",
     loginToSave: "Connecte-toi pour sauvegarder tes contenus !",
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
+    premium: "⭐ Premium",
   },
   English: {
     subtitle: "Generate viral hooks for your videos in seconds ⚡",
@@ -74,12 +76,14 @@ const T = {
     strengths: "✅ Strengths", weaknesses: "❌ Weaknesses", improved: "🚀 Improved version",
     login: "Login", logout: "Logout",
     limitFree: "free generations left today", limitConnected: "generations left today",
+    unlimited: "✨ Unlimited generations",
     noMore: "You have reached your daily limit!", noMoreSub: "Login for more generations",
     upgrade: "Login →",
     savedTab: "💾 Saved", delete: "🗑️",
     loginToSave: "Login to save your content!",
     savedLegendes: "Saved captions", savedIdees: "Saved ideas", savedHooksTitle: "Saved hooks",
     saveSuccess: "✅ Saved!", saveBrief: "💾 Save brief", saveLegende: "💾 Save",
+    premium: "⭐ Premium",
   },
   Español: {
     subtitle: "Genera hooks virales para tus videos en segundos ⚡",
@@ -103,12 +107,14 @@ const T = {
     strengths: "✅ Puntos fuertes", weaknesses: "❌ Puntos debiles", improved: "🚀 Version mejorada",
     login: "Iniciar sesion", logout: "Cerrar sesion",
     limitFree: "generaciones gratuitas hoy", limitConnected: "generaciones restantes hoy",
+    unlimited: "✨ Generaciones ilimitadas",
     noMore: "Has alcanzado tu limite diario!", noMoreSub: "Inicia sesion para mas generaciones",
     upgrade: "Iniciar sesion →",
     savedTab: "💾 Guardados", delete: "🗑️",
     loginToSave: "Inicia sesion para guardar tu contenido!",
     savedLegendes: "Leyendas guardadas", savedIdees: "Ideas guardadas", savedHooksTitle: "Hooks guardados",
     saveSuccess: "✅ Guardado!", saveBrief: "💾 Guardar brief", saveLegende: "💾 Guardar",
+    premium: "⭐ Premium",
   },
   Português: {
     subtitle: "Gere hooks virais para seus videos em segundos ⚡",
@@ -132,12 +138,14 @@ const T = {
     strengths: "✅ Pontos fortes", weaknesses: "❌ Pontos fracos", improved: "🚀 Versao melhorada",
     login: "Entrar", logout: "Sair",
     limitFree: "geracoes gratuitas restantes hoje", limitConnected: "geracoes restantes hoje",
+    unlimited: "✨ Geracoes ilimitadas",
     noMore: "Voce atingiu seu limite diario!", noMoreSub: "Entre para mais geracoes",
     upgrade: "Entrar →",
     savedTab: "💾 Salvos", delete: "🗑️",
     loginToSave: "Entre para salvar seu conteudo!",
     savedLegendes: "Legendas salvas", savedIdees: "Ideias salvas", savedHooksTitle: "Hooks salvos",
     saveSuccess: "✅ Salvo!", saveBrief: "💾 Salvar brief", saveLegende: "💾 Salvar",
+    premium: "⭐ Premium",
   },
 };
 
@@ -214,18 +222,15 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   const [dragging, setDragging] = useState(false);
   const [direction, setDirection] = useState(null);
   const startX = useRef(null);
-
   const md = (e) => { startX.current = e.clientX; setDragging(true); };
   const mm = (e) => { if (!dragging) return; setDrag(e.clientX - startX.current); };
   const mu = () => { if (drag > 80) hl(); else if (drag < -80) hp(); setDrag(0); setDragging(false); };
   const ts = (e) => { startX.current = e.touches[0].clientX; setDragging(true); };
   const tm = (e) => { if (!dragging) return; setDrag(e.touches[0].clientX - startX.current); };
-
   const saveHookToSupabase = async (hookText) => {
     if (!user) return;
     await supabase.from("liked_hooks").insert({ user_id: user.id, hook: hookText, platform, tone, langue });
   };
-
   const hl = () => {
     if (current >= hooks.length) return;
     setDirection("right");
@@ -240,7 +245,6 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
     setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300);
   };
   const copy = (text) => navigator.clipboard.writeText(text);
-
   if (current >= hooks.length) {
     return (
       <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
@@ -267,11 +271,9 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
       </div>
     );
   }
-
   const rotate = drag / 15;
   const lo = Math.min(1, drag / 80);
   const po = Math.min(1, -drag / 80);
-
   return (
     <div className="relative">
       <div className="flex gap-1 mb-4">
@@ -303,7 +305,6 @@ function LegendeTab({ platform, langue, t, user, state, setState }) {
   const setSaved = (v) => setState(s => ({ ...s, saved: v }));
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(null);
-
   const generate = async () => {
     if (!description) return;
     setLoading(true); setResult(""); setSaved(false);
@@ -311,22 +312,18 @@ function LegendeTab({ platform, langue, t, user, state, setState }) {
     const data = await res.json();
     setResult(data.result); setLoading(false);
   };
-
   const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
-
   const parseLegende = (text) => {
     if (!text) return { legende: "", hashtags: "" };
     const parts = text.split(/HASHTAGS:/i);
     return { legende: parts[0].replace(/LEGENDE:|CAPTION:|LEGENDA:|LEYENDA:/i, "").replace(/\*\*/g, "").trim(), hashtags: parts[1] ? parts[1].replace(/\*\*/g, "").trim() : "" };
   };
   const { legende, hashtags } = parseLegende(result);
-
   const saveToSupabase = async () => {
     if (!user || !legende) return;
     await supabase.from("liked_legendes").insert({ user_id: user.id, legende, hashtags, platform, langue });
     setSaved(true);
   };
-
   return (
     <div className="space-y-4">
       <div className="relative">
@@ -360,7 +357,6 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
   const [loading, setLoading] = useState(false);
   const [loadingPrompt, setLoadingPrompt] = useState(false);
   const [copied, setCopied] = useState(null);
-
   const generate = async () => {
     if (!niche) return;
     setLoading(true); setResult(""); setSelectedIdee(null); setPrompt(""); setSaved(false);
@@ -368,22 +364,18 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
     const data = await res.json();
     setResult(data.result); setLoading(false);
   };
-
   const generatePrompt = async (idee) => {
     setSelectedIdee(idee); setPrompt(""); setLoadingPrompt(true); setSaved(false);
     const res = await fetch("/api/prompt-idee", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idee, niche, platform, langue }) });
     const data = await res.json();
     setPrompt(data.result); setLoadingPrompt(false);
   };
-
   const saveToSupabase = async () => {
     if (!user || !selectedIdee) return;
     await supabase.from("liked_idees").insert({ user_id: user.id, idee: selectedIdee, brief: prompt, platform, langue });
     setSaved(true);
   };
-
   const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
-
   const parsePrompt = (text) => {
     if (!text) return {};
     const hook = text.match(/HOOK:\s*([\s\S]*?)(?=ANGLE:|$)/i)?.[1]?.trim() || "";
@@ -393,10 +385,8 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
     const astuce = text.match(/ASTUCE:\s*([\s\S]*?)$/i)?.[1]?.trim() || "";
     return { hook, angle, structure, cta, astuce };
   };
-
   const idees = result ? result.split("\n").map((l) => { const m = l.match(/^\d+[\.\)]\s*(.+)$/); return m ? m[1].replace(/\*\*/g, "").trim() : null; }).filter(Boolean) : [];
   const { hook, angle, structure, cta, astuce } = parsePrompt(prompt);
-
   const labels = {
     Français: { hook: "🎣 Hook", angle: "🎯 Angle", structure: "📋 Structure", cta: "📣 Call to action", astuce: "💡 Astuce viralité", back: "← Retour aux idées", generating: "⏳ Génération...", copyAll: "📋 Tout copier" },
     English: { hook: "🎣 Hook", angle: "🎯 Angle", structure: "📋 Structure", cta: "📣 Call to action", astuce: "💡 Virality tip", back: "← Back to ideas", generating: "⏳ Generating...", copyAll: "📋 Copy all" },
@@ -404,7 +394,6 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
     Português: { hook: "🎣 Hook", angle: "🎯 Ângulo", structure: "📋 Estrutura", cta: "📣 Call to action", astuce: "💡 Dica viral", back: "← Voltar às ideias", generating: "⏳ Gerando...", copyAll: "📋 Copiar tudo" },
   };
   const l = labels[langue] || labels["Français"];
-
   return (
     <div className="space-y-4">
       <div className="relative">
@@ -412,7 +401,6 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
         <label htmlFor="niche" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">{t.niche}</label>
       </div>
       <button onClick={generate} disabled={loading || !niche} className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">{loading ? t.generating : t.generateIdees}</button>
-
       {idees.length > 0 && !selectedIdee && (
         <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-3">
           <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-4">{t.tenIdeas}</p>
@@ -426,7 +414,6 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
           <button onClick={() => { setResult(""); setSelectedIdee(null); setPrompt(""); }} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium mt-2">{t.restart}</button>
         </div>
       )}
-
       {selectedIdee && (
         <div className="space-y-3">
           <button onClick={() => { setSelectedIdee(null); setPrompt(""); setSaved(false); }} className="text-xs text-gray-500 hover:text-pink-400 transition font-medium">{l.back}</button>
@@ -462,7 +449,6 @@ function AnalyseTab({ platform, langue, t, state, setState }) {
   const setResult = (v) => setState(s => ({ ...s, result: v }));
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(null);
-
   const generate = async () => {
     if (!hook) return;
     setLoading(true); setResult("");
@@ -508,7 +494,6 @@ function SavedTab({ user, t }) {
   const [copied, setCopied] = useState(null);
   const [section, setSection] = useState("hooks");
   const [expandedIdee, setExpandedIdee] = useState(null);
-
   useEffect(() => {
     if (!user) { setLoading(false); return; }
     const fetchAll = async () => {
@@ -522,14 +507,11 @@ function SavedTab({ user, t }) {
     };
     fetchAll();
   }, [user]);
-
   const deleteItem = async (table, id, setter) => {
     await supabase.from(table).delete().eq("id", id);
     setter((prev) => prev.filter((x) => x.id !== id));
   };
-
   const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
-
   if (!user) return (
     <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
       <p className="text-4xl mb-4">🔒</p>
@@ -537,9 +519,7 @@ function SavedTab({ user, t }) {
       <a href="/auth" className="inline-block mt-3 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.login} →</a>
     </div>
   );
-
   if (loading) return <div className="text-center text-gray-500 py-12">⏳</div>;
-
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-1 bg-gray-900 p-1 rounded-3xl">
@@ -547,7 +527,6 @@ function SavedTab({ user, t }) {
           <button key={id} onClick={() => setSection(id)} className={`py-2.5 rounded-3xl text-xs font-bold transition ${section === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>{label}</button>
         ))}
       </div>
-
       {section === "hooks" && (
         <div className="space-y-3">
           <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.savedHooksTitle} ({hooks.length})</p>
@@ -569,7 +548,6 @@ function SavedTab({ user, t }) {
           ))}
         </div>
       )}
-
       {section === "idees" && (
         <div className="space-y-3">
           <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.savedIdees} ({idees.length})</p>
@@ -594,7 +572,6 @@ function SavedTab({ user, t }) {
           ))}
         </div>
       )}
-
       {section === "legendes" && (
         <div className="space-y-3">
           <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.savedLegendes} ({legendes.length})</p>
@@ -625,9 +602,10 @@ export default function Home() {
   const [langue, setLangue] = useState("Français");
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
   const [generationsLeft, setGenerationsLeft] = useState(null);
+  const [loadingHooks, setLoadingHooks] = useState(false);
 
-  // États persistants par onglet
   const [hooksState, setHooksState] = useState({ description: "", result: "", liked: [] });
   const [legendeState, setLegendeState] = useState({ description: "", result: "", saved: false });
   const [ideesState, setIdeesState] = useState({ niche: "", result: "", selectedIdee: null, prompt: "", saved: false });
@@ -636,15 +614,28 @@ export default function Home() {
   const t = T[langue];
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user ?? null));
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setUser(session?.user ?? null));
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) fetchProfile(session.user.id);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) fetchProfile(session.user.id);
+      else { setIsPremium(false); }
+    });
     return () => subscription.unsubscribe();
   }, []);
 
+  const fetchProfile = async (userId) => {
+    const { data } = await supabase.from("user_profiles").select("is_premium").eq("id", userId).single();
+    if (data) setIsPremium(data.is_premium === true);
+  };
+
   useEffect(() => {
-    if (user) setGenerationsLeft(CONNECTED_LIMIT);
+    if (isPremium) setGenerationsLeft(null); // null = illimité
+    else if (user) setGenerationsLeft(CONNECTED_LIMIT);
     else setGenerationsLeft(FREE_LIMIT - getLocalGenerations());
-  }, [user]);
+  }, [user, isPremium]);
 
   const handleLangueChange = (l) => {
     setLangue(l); setTone(T[l].tones[0]);
@@ -653,17 +644,19 @@ export default function Home() {
     setIdeesState({ niche: "", result: "", selectedIdee: null, prompt: "", saved: false });
     setAnalyseState({ hook: "", result: "" });
   };
-  const handleLogout = async () => { await supabase.auth.signOut(); setUser(null); };
-  const canGenerate = generationsLeft === null || generationsLeft > 0;
+  const handleLogout = async () => { await supabase.auth.signOut(); setUser(null); setIsPremium(false); };
+  const canGenerate = isPremium || generationsLeft === null || generationsLeft > 0;
 
-  const generate = async () => {
+  const generateHooks = async () => {
     if (!hooksState.description || !canGenerate) return;
+    setLoadingHooks(true);
     setHooksState(s => ({ ...s, result: "", liked: [] }));
     if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
-    else setGenerationsLeft((g) => g - 1);
+    else if (!isPremium) setGenerationsLeft((g) => g - 1);
     const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description: hooksState.description, platform, tone, langue }) });
     const data = await res.json();
     setHooksState(s => ({ ...s, result: data.result }));
+    setLoadingHooks(false);
   };
 
   const parseHooks = (text) => {
@@ -672,20 +665,6 @@ export default function Home() {
   };
 
   const hooks = parseHooks(hooksState.result);
-  const [loadingHooks, setLoadingHooks] = useState(false);
-
-  const generateHooks = async () => {
-    if (!hooksState.description || !canGenerate) return;
-    setLoadingHooks(true);
-    setHooksState(s => ({ ...s, result: "", liked: [] }));
-    if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
-    else setGenerationsLeft((g) => g - 1);
-    const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description: hooksState.description, platform, tone, langue }) });
-    const data = await res.json();
-    setHooksState(s => ({ ...s, result: data.result }));
-    setLoadingHooks(false);
-  };
-
   const tabIds = ["hooks", "legende", "idees", "analyse", "saved"];
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
@@ -696,6 +675,7 @@ export default function Home() {
           <div />
           {user ? (
             <div className="flex items-center gap-3">
+              {isPremium && <span className="text-xs bg-gradient-to-r from-pink-500 to-violet-500 text-white px-2 py-1 rounded-full font-bold">{t.premium}</span>}
               <span className="text-xs text-gray-400">{user.email}</span>
               <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
             </div>
@@ -707,11 +687,9 @@ export default function Home() {
         <div className="text-center mb-8">
           <h1 className="text-5xl font-black mb-2 bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">HookGenerator</h1>
           <p className="text-gray-400 mb-4">{t.subtitle}</p>
-          {generationsLeft !== null && (
-            <div className={`text-xs mb-4 font-medium ${generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
-              {canGenerate ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : ""}
-            </div>
-          )}
+          <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
+            {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
+          </div>
           <div className="flex justify-center gap-2 mb-4">
             {langues.map((l) => (
               <button key={l.id} onClick={() => handleLangueChange(l.id)}
