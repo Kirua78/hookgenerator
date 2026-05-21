@@ -296,12 +296,13 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   );
 }
 
-function LegendeTab({ platform, langue, t, user }) {
-  const [description, setDescription] = useState("");
-  const [result, setResult] = useState("");
+function LegendeTab({ platform, langue, t, user, state, setState }) {
+  const { description, result, saved } = state;
+  const setDescription = (v) => setState(s => ({ ...s, description: v }));
+  const setResult = (v) => setState(s => ({ ...s, result: v }));
+  const setSaved = (v) => setState(s => ({ ...s, saved: v }));
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(null);
-  const [saved, setSaved] = useState(false);
 
   const generate = async () => {
     if (!description) return;
@@ -313,18 +314,18 @@ function LegendeTab({ platform, langue, t, user }) {
 
   const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
 
-  const saveToSupabase = async () => {
-    if (!user || !legende) return;
-    await supabase.from("liked_legendes").insert({ user_id: user.id, legende, hashtags, platform, langue });
-    setSaved(true);
-  };
-
   const parseLegende = (text) => {
     if (!text) return { legende: "", hashtags: "" };
     const parts = text.split(/HASHTAGS:/i);
     return { legende: parts[0].replace(/LEGENDE:|CAPTION:|LEGENDA:|LEYENDA:/i, "").replace(/\*\*/g, "").trim(), hashtags: parts[1] ? parts[1].replace(/\*\*/g, "").trim() : "" };
   };
   const { legende, hashtags } = parseLegende(result);
+
+  const saveToSupabase = async () => {
+    if (!user || !legende) return;
+    await supabase.from("liked_legendes").insert({ user_id: user.id, legende, hashtags, platform, langue });
+    setSaved(true);
+  };
 
   return (
     <div className="space-y-4">
@@ -338,9 +339,7 @@ function LegendeTab({ platform, langue, t, user }) {
           {legende && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-3"><span className="text-xs font-black tracking-widest uppercase text-pink-400">{t.legende}</span><button onClick={() => copy(legende, "legende")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "legende" ? t.copied : t.copy}</button></div><p className="text-white text-sm leading-relaxed whitespace-pre-wrap">{legende}</p></div>)}
           {hashtags && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-3"><span className="text-xs font-black tracking-widest uppercase text-pink-400">{t.hashtags}</span><button onClick={() => copy(hashtags, "hashtags")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "hashtags" ? t.copied : t.copy}</button></div><p className="text-pink-300 text-sm leading-relaxed">{hashtags}</p></div>)}
           {user ? (
-            <button onClick={saveToSupabase} disabled={saved} className="w-full border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-3xl transition text-sm font-medium disabled:opacity-50">
-              {saved ? t.saveSuccess : t.saveLegende}
-            </button>
+            <button onClick={saveToSupabase} disabled={saved} className="w-full border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-3xl transition text-sm font-medium disabled:opacity-50">{saved ? t.saveSuccess : t.saveLegende}</button>
           ) : (
             <p className="text-center text-xs text-gray-500">{t.loginToSave}</p>
           )}
@@ -351,15 +350,16 @@ function LegendeTab({ platform, langue, t, user }) {
   );
 }
 
-function IdeesTab({ platform, langue, t, user }) {
-  const [niche, setNiche] = useState("");
-  const [result, setResult] = useState("");
+function IdeesTab({ platform, langue, t, user, state, setState }) {
+  const { niche, result, selectedIdee, prompt, saved } = state;
+  const setNiche = (v) => setState(s => ({ ...s, niche: v }));
+  const setResult = (v) => setState(s => ({ ...s, result: v }));
+  const setSelectedIdee = (v) => setState(s => ({ ...s, selectedIdee: v }));
+  const setPrompt = (v) => setState(s => ({ ...s, prompt: v }));
+  const setSaved = (v) => setState(s => ({ ...s, saved: v }));
   const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(null);
-  const [selectedIdee, setSelectedIdee] = useState(null);
-  const [prompt, setPrompt] = useState("");
   const [loadingPrompt, setLoadingPrompt] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [copied, setCopied] = useState(null);
 
   const generate = async () => {
     if (!niche) return;
@@ -443,9 +443,7 @@ function IdeesTab({ platform, langue, t, user }) {
               {cta && (<div className="border-2 border-gray-800 rounded-3xl p-5"><div className="flex justify-between items-center mb-2"><p className="text-xs font-black tracking-widest uppercase text-pink-400">{l.cta}</p><button onClick={() => copy(cta, "cta")} className="text-xs text-gray-500 hover:text-pink-400 transition">{copied === "cta" ? t.copied : t.copy}</button></div><p className="text-white text-sm font-bold">{cta}</p></div>)}
               {astuce && (<div className="border-2 border-violet-500/30 bg-violet-500/5 rounded-3xl p-5"><p className="text-xs font-black tracking-widest uppercase text-violet-400 mb-2">{l.astuce}</p><p className="text-white text-sm">{astuce}</p></div>)}
               {user ? (
-                <button onClick={saveToSupabase} disabled={saved} className="w-full border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-3xl transition text-sm font-medium disabled:opacity-50">
-                  {saved ? t.saveSuccess : t.saveBrief}
-                </button>
+                <button onClick={saveToSupabase} disabled={saved} className="w-full border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-3xl transition text-sm font-medium disabled:opacity-50">{saved ? t.saveSuccess : t.saveBrief}</button>
               ) : (
                 <p className="text-center text-xs text-gray-500">{t.loginToSave}</p>
               )}
@@ -458,11 +456,13 @@ function IdeesTab({ platform, langue, t, user }) {
   );
 }
 
-function AnalyseTab({ platform, langue, t }) {
-  const [hook, setHook] = useState("");
-  const [result, setResult] = useState("");
+function AnalyseTab({ platform, langue, t, state, setState }) {
+  const { hook, result } = state;
+  const setHook = (v) => setState(s => ({ ...s, hook: v }));
+  const setResult = (v) => setState(s => ({ ...s, result: v }));
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(null);
+
   const generate = async () => {
     if (!hook) return;
     setLoading(true); setResult("");
@@ -511,18 +511,16 @@ function SavedTab({ user, t }) {
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
-    const fetch_ = async () => {
+    const fetchAll = async () => {
       const [h, i, l] = await Promise.all([
         supabase.from("liked_hooks").select("*").order("created_at", { ascending: false }),
         supabase.from("liked_idees").select("*").order("created_at", { ascending: false }),
         supabase.from("liked_legendes").select("*").order("created_at", { ascending: false }),
       ]);
-      setHooks(h.data || []);
-      setIdees(i.data || []);
-      setLegendees(l.data || []);
+      setHooks(h.data || []); setIdees(i.data || []); setLegendees(l.data || []);
       setLoading(false);
     };
-    fetch_();
+    fetchAll();
   }, [user]);
 
   const deleteItem = async (table, id, setter) => {
@@ -622,16 +620,18 @@ function SavedTab({ user, t }) {
 
 export default function Home() {
   const [tab, setTab] = useState("hooks");
-  const [description, setDescription] = useState("");
   const [platform, setPlatform] = useState("TikTok");
   const [tone, setTone] = useState("Divertissant");
   const [langue, setLangue] = useState("Français");
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [liked, setLiked] = useState([]);
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [generationsLeft, setGenerationsLeft] = useState(null);
+
+  // États persistants par onglet
+  const [hooksState, setHooksState] = useState({ description: "", result: "", liked: [] });
+  const [legendeState, setLegendeState] = useState({ description: "", result: "", saved: false });
+  const [ideesState, setIdeesState] = useState({ niche: "", result: "", selectedIdee: null, prompt: "", saved: false });
+  const [analyseState, setAnalyseState] = useState({ hook: "", result: "" });
 
   const t = T[langue];
 
@@ -646,18 +646,24 @@ export default function Home() {
     else setGenerationsLeft(FREE_LIMIT - getLocalGenerations());
   }, [user]);
 
-  const handleLangueChange = (l) => { setLangue(l); setTone(T[l].tones[0]); setResult(""); };
+  const handleLangueChange = (l) => {
+    setLangue(l); setTone(T[l].tones[0]);
+    setHooksState({ description: "", result: "", liked: [] });
+    setLegendeState({ description: "", result: "", saved: false });
+    setIdeesState({ niche: "", result: "", selectedIdee: null, prompt: "", saved: false });
+    setAnalyseState({ hook: "", result: "" });
+  };
   const handleLogout = async () => { await supabase.auth.signOut(); setUser(null); };
   const canGenerate = generationsLeft === null || generationsLeft > 0;
 
   const generate = async () => {
-    if (!description || !canGenerate) return;
-    setLoading(true); setResult(""); setLiked([]);
+    if (!hooksState.description || !canGenerate) return;
+    setHooksState(s => ({ ...s, result: "", liked: [] }));
     if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
     else setGenerationsLeft((g) => g - 1);
-    const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description, platform, tone, langue }) });
+    const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description: hooksState.description, platform, tone, langue }) });
     const data = await res.json();
-    setResult(data.result); setLoading(false);
+    setHooksState(s => ({ ...s, result: data.result }));
   };
 
   const parseHooks = (text) => {
@@ -665,7 +671,21 @@ export default function Home() {
     return text.split("\n").map((line) => { const m = line.match(/^\d+[\.\)]\s*(.+)$/); if (!m) return null; return m[1].replace(/\*\*/g, "").replace(/\s*\(.*?\)/g, "").replace(/^["'"]+|["'"]+$/g, "").trim(); }).filter(Boolean);
   };
 
-  const hooks = parseHooks(result);
+  const hooks = parseHooks(hooksState.result);
+  const [loadingHooks, setLoadingHooks] = useState(false);
+
+  const generateHooks = async () => {
+    if (!hooksState.description || !canGenerate) return;
+    setLoadingHooks(true);
+    setHooksState(s => ({ ...s, result: "", liked: [] }));
+    if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
+    else setGenerationsLeft((g) => g - 1);
+    const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ description: hooksState.description, platform, tone, langue }) });
+    const data = await res.json();
+    setHooksState(s => ({ ...s, result: data.result }));
+    setLoadingHooks(false);
+  };
+
   const tabIds = ["hooks", "legende", "idees", "analyse", "saved"];
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
@@ -702,7 +722,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-5 gap-1 bg-gray-900 p-1 rounded-3xl">
             {tabIds.map((id, i) => (
-              <button key={id} onClick={() => { setTab(id); setResult(""); }}
+              <button key={id} onClick={() => setTab(id)}
                 className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
                 {id === "saved" ? t.savedTab : t.tabs[i]}
               </button>
@@ -711,10 +731,10 @@ export default function Home() {
         </div>
 
         {tab === "hooks" && (
-          !result ? (
+          !hooksState.result ? (
             <div className="space-y-4 mb-6">
               <div className="relative">
-                <textarea id="description" className="peer w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-28" placeholder="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                <textarea id="description" className="peer w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-28" placeholder="description" value={hooksState.description} onChange={(e) => setHooksState(s => ({ ...s, description: e.target.value }))} />
                 <label htmlFor="description" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">{t.videoAbout}</label>
               </div>
               <PlatformSelect value={platform} onChange={setPlatform} t={t} />
@@ -726,8 +746,8 @@ export default function Home() {
                   <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.upgrade}</a>
                 </div>
               ) : (
-                <button onClick={generate} disabled={loading || !description} className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">
-                  {loading ? t.generating : t.generateHooks}
+                <button onClick={generateHooks} disabled={loadingHooks || !hooksState.description} className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">
+                  {loadingHooks ? t.generating : t.generateHooks}
                 </button>
               )}
               <div className="border-2 border-gray-800 rounded-3xl overflow-hidden">
@@ -748,14 +768,14 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-4">
-              <TinderCard hooks={hooks} onLike={(h) => setLiked((l) => [...l, h])} liked={liked} t={t} user={user} platform={platform} tone={tone} langue={langue} />
-              <button onClick={() => setResult("")} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
+              <TinderCard hooks={hooks} onLike={(h) => setHooksState(s => ({ ...s, liked: [...s.liked, h] }))} liked={hooksState.liked} t={t} user={user} platform={platform} tone={tone} langue={langue} />
+              <button onClick={() => setHooksState(s => ({ ...s, result: "" }))} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
             </div>
           )
         )}
-        {tab === "legende" && <LegendeTab platform={platform} langue={langue} t={t} user={user} />}
-        {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} user={user} />}
-        {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} />}
+        {tab === "legende" && <LegendeTab platform={platform} langue={langue} t={t} user={user} state={legendeState} setState={setLegendeState} />}
+        {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} user={user} state={ideesState} setState={setIdeesState} />}
+        {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} state={analyseState} setState={setAnalyseState} />}
         {tab === "saved" && <SavedTab user={user} t={t} />}
       </div>
     </main>
