@@ -1,6 +1,35 @@
-﻿export async function POST(req) {
+﻿import { createClient } from '@supabase/supabase-js';
+
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000;
+const RATE_LIMIT_MAX = 5;
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip) || { count: 0, start: now };
+  if (now - entry.start > RATE_LIMIT_WINDOW) { rateLimitMap.set(ip, { count: 1, start: now }); return true; }
+  if (entry.count >= RATE_LIMIT_MAX) return false;
+  rateLimitMap.set(ip, { count: entry.count + 1, start: entry.start });
+  return true;
+}
+
+export async function POST(req) {
+  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  if (!checkRateLimit(ip)) return Response.json({ error: 'Trop de requêtes. Réessaie dans une minute.' }, { status: 429 });
+
+  const authHeader = req.headers.get('authorization');
+  if (authHeader) {
+    const token = authHeader.replace('Bearer ', '');
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, { global: { headers: { Authorization: `Bearer ${token}` } } });
+    await supabase.auth.getUser();
+  }
+
   const { hook, platform, langue } = await req.json();
-  const prompt = 'Tu es un expert en creation de contenu viral sur ' + platform + '. Analyse ce hook : ' + hook + '. Langue de reponse : ' + langue + '. Donne : 1) Une note sur 10 2) Les points forts 3) Les points faibles 4) Une version amelioree. IMPORTANT: Sans asterisques ni markdown. Format: NOTE: X/10 POINTS FORTS: ... POINTS FAIBLES: ... VERSION AMELIOREE: ...';
+  if (!hook || !platform || !langue) return Response.json({ error: 'Paramètres manquants.' }, { status: 400 });
+  if (hook.length > 500) return Response.json({ error: 'Hook trop long.' }, { status: 400 });
+
+  const prompt = 'Tu es un expert en hooks viraux sur ' + platform + '. Analyse ce hook : "' + hook + '". Langue : ' + langue + '. Format strict sans asterisques:\nNOTE: [X/10]\nPOINTS FORTS:\n[points forts]\nPOINTS FAIBLES:\n[points faibles]\nVERSION AMELIOREE:\n[version améliorée]';
+
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY, 'Content-Type': 'application/json' },
