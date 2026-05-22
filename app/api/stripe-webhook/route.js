@@ -1,15 +1,16 @@
 export const dynamic = 'force-dynamic';
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 export async function POST(req) {
+  const Stripe = (await import('stripe')).default;
+  const { createClient } = await import('@supabase/supabase-js');
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');
 
@@ -53,13 +54,12 @@ export async function POST(req) {
 
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object;
-    // Chercher l'utilisateur via customer ID
     const { data } = await supabaseAdmin
       .from('user_profiles')
       .select('id')
       .eq('stripe_customer_id', sub.customer)
       .single();
-    
+
     if (data) {
       await supabaseAdmin
         .from('user_profiles')

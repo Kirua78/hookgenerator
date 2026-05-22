@@ -1,8 +1,4 @@
 export const dynamic = 'force-dynamic';
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const PRICE_IDS = {
   mensuel: process.env.NEXT_PUBLIC_STRIPE_PRICE_MENSUEL,
@@ -12,6 +8,11 @@ const PRICE_IDS = {
 };
 
 export async function POST(req) {
+  const Stripe = (await import('stripe')).default;
+  const { createClient } = await import('@supabase/supabase-js');
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
   const authHeader = req.headers.get('authorization');
   if (!authHeader) return Response.json({ error: 'Non autorisé' }, { status: 401 });
 
@@ -35,8 +36,8 @@ export async function POST(req) {
     payment_method_types: ['card'],
     mode: isSubscription ? 'subscription' : 'payment',
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hookgenerator.eu'}/success?plan=${priceKey}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hookgenerator.eu'}/pricing`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?plan=${priceKey}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
     customer_email: user.email,
     metadata: { user_id: user.id, plan: priceKey },
   });
