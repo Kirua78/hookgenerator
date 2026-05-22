@@ -394,7 +394,7 @@ const T = {
     unlimited: " Générations illimitées",
     noMore: "Tu as atteint ta limite du jour !",
     noMoreSub: "Connecte-toi pour plus de générations", upgrade: "Se connecter →",
-    savedTab: "Savés", delete: "🗑️",
+    savedTab: "Sauvegardés", delete: "🗑️",
     loginToSave: "Connecte-toi pour sauvegarder tes contenus !",
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
