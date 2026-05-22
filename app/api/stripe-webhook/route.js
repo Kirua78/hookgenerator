@@ -27,7 +27,11 @@ export async function POST(req) {
     const plan = session.metadata?.plan;
     if (!userId || !plan) return Response.json({ received: true });
 
-    let updates = { is_premium: true, plan };
+    let updates = { 
+      is_premium: true, 
+      plan,
+      stripe_customer_id: session.customer,
+    };
 
     if (plan === 'mensuel') {
       const end = new Date();
@@ -52,6 +56,24 @@ export async function POST(req) {
       .upsert({ id: userId, ...updates });
   }
 
+  if (event.type === 'customer.subscription.updated') {
+    const sub = event.data.object;
+    if (sub.status === 'active') {
+      const { data } = await supabaseAdmin
+        .from('user_profiles')
+        .select('id')
+        .eq('stripe_customer_id', sub.customer)
+        .single();
+
+      if (data) {
+        await supabaseAdmin
+          .from('user_profiles')
+          .update({ is_premium: true })
+          .eq('id', data.id);
+      }
+    }
+  }
+
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object;
     const { data } = await supabaseAdmin
@@ -63,7 +85,12 @@ export async function POST(req) {
     if (data) {
       await supabaseAdmin
         .from('user_profiles')
-        .update({ is_premium: false, plan: 'free', subscription_end: null })
+        .update({ 
+          is_premium: false, 
+          plan: 'free', 
+          subscription_end: null,
+          hooks_remaining: 0,
+        })
         .eq('id', data.id);
     }
   }
