@@ -18,11 +18,11 @@ export default function Landing() {
   };
 
   const testimonials = [
-    { name: "Mathieu R.", handle: "@mathieu_fitness", avatar: "MR", niche: "Fitness · 84K abonnés", quote: "Avant HookGenerator, je passais 2h à écrire mes accroches. Maintenant 5 minutes. Mon taux de complétion a augmenté de 340% en un mois.", stat: "+340% de complétion", color: "from-pink-500 to-rose-500" },
-    { name: "Sarah L.", handle: "@sarahinvest", avatar: "SL", niche: "Finance · 127K abonnés", quote: "Mon premier hook généré a fait 2,1M de vues sur TikTok. Je n'aurais jamais écrit ça toute seule. L'outil comprend vraiment ce qui fait scroller.", stat: "2,1M de vues", color: "from-violet-500 to-purple-500" },
-    { name: "Kevin T.", handle: "@kevintech_fr", avatar: "KT", niche: "Tech · 52K abonnés", quote: "Le ton Storytelling a complètement changé ma façon de créer. Mes vidéos durent plus longtemps dans le feed et l'algo me pousse naturellement.", stat: "x4 portée organique", color: "from-blue-500 to-cyan-500" },
-    { name: "Léa M.", handle: "@lea_lifestyle", avatar: "LM", niche: "Lifestyle · 213K abonnés", quote: "J'utilise le brief IA pour chaque idée de vidéo. C'est comme avoir un directeur créatif dans ma poche. Mes sponsors ont remarqué la différence.", stat: "+89% d'engagement", color: "from-emerald-500 to-teal-500" },
-  ];
+  { name: "Mathieu R.", niche: "Fitness · 84K abonnés", avatar: "MR", quote: "Avant HookGenerator, je passais 2h à écrire mes accroches. Maintenant 5 minutes. Mon taux de complétion a augmenté de 340% en un mois.", stat: "+340% de complétion", color: "from-pink-500 to-rose-500" },
+  { name: "Sarah L.", niche: "Finance · 127K abonnés", avatar: "SL", quote: "Mon premier hook généré a fait 2,1M de vues sur TikTok. Je n'aurais jamais écrit ça toute seule. L'outil comprend vraiment ce qui fait scroller.", stat: "2,1M de vues", color: "from-violet-500 to-purple-500" },
+  { name: "Kevin T.", niche: "Tech · 52K abonnés", avatar: "KT", quote: "Le ton Storytelling a complètement changé ma façon de créer. Mes vidéos durent plus longtemps dans le feed et l'algo me pousse naturellement.", stat: "x4 portée organique", color: "from-blue-500 to-cyan-500" },
+  { name: "Léa M.", niche: "Lifestyle · 213K abonnés", avatar: "LM", quote: "J'utilise le brief IA pour chaque idée de vidéo. C'est comme avoir un directeur créatif dans ma poche. Mes sponsors ont remarqué la différence.", stat: "+89% d'engagement", color: "from-emerald-500 to-teal-500" },
+];
 
   const features = [
     { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
