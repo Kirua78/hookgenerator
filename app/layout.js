@@ -1,22 +1,56 @@
-import { Oswald } from "next/font/google";
-import "./globals.css";
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const oswald = Oswald({
-  subsets: ["latin"],
-  variable: "--font-oswald",
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "HookGenerator",
-  description: "Génère des hooks viraux pour tes vidéos",
+  metadataBase: new URL('https://hookgenerator.eu'),
+  title: {
+    default: 'HookGenerator — Hooks viraux pour TikTok, Instagram, YouTube',
+    template: '%s | HookGenerator',
+  },
+  description: "L'outil qui génère des hooks viraux en quelques secondes pour TikTok, Instagram Reels, YouTube Shorts et LinkedIn. Stop à la page blanche.",
+  keywords: ['hook viral', 'hook tiktok', 'accroche vidéo', 'créateur de contenu', 'hook instagram', 'hook youtube', 'generateur hook'],
+  authors: [{ name: 'HookGenerator', url: 'https://hookgenerator.eu' }],
+  creator: 'HookGenerator',
+  publisher: 'SB SOLUTION INFO',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    url: 'https://hookgenerator.eu',
+    siteName: 'HookGenerator',
+    title: 'HookGenerator — Hooks viraux pour TikTok, Instagram, YouTube',
+    description: "L'outil qui génère des hooks viraux en quelques secondes. Stop à la page blanche. Start au scroll.",
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'HookGenerator — Génère des hooks viraux',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HookGenerator — Hooks viraux pour TikTok, Instagram, YouTube',
+    description: "L'outil qui génère des hooks viraux en quelques secondes. Stop à la page blanche.",
+    images: ['/og-image.png'],
+    creator: '@hookgenerator',
+  },
+  alternates: {
+    canonical: 'https://hookgenerator.eu',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
-      <body className={`${oswald.variable} antialiased`}>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

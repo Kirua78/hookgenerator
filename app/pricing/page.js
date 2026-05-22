@@ -1,3 +1,16 @@
+// À coller en haut de app/pricing/page.js (avant le composant)
+
+export const metadata = {
+  title: 'Tarifs — HookGenerator',
+  description: 'Découvre nos offres : gratuit, mensuel 4,99€, annuel 39,99€ ou packs de hooks. Génère des hooks viraux sans limite.',
+  alternates: { canonical: 'https://hookgenerator.eu/pricing' },
+  openGraph: {
+    title: 'Tarifs HookGenerator — À partir de 4,99€/mois',
+    description: 'Offre mensuelle, annuelle ou packs one-shot. Génère des hooks viraux sans limite pour TikTok, Instagram, YouTube.',
+    url: 'https://hookgenerator.eu/pricing',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+};
 'use client';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
