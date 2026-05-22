@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 
 const STORAGE_KEY = "hg_generations";
@@ -19,7 +19,199 @@ function incrementLocalGenerations() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count }));
 }
 
-function DemoSection() {
+const TL = {
+  Français: {
+    flag: "🇫🇷",
+    tagline: "Plus de 50 000 hooks générés ce mois",
+    h1a: "Tes vidéos méritent un",
+    h1b: "hook qui déchire",
+    desc: "L'outil qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.",
+    tryFree: "Essayer gratuitement",
+    openApp: "Accéder à l'app →",
+    seePricing: "Voir les tarifs →",
+    disclaimer: "3 générations gratuites · Sans carte bancaire",
+    tryNow: "Essaie maintenant",
+    tryNowSub: "Tape ta niche et vois ce que l'outil génère en quelques secondes.",
+    videoAbout: "Ta vidéo parle de quoi ?",
+    generate: "Générer 3 hooks gratuits",
+    generating: "Génération en cours...",
+    remaining: "restante",
+    remainingPlural: "restantes",
+    usedAll: "Tu as utilisé tes 3 générations gratuites !",
+    createAccount: "Crée un compte gratuit pour continuer.",
+    createBtn: "Créer un compte gratuit →",
+    hooksGenerated: "Tes hooks générés",
+    createMore: "Créer un compte pour générer 10 hooks par jour →",
+    platforms: "Compatible avec toutes les plateformes",
+    hooksTitle: "Des hooks qui font",
+    hooksTitleAccent: "arrêter de scroller",
+    hooksSub: "Générés en quelques secondes. Adaptés à ta niche.",
+    featuresTitle: "Tout ce dont tu as besoin pour",
+    featuresTitleAccent: "exploser sur les réseaux",
+    featuresSub: "4 outils puissants. 1 seule plateforme.",
+    ctaTitle: "Prêt à créer des hooks qui",
+    ctaTitleAccent: "font la différence ?",
+    ctaSub: "Commence gratuitement. Upgrade quand tu veux.",
+    ctaDisclaimer: "3 générations gratuites · Sans carte bancaire · Annulation à tout moment",
+    tarifs: "Tarifs",
+    connexion: "Connexion",
+    cgu: "CGU",
+    confidentialite: "Confidentialité",
+    mentions: "Mentions légales",
+    contact: "Contact",
+  },
+  English: {
+    flag: "🇬🇧",
+    tagline: "More than 50,000 hooks generated this month",
+    h1a: "Your videos deserve a",
+    h1b: "hook that kills it",
+    desc: "The tool that generates viral hooks for TikTok, Instagram, YouTube and more. Stop the blank page. Start the scroll.",
+    tryFree: "Try for free",
+    openApp: "Open the app →",
+    seePricing: "See pricing →",
+    disclaimer: "3 free generations · No credit card",
+    tryNow: "Try it now",
+    tryNowSub: "Type your niche and see what the tool generates in seconds.",
+    videoAbout: "What is your video about?",
+    generate: "Generate 3 free hooks",
+    generating: "Generating...",
+    remaining: "remaining",
+    remainingPlural: "remaining",
+    usedAll: "You have used your 3 free generations!",
+    createAccount: "Create a free account to continue.",
+    createBtn: "Create a free account →",
+    hooksGenerated: "Your generated hooks",
+    createMore: "Create an account to generate 10 hooks per day →",
+    platforms: "Compatible with all platforms",
+    hooksTitle: "Hooks that make people",
+    hooksTitleAccent: "stop scrolling",
+    hooksSub: "Generated in seconds. Adapted to your niche.",
+    featuresTitle: "Everything you need to",
+    featuresTitleAccent: "blow up on social media",
+    featuresSub: "4 powerful tools. 1 platform.",
+    ctaTitle: "Ready to create hooks that",
+    ctaTitleAccent: "make a difference?",
+    ctaSub: "Start for free. Upgrade whenever you want.",
+    ctaDisclaimer: "3 free generations · No credit card · Cancel anytime",
+    tarifs: "Pricing",
+    connexion: "Login",
+    cgu: "Terms",
+    confidentialite: "Privacy",
+    mentions: "Legal",
+    contact: "Contact",
+  },
+  Español: {
+    flag: "🇪🇸",
+    tagline: "Más de 50,000 hooks generados este mes",
+    h1a: "Tus videos merecen un",
+    h1b: "hook que destruye",
+    desc: "La herramienta que genera ganchos virales para TikTok, Instagram, YouTube y más. Stop a la página en blanco. Start al scroll.",
+    tryFree: "Probar gratis",
+    openApp: "Abrir la app →",
+    seePricing: "Ver precios →",
+    disclaimer: "3 generaciones gratuitas · Sin tarjeta",
+    tryNow: "Pruébalo ahora",
+    tryNowSub: "Escribe tu nicho y ve lo que genera en segundos.",
+    videoAbout: "¿De qué trata tu video?",
+    generate: "Generar 3 hooks gratis",
+    generating: "Generando...",
+    remaining: "restante",
+    remainingPlural: "restantes",
+    usedAll: "¡Has usado tus 3 generaciones gratuitas!",
+    createAccount: "Crea una cuenta gratis para continuar.",
+    createBtn: "Crear cuenta gratis →",
+    hooksGenerated: "Tus hooks generados",
+    createMore: "Crear cuenta para generar 10 hooks por día →",
+    platforms: "Compatible con todas las plataformas",
+    hooksTitle: "Hooks que hacen",
+    hooksTitleAccent: "parar el scroll",
+    hooksSub: "Generados en segundos. Adaptados a tu nicho.",
+    featuresTitle: "Todo lo que necesitas para",
+    featuresTitleAccent: "explotar en redes sociales",
+    featuresSub: "4 herramientas potentes. 1 plataforma.",
+    ctaTitle: "¿Listo para crear hooks que",
+    ctaTitleAccent: "marcan la diferencia?",
+    ctaSub: "Empieza gratis. Actualiza cuando quieras.",
+    ctaDisclaimer: "3 generaciones gratuitas · Sin tarjeta · Cancela cuando quieras",
+    tarifs: "Precios",
+    connexion: "Entrar",
+    cgu: "Términos",
+    confidentialite: "Privacidad",
+    mentions: "Legal",
+    contact: "Contacto",
+  },
+  Português: {
+    flag: "🇧🇷",
+    tagline: "Mais de 50.000 hooks gerados este mês",
+    h1a: "Seus vídeos merecem um",
+    h1b: "hook que arrasa",
+    desc: "A ferramenta que gera ganchos virais para TikTok, Instagram, YouTube e mais. Pare com a página em branco. Comece o scroll.",
+    tryFree: "Experimentar grátis",
+    openApp: "Abrir o app →",
+    seePricing: "Ver preços →",
+    disclaimer: "3 gerações gratuitas · Sem cartão",
+    tryNow: "Experimente agora",
+    tryNowSub: "Digite seu nicho e veja o que a ferramenta gera em segundos.",
+    videoAbout: "Sobre o que é o seu vídeo?",
+    generate: "Gerar 3 hooks grátis",
+    generating: "Gerando...",
+    remaining: "restante",
+    remainingPlural: "restantes",
+    usedAll: "Você usou suas 3 gerações gratuitas!",
+    createAccount: "Crie uma conta grátis para continuar.",
+    createBtn: "Criar conta grátis →",
+    hooksGenerated: "Seus hooks gerados",
+    createMore: "Criar conta para gerar 10 hooks por dia →",
+    platforms: "Compatível com todas as plataformas",
+    hooksTitle: "Hooks que fazem",
+    hooksTitleAccent: "parar de rolar",
+    hooksSub: "Gerados em segundos. Adaptados ao seu nicho.",
+    featuresTitle: "Tudo que você precisa para",
+    featuresTitleAccent: "explodir nas redes sociais",
+    featuresSub: "4 ferramentas poderosas. 1 plataforma.",
+    ctaTitle: "Pronto para criar hooks que",
+    ctaTitleAccent: "fazem a diferença?",
+    ctaSub: "Comece grátis. Atualize quando quiser.",
+    ctaDisclaimer: "3 gerações gratuitas · Sem cartão · Cancele quando quiser",
+    tarifs: "Preços",
+    connexion: "Entrar",
+    cgu: "Termos",
+    confidentialite: "Privacidade",
+    mentions: "Legal",
+    contact: "Contato",
+  },
+};
+
+function LandingLangSelector({ langue, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const langs = Object.keys(TL);
+  useEffect(() => {
+    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  return (
+    <div className="relative" ref={ref}>
+      <button onClick={() => setOpen(o => !o)} className="text-2xl hover:scale-110 transition-transform" title={langue}>
+        {TL[langue].flag}
+      </button>
+      {open && (
+        <div className="absolute top-10 left-0 bg-gray-950 border-2 border-gray-800 rounded-2xl overflow-hidden shadow-xl z-20 min-w-max">
+          {langs.map(l => (
+            <button key={l} onClick={() => { onChange(l); setOpen(false); }}
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm w-full text-left transition ${langue === l ? "bg-pink-500/10 text-pink-400" : "text-gray-300 hover:bg-gray-800"}`}>
+              <span>{TL[l].flag}</span><span>{l}</span>
+              {langue === l && <span className="ml-auto text-pink-400">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DemoSection({ t }) {
   const [description, setDescription] = useState('');
   const [platform, setPlatform] = useState('TikTok');
   const [loading, setLoading] = useState(false);
@@ -33,7 +225,7 @@ function DemoSection() {
     if (!description) return;
     const remaining = 3 - getLocalGenerations();
     if (remaining <= 0) {
-      setError('Tu as utilisé tes 3 générations gratuites. Crée un compte pour continuer !');
+      setError(t.usedAll);
       return;
     }
     setLoading(true); setError(''); setHooks([]);
@@ -59,9 +251,9 @@ function DemoSection() {
     <section className="relative px-6 py-24 max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-black mb-4">
-          Essaie <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">maintenant</span>
+          {t.tryNow} <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">✨</span>
         </h2>
-        <p className="text-gray-400">Tape ta niche et vois ce que l&apos;outil génère en quelques secondes.</p>
+        <p className="text-gray-400">{t.tryNowSub}</p>
       </div>
       <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-4 bg-black/60 backdrop-blur-sm">
         <div className="relative">
@@ -70,7 +262,7 @@ function DemoSection() {
             placeholder="description" value={description}
             onChange={e => setDescription(e.target.value)} id="demo-desc" />
           <label htmlFor="demo-desc" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">
-            Ta vidéo parle de quoi ?
+            {t.videoAbout}
           </label>
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -84,24 +276,24 @@ function DemoSection() {
         {remaining > 0 ? (
           <button onClick={generate} disabled={loading || !description}
             className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-2xl hover:opacity-90 disabled:opacity-50 transition">
-            {loading ? 'Génération en cours...' : `Générer 3 hooks gratuits (${remaining} restante${remaining > 1 ? 's' : ''})`}
+            {loading ? t.generating : `${t.generate} (${remaining} ${remaining > 1 ? t.remainingPlural : t.remaining})`}
           </button>
         ) : (
           <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 text-center">
-            <p className="text-white font-bold mb-1">Tu as utilisé tes 3 générations gratuites !</p>
-            <p className="text-gray-400 text-sm mb-3">Crée un compte gratuit pour continuer.</p>
-            <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">Créer un compte gratuit →</a>
+            <p className="text-white font-bold mb-1">{t.usedAll}</p>
+            <p className="text-gray-400 text-sm mb-3">{t.createAccount}</p>
+            <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.createBtn}</a>
           </div>
         )}
         {error && (
           <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 text-center">
             <p className="text-white font-bold mb-1">{error}</p>
-            <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">Créer un compte gratuit →</a>
+            <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.createBtn}</a>
           </div>
         )}
         {hooks.length > 0 && (
           <div className="space-y-3 pt-2">
-            <p className="text-xs font-black tracking-widest uppercase text-pink-400">Tes hooks générés</p>
+            <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.hooksGenerated}</p>
             {hooks.map((hook, i) => (
               <div key={i} onClick={() => copy(hook, i)}
                 className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 cursor-pointer transition flex justify-between items-center gap-3">
@@ -110,7 +302,7 @@ function DemoSection() {
               </div>
             ))}
             <a href="/auth" className="block w-full text-center border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-2xl transition text-sm font-medium">
-              Créer un compte pour générer 10 hooks par jour →
+              {t.createMore}
             </a>
           </div>
         )}
@@ -121,6 +313,8 @@ function DemoSection() {
 
 export default function Landing() {
   const [user, setUser] = useState(null);
+  const [langue, setLangue] = useState('Français');
+  const t = TL[langue];
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -169,18 +363,21 @@ export default function Landing() {
 
       {/* Nav */}
       <nav className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
-        <img src="/logo.png" alt="HookGenerator" className="h-10 object-contain" />
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="HookGenerator" className="h-10 object-contain" />
+          <LandingLangSelector langue={langue} onChange={setLangue} />
+        </div>
         <div className="flex items-center gap-4">
-          <a href="/pricing" className="text-sm text-gray-400 hover:text-white transition">Tarifs</a>
+          <a href="/pricing" className="text-sm text-gray-400 hover:text-white transition">{t.tarifs}</a>
           {user ? (
             <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
-              Accéder à l&apos;app →
+              {t.openApp}
             </a>
           ) : (
             <>
-              <a href="/auth" className="text-sm text-gray-400 hover:text-white transition">Connexion</a>
+              <a href="/auth" className="text-sm text-gray-400 hover:text-white transition">{t.connexion}</a>
               <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
-                Essayer gratuitement
+                {t.tryFree}
               </a>
             </>
           )}
@@ -190,38 +387,36 @@ export default function Landing() {
       {/* Hero */}
       <section className="text-center px-6 py-20 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold px-4 py-2 rounded-full mb-6">
-          Plus de 50 000 hooks générés ce mois
+          {t.tagline}
         </div>
         <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
-          Tes vidéos méritent un
-          <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent"> hook qui déchire</span>
+          {t.h1a}
+          <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent"> {t.h1b}</span>
         </h1>
-        <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-          L&apos;outil qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
-        </p>
+        <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">{t.desc}</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           {user ? (
             <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-              Accéder à l&apos;app →
+              {t.openApp}
             </a>
           ) : (
             <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-              Essayer gratuitement
+              {t.tryFree}
             </a>
           )}
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
-            Voir les tarifs →
+            {t.seePricing}
           </a>
         </div>
-        <p className="text-xs text-gray-600 mt-4">3 générations gratuites · Sans carte bancaire</p>
+        <p className="text-xs text-gray-600 mt-4">{t.disclaimer}</p>
       </section>
 
       {/* Démo interactive */}
-      <DemoSection />
+      <DemoSection t={t} />
 
       {/* Plateformes */}
       <section className="px-6 py-10 max-w-4xl mx-auto">
-        <p className="text-center text-xs text-gray-600 uppercase tracking-widest font-bold mb-8">Compatible avec toutes les plateformes</p>
+        <p className="text-center text-xs text-gray-600 uppercase tracking-widest font-bold mb-8">{t.platforms}</p>
         <div className="flex flex-wrap justify-center gap-4">
           {platforms.map(p => (
             <div key={p.name} className="flex items-center gap-3 border border-gray-800 hover:border-gray-600 bg-gray-900/50 px-5 py-3 rounded-2xl transition group">
@@ -235,8 +430,8 @@ export default function Landing() {
       {/* Exemples de hooks */}
       <section className="px-6 py-20 max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-black mb-4">Des hooks qui font <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">arrêter de scroller</span></h2>
-          <p className="text-gray-400">Générés en quelques secondes. Adaptés à ta niche.</p>
+          <h2 className="text-3xl md:text-4xl font-black mb-4">{t.hooksTitle} <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">{t.hooksTitleAccent}</span></h2>
+          <p className="text-gray-400">{t.hooksSub}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
@@ -260,8 +455,8 @@ export default function Landing() {
       <section className="px-6 py-20 bg-black/40 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black mb-4">Tout ce dont tu as besoin pour <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">exploser sur les réseaux</span></h2>
-            <p className="text-gray-400">4 outils puissants. 1 seule plateforme.</p>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">{t.featuresTitle} <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">{t.featuresTitleAccent}</span></h2>
+            <p className="text-gray-400">{t.featuresSub}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => (
@@ -293,23 +488,23 @@ export default function Landing() {
 
       {/* CTA final */}
       <section className="px-6 py-20 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-black mb-4">Prêt à créer des hooks qui <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">font la différence ?</span></h2>
-        <p className="text-gray-400 mb-8">Commence gratuitement. Upgrade quand tu veux.</p>
+        <h2 className="text-3xl md:text-4xl font-black mb-4">{t.ctaTitle} <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">{t.ctaTitleAccent}</span></h2>
+        <p className="text-gray-400 mb-8">{t.ctaSub}</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           {user ? (
             <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-              Accéder à l&apos;app →
+              {t.openApp}
             </a>
           ) : (
             <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-              Essayer gratuitement
+              {t.tryFree}
             </a>
           )}
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
-            Voir les tarifs →
+            {t.seePricing}
           </a>
         </div>
-        <p className="text-xs text-gray-600 mt-4">3 générations gratuites · Sans carte bancaire · Annulation à tout moment</p>
+        <p className="text-xs text-gray-600 mt-4">{t.ctaDisclaimer}</p>
       </section>
 
       {/* Footer */}
@@ -317,10 +512,10 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <img src="/logo.png" alt="HookGenerator" className="h-8 object-contain" />
           <div className="flex gap-6 text-xs text-gray-600">
-            <a href="/cgu" className="hover:text-gray-400 transition">CGU</a>
-            <a href="/privacy" className="hover:text-gray-400 transition">Confidentialité</a>
-            <a href="/mentions" className="hover:text-gray-400 transition">Mentions légales</a>
-            <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">Contact</a>
+            <a href="/cgu" className="hover:text-gray-400 transition">{t.cgu}</a>
+            <a href="/privacy" className="hover:text-gray-400 transition">{t.confidentialite}</a>
+            <a href="/mentions" className="hover:text-gray-400 transition">{t.mentions}</a>
+            <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">{t.contact}</a>
           </div>
           <p className="text-xs text-gray-700">© 2025 SB SOLUTION INFO</p>
         </div>
