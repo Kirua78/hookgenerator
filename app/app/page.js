@@ -605,7 +605,7 @@ function SavedTab({ user, t }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-1 bg-gray-900 p-1 rounded-3xl">
-        {[["hooks", ` (${hooks.length})`], ["idees", ` (${idees.length})`], ["legendes", ` (${legendes.length})`]].map(([id, label]) => (
+        {[["hooks", `Hooks (${hooks.length})`], ["idees", `Idées (${idees.length})`], ["legendes", `Légendes (${legendes.length})`]].map(([id, label]) => (
           <button key={id} onClick={() => setSection(id)} className={`py-2.5 rounded-3xl text-xs font-bold transition ${section === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>{label}</button>
         ))}
       </div>
@@ -711,10 +711,7 @@ export default function Home() {
 
   const fetchProfile = async (userId) => {
     const { data } = await supabase.from("user_profiles").select("is_premium, plan").eq("id", userId).single();
-    if (data) {
-      setIsPremium(data.is_premium === true);
-      setPlan(data.plan || 'free');
-    }
+    if (data) { setIsPremium(data.is_premium === true); setPlan(data.plan || 'free'); }
   };
 
   useEffect(() => {
@@ -730,6 +727,7 @@ export default function Home() {
     setIdeesState({ niche: "", result: "", selectedIdee: null, prompt: "", saved: false });
     setAnalyseState({ hook: "", result: "" });
   };
+
   const handleLogout = async () => { await supabase.auth.signOut(); setUser(null); setIsPremium(false); };
   const canGenerate = isPremium || generationsLeft === null || generationsLeft > 0;
 
@@ -743,8 +741,7 @@ export default function Home() {
     const headers = { "Content-Type": "application/json" };
     if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
     const res = await fetch("/api/generate", {
-      method: "POST",
-      headers,
+      method: "POST", headers,
       body: JSON.stringify({ description: hooksState.description, platform, tone, langue }),
     });
     const data = await res.json();
@@ -762,24 +759,19 @@ export default function Home() {
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
   return (
-    <main className="min-h-screen bg-black text-white p-6 pb-24">
+    <main className="min-h-screen bg-black/60 text-white p-6 pb-24" style={{ position: 'relative', zIndex: 1 }}>
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div />
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap justify-end">
               {isPremium && (
-                <span className={`text-xs bg-gradient-to-r ${
-                  plan === 'annuel' ? 'from-yellow-500 to-yellow-300' :
-                  plan === 'mensuel' ? 'from-gray-400 to-gray-300' :
-                  'from-orange-700 to-orange-500'
-                } text-white px-2 py-1 rounded-full font-bold`}>
+                <span className={`text-xs bg-gradient-to-r ${plan === 'annuel' ? 'from-yellow-500 to-yellow-300' : plan === 'mensuel' ? 'from-gray-400 to-gray-300' : 'from-orange-700 to-orange-500'} text-white px-2 py-1 rounded-full font-bold`}>
                   {plan === 'annuel' ? '🥇 Pro Creator' : plan === 'mensuel' ? '🥈 Pro Creator' : '🥉 Pro Creator'}
                 </span>
               )}
               {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
               <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 Mon compte</a>
-              <span className="text-xs text-gray-400">{user.email}</span>
               <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
             </div>
           ) : (
@@ -796,7 +788,7 @@ export default function Home() {
           <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
             {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
           </div>
-          <div className="flex justify-center gap-2 mb-4">
+          <div className="flex justify-center gap-2 mb-4 flex-wrap">
             {langues.map((l) => (
               <button key={l.id} onClick={() => handleLangueChange(l.id)}
                 className={`px-3 py-1 rounded-full text-xs font-bold border-2 transition ${langue === l.id ? "border-pink-500 text-pink-400 bg-pink-500/10" : "border-gray-800 text-gray-500 hover:border-gray-600"}`}>
@@ -844,7 +836,7 @@ export default function Home() {
                     <p>{t.hookExplain1}</p><p>{t.hookExplain2}</p><p>{t.hookExplain3}</p>
                     <div className="border-2 border-gray-800 rounded-2xl p-3 mt-2">
                       <p className="text-xs text-gray-600 uppercase font-black tracking-widest mb-2">{t.example}</p>
-                      <p className="text-white italic">"{t.hookExample}"</p>
+                      <p className="text-white italic">&ldquo;{t.hookExample}&rdquo;</p>
                     </div>
                   </div>
                 )}
@@ -876,12 +868,8 @@ export default function Home() {
         <div className="fixed bottom-0 left-0 right-0 z-50 p-3">
           <a href="/pricing" className="flex items-center justify-between bg-gradient-to-r from-pink-500 to-violet-500 text-white rounded-2xl px-5 py-3 shadow-2xl hover:opacity-90 transition max-w-2xl mx-auto">
             <div>
-              <p className="font-black text-sm">
-                {!user ? " Passe au Premium" : " Deviens Pro Creator"}
-              </p>
-              <p className="text-xs text-white/80">
-                {!user ? "Générations illimitées · Sauvegarde · dès 4,99€/mois" : "Générations illimitées · Brief IA · dès 4,99€/mois"}
-              </p>
+              <p className="font-black text-sm">{!user ? " Passe au Premium" : " Deviens Pro Creator"}</p>
+              <p className="text-xs text-white/80">{!user ? "Générations illimitées · Sauvegarde · dès 4,99€/mois" : "Générations illimitées · Brief IA · dès 4,99€/mois"}</p>
             </div>
             <span className="text-white font-black text-lg shrink-0">→</span>
           </a>
