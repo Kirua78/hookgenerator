@@ -1,3 +1,137 @@
+'use client';
+import { useState } from 'react';
+
+const STORAGE_KEY = "hg_generations";
+
+function getLocalGenerations() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const today = new Date().toISOString().split("T")[0];
+    if (data.date !== today) return 0;
+    return data.count || 0;
+  } catch { return 0; }
+}
+
+function incrementLocalGenerations() {
+  const today = new Date().toISOString().split("T")[0];
+  const count = getLocalGenerations() + 1;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count }));
+}
+
+function DemoSection() {
+  const [description, setDescription] = useState('');
+  const [platform, setPlatform] = useState('TikTok');
+  const [loading, setLoading] = useState(false);
+  const [hooks, setHooks] = useState([]);
+  const [error, setError] = useState('');
+  const [copied, setCopied] = useState(null);
+
+  const platforms = ['TikTok', 'Instagram Reels', 'YouTube Shorts', 'LinkedIn'];
+
+  const generate = async () => {
+    if (!description) return;
+    const remaining = 3 - getLocalGenerations();
+    if (remaining <= 0) {
+      setError('Tu as utilisé tes 3 générations gratuites. Crée un compte pour continuer !');
+      return;
+    }
+    setLoading(true); setError(''); setHooks([]);
+    incrementLocalGenerations();
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description, platform, tone: 'Divertissant', langue: 'Français' }),
+    });
+    const data = await res.json();
+    if (data.error) { setError(data.error); setLoading(false); return; }
+    const parsed = data.result.split('\n')
+      .map(l => { const m = l.match(/^\d+[\.\)]\s*(.+)$/); return m ? m[1].replace(/\*\*/g, '').trim() : null; })
+      .filter(Boolean)
+      .slice(0, 3);
+    setHooks(parsed);
+    setLoading(false);
+  };
+
+  const copy = (text, i) => { navigator.clipboard.writeText(text); setCopied(i); setTimeout(() => setCopied(null), 2000); };
+
+  const remaining = typeof window !== 'undefined' ? 3 - getLocalGenerations() : 3;
+
+  return (
+    <section className="px-6 py-20 max-w-3xl mx-auto">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-black mb-4">
+          Essaie <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">maintenant</span>
+        </h2>
+        <p className="text-gray-400">Tape ta niche et vois ce que l'IA génère en quelques secondes.</p>
+      </div>
+
+      <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-4">
+        <div className="relative">
+          <textarea
+            className="w-full bg-transparent border-2 border-gray-800 rounded-2xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-24 peer"
+            placeholder="description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            id="demo-desc"
+          />
+          <label htmlFor="demo-desc" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">
+            Ta vidéo parle de quoi ?
+          </label>
+        </div>
+
+        <div className="flex gap-2 flex-wrap">
+          {platforms.map(p => (
+            <button key={p} onClick={() => setPlatform(p)}
+              className={`px-4 py-2 rounded-full text-xs font-bold border-2 transition ${platform === p ? 'border-pink-500 text-pink-400 bg-pink-500/10' : 'border-gray-800 text-gray-500 hover:border-gray-600'}`}>
+              {p}
+            </button>
+          ))}
+        </div>
+
+        {remaining > 0 ? (
+          <button onClick={generate} disabled={loading || !description}
+            className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-2xl hover:opacity-90 disabled:opacity-50 transition">
+            {loading ? 'Génération en cours...' : `Générer 3 hooks gratuits (${remaining} restante${remaining > 1 ? 's' : ''})`}
+          </button>
+        ) : (
+          <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 text-center">
+            <p className="text-white font-bold mb-1">Tu as utilisé tes 3 générations gratuites !</p>
+            <p className="text-gray-400 text-sm mb-3">Crée un compte gratuit pour continuer.</p>
+            <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">
+              Créer un compte gratuit →
+            </a>
+          </div>
+        )}
+
+        {error && (
+          <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 text-center">
+            <p className="text-white font-bold mb-1">{error}</p>
+            <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">
+              Créer un compte gratuit →
+            </a>
+          </div>
+        )}
+
+        {hooks.length > 0 && (
+          <div className="space-y-3 pt-2">
+            <p className="text-xs font-black tracking-widest uppercase text-pink-400">Tes hooks générés</p>
+            {hooks.map((hook, i) => (
+              <div key={i} onClick={() => copy(hook, i)}
+                className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 cursor-pointer transition flex justify-between items-center gap-3">
+                <p className="text-white text-sm">{hook}</p>
+                <span className="text-gray-500 shrink-0">{copied === i ? '✅' : '📋'}</span>
+              </div>
+            ))}
+            <a href="/auth" className="block w-full text-center border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 py-3 rounded-2xl transition text-sm font-medium">
+              Créer un compte pour générer 10 hooks par jour →
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function Landing() {
   const hooks = {
     cyber: [
@@ -17,13 +151,6 @@ export default function Landing() {
     ],
   };
 
-  const testimonials = [
-  { name: "Mathieu R.", niche: "Fitness · 84K abonnés", avatar: "MR", quote: "Avant HookGenerator, je passais 2h à écrire mes accroches. Maintenant 5 minutes. Mon taux de complétion a augmenté de 340% en un mois.", stat: "+340% de complétion", color: "from-pink-500 to-rose-500" },
-  { name: "Sarah L.", niche: "Finance · 127K abonnés", avatar: "SL", quote: "Mon premier hook généré a fait 2,1M de vues sur TikTok. Je n'aurais jamais écrit ça toute seule. L'outil comprend vraiment ce qui fait scroller.", stat: "2,1M de vues", color: "from-violet-500 to-purple-500" },
-  { name: "Kevin T.", niche: "Tech · 52K abonnés", avatar: "KT", quote: "Le ton Storytelling a complètement changé ma façon de créer. Mes vidéos durent plus longtemps dans le feed et l'algo me pousse naturellement.", stat: "x4 portée organique", color: "from-blue-500 to-cyan-500" },
-  { name: "Léa M.", niche: "Lifestyle · 213K abonnés", avatar: "LM", quote: "J'utilise le brief IA pour chaque idée de vidéo. C'est comme avoir un directeur créatif dans ma poche. Mes sponsors ont remarqué la différence.", stat: "+89% d'engagement", color: "from-emerald-500 to-teal-500" },
-];
-
   const features = [
     { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
     { title: "Brief IA complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
@@ -34,72 +161,23 @@ export default function Landing() {
   ];
 
   const platforms = [
-    {
-      name: "TikTok",
-      color: "#000000",
-      svg: (
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.78a4.85 4.85 0 01-1.02-.09z"/>
-        </svg>
-      ),
-    },
-    {
-      name: "Instagram",
-      color: "#E1306C",
-      svg: (
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-        </svg>
-      ),
-    },
-    {
-      name: "YouTube",
-      color: "#FF0000",
-      svg: (
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-          <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
-        </svg>
-      ),
-    },
-    {
-      name: "LinkedIn",
-      color: "#0A66C2",
-      svg: (
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-      ),
-    },
-    {
-      name: "Twitter/X",
-      color: "#000000",
-      svg: (
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-      ),
-    },
-    {
-      name: "Snapchat",
-      color: "#FFFC00",
-      svg: (
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-          <path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.317 4.814-.04.752-.081 1.15.157 1.292.374.213 1.05-.023 1.738-.584.211-.172.455-.268.698-.268.374 0 .698.2.806.5.14.37-.005.818-.414 1.164-.271.23-1.878 1.348-1.878 2.387 0 .18.033.36.098.528 0 0 .55 1.553 2.39 2.643.27.16.387.5.28.79-.1.28-.37.46-.67.46-.05 0-.11-.01-.16-.02-.07-.01-.16-.02-.25-.03-.52-.07-1.38-.19-2.45.04-.43.09-.83.27-1.21.44-1.29.57-2.73 1.21-5.54 1.21-2.8 0-4.24-.64-5.54-1.21-.38-.17-.78-.35-1.21-.44-1.07-.23-1.93-.11-2.45-.04-.09.01-.18.02-.25.03-.05.01-.11.02-.16.02-.3 0-.57-.18-.67-.46-.11-.29.01-.63.28-.79 1.84-1.09 2.39-2.643 2.39-2.643.065-.168.098-.348.098-.528 0-1.04-1.607-2.157-1.878-2.387-.409-.346-.554-.793-.414-1.164.108-.3.432-.5.806-.5.243 0 .487.096.698.268.688.561 1.364.797 1.738.584.238-.142.197-.54.157-1.292-.086-1.595-.212-3.621.317-4.814C7.859 1.07 11.216.793 12.206.793z"/>
-        </svg>
-      ),
-    },
+    { name: "TikTok", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.78a4.85 4.85 0 01-1.02-.09z"/></svg> },
+    { name: "Instagram", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> },
+    { name: "YouTube", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg> },
+    { name: "LinkedIn", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> },
+    { name: "Twitter/X", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
+    { name: "Snapchat", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.317 4.814-.04.752-.081 1.15.157 1.292.374.213 1.05-.023 1.738-.584.211-.172.455-.268.698-.268.374 0 .698.2.806.5.14.37-.005.818-.414 1.164-.271.23-1.878 1.348-1.878 2.387 0 .18.033.36.098.528 0 0 .55 1.553 2.39 2.643.27.16.387.5.28.79-.1.28-.37.46-.67.46-.05 0-.11-.01-.16-.02-.07-.01-.16-.02-.25-.03-.52-.07-1.38-.19-2.45.04-.43.09-.83.27-1.21.44-1.29.57-2.73 1.21-5.54 1.21-2.8 0-4.24-.64-5.54-1.21-.38-.17-.78-.35-1.21-.44-1.07-.23-1.93-.11-2.45-.04-.09.01-.18.02-.25.03-.05.01-.11.02-.16.02-.3 0-.57-.18-.67-.46-.11-.29.01-.63.28-.79 1.84-1.09 2.39-2.643 2.39-2.643.065-.168.098-.348.098-.528 0-1.04-1.607-2.157-1.878-2.387-.409-.346-.554-.793-.414-1.164.108-.3.432-.5.806-.5.243 0 .487.096.698.268.688.561 1.364.797 1.738.584.238-.142.197-.54.157-1.292-.086-1.595-.212-3.621.317-4.814C7.859 1.07 11.216.793 12.206.793z"/></svg> },
   ];
 
   return (
     <main className="min-h-screen bg-black text-white">
-
       {/* Nav */}
       <nav className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
         <img src="/logo.png" alt="HookGenerator" className="h-10 object-contain" />
         <div className="flex items-center gap-4">
           <a href="/pricing" className="text-sm text-gray-400 hover:text-white transition">Tarifs</a>
           <a href="/auth" className="text-sm text-gray-400 hover:text-white transition">Connexion</a>
-          <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
+          <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
             Essayer gratuitement
           </a>
         </div>
@@ -108,7 +186,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="text-center px-6 py-20 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold px-4 py-2 rounded-full mb-6">
-           Plus de 50 000 hooks générés ce mois
+          Plus de 50 000 hooks générés ce mois
         </div>
         <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
           Tes vidéos méritent un
@@ -118,8 +196,8 @@ export default function Landing() {
           L'IA qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-             Essayer gratuitement
+          <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
+            Essayer gratuitement
           </a>
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
             Voir les tarifs →
@@ -128,7 +206,7 @@ export default function Landing() {
         <p className="text-xs text-gray-600 mt-4">3 générations gratuites · Sans carte bancaire</p>
       </section>
 
-      {/* Plateformes avec logos */}
+      {/* Plateformes */}
       <section className="px-6 py-10 max-w-4xl mx-auto">
         <p className="text-center text-xs text-gray-600 uppercase tracking-widest font-bold mb-8">Compatible avec toutes les plateformes</p>
         <div className="flex flex-wrap justify-center gap-4">
@@ -149,9 +227,9 @@ export default function Landing() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { label: " Cybersécurité", color: "border-blue-500/30 bg-blue-500/5", accent: "text-blue-400", hooks: hooks.cyber },
-            { label: " Sport & Fitness", color: "border-pink-500/30 bg-pink-500/5", accent: "text-pink-400", hooks: hooks.sport },
-            { label: " Lifestyle", color: "border-violet-500/30 bg-violet-500/5", accent: "text-violet-400", hooks: hooks.lifestyle },
+            { label: "Cybersécurité", color: "border-blue-500/30 bg-blue-500/5", accent: "text-blue-400", hooks: hooks.cyber },
+            { label: "Sport & Fitness", color: "border-pink-500/30 bg-pink-500/5", accent: "text-pink-400", hooks: hooks.sport },
+            { label: "Lifestyle", color: "border-violet-500/30 bg-violet-500/5", accent: "text-violet-400", hooks: hooks.lifestyle },
           ].map((cat) => (
             <div key={cat.label} className={`border-2 ${cat.color} rounded-3xl p-6 space-y-4`}>
               <p className={`text-xs font-black tracking-widest uppercase ${cat.accent}`}>{cat.label}</p>
@@ -165,6 +243,9 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Démo interactive */}
+      <DemoSection />
+
       {/* Fonctionnalités */}
       <section className="px-6 py-20 bg-gray-950/50 max-w-full">
         <div className="max-w-6xl mx-auto">
@@ -175,39 +256,11 @@ export default function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => (
               <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-3xl p-6 transition group">
-                <div className="text-3xl mb-4">{f.icon}</div>
                 <h3 className="text-white font-black text-lg mb-2 group-hover:text-pink-400 transition">{f.title}</h3>
                 <p className="text-gray-400 text-sm">{f.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Témoignages */}
-      <section className="px-6 py-20 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-black mb-4">Ils ont <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">explosé leurs stats</span></h2>
-          <p className="text-gray-400">Des créateurs qui font confiance à HookGenerator chaque jour.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {testimonials.map((t, i) => (
-            <div key={i} className="border-2 border-gray-800 rounded-3xl p-6 hover:border-gray-600 transition">
-              <div className="flex items-start gap-4 mb-4">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${t.color} flex items-center justify-center text-white font-black text-sm shrink-0`}>
-                  {t.avatar}
-                </div>
-                <div>
-                  <p className="text-white font-bold">{t.name}</p>
-                  <p className="text-gray-500 text-xs"> · {t.niche}</p>
-                </div>
-                <div className={`ml-auto bg-gradient-to-r ${t.color} text-white text-xs font-black px-3 py-1 rounded-full shrink-0`}>
-                  {t.stat}
-                </div>
-              </div>
-              <p className="text-gray-300 text-sm leading-relaxed italic">"{t.quote}"</p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -233,8 +286,8 @@ export default function Landing() {
         <h2 className="text-3xl md:text-4xl font-black mb-4">Prêt à créer des hooks qui <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">font la différence ?</span></h2>
         <p className="text-gray-400 mb-8">Commence gratuitement. Upgrade quand tu veux.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-             Essayer gratuitement
+          <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
+            Essayer gratuitement
           </a>
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
             Voir les tarifs →
