@@ -25,12 +25,12 @@ export default function Landing() {
   ];
 
   const features = [
-    { icon: "⚡", title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
-    { icon: "🎯", title: "Brief IA complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
-    { icon: "📝", title: "Légendes & Hashtags", desc: "Légendes optimisées et hashtags viraux adaptés à chaque plateforme." },
-    { icon: "🔍", title: "Analyseur de hook", desc: "Score sur 10, points forts, faiblesses et version améliorée de ton hook." },
-    { icon: "🏆", title: "Top Hooks de la semaine", desc: "Découvre les hooks les plus likés par la communauté pour t'inspirer." },
-    { icon: "💾", title: "Sauvegarde illimitée", desc: "Retrouve tous tes hooks likés, idées et légendes dans ton espace personnel." },
+    { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
+    { title: "Brief IA complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
+    { title: "Légendes & Hashtags", desc: "Légendes optimisées et hashtags viraux adaptés à chaque plateforme." },
+    { title: "Analyseur de hook", desc: "Score sur 10, points forts, faiblesses et version améliorée de ton hook." },
+    { title: "Top Hooks de la semaine", desc: "Découvre les hooks les plus likés par la communauté pour t'inspirer." },
+    { title: "Sauvegarde illimitée", desc: "Retrouve tous tes hooks likés, idées et légendes dans ton espace personnel." },
   ];
 
   const platforms = [
@@ -108,7 +108,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="text-center px-6 py-20 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold px-4 py-2 rounded-full mb-6">
-          ⚡ Plus de 50 000 hooks générés ce mois
+           Plus de 50 000 hooks générés ce mois
         </div>
         <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
           Tes vidéos méritent un
@@ -119,7 +119,7 @@ export default function Landing() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-            ⚡ Essayer gratuitement
+             Essayer gratuitement
           </a>
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
             Voir les tarifs →
@@ -149,9 +149,9 @@ export default function Landing() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { label: "🛡️ Cybersécurité", color: "border-blue-500/30 bg-blue-500/5", accent: "text-blue-400", hooks: hooks.cyber },
-            { label: "💪 Sport & Fitness", color: "border-pink-500/30 bg-pink-500/5", accent: "text-pink-400", hooks: hooks.sport },
-            { label: "✨ Lifestyle", color: "border-violet-500/30 bg-violet-500/5", accent: "text-violet-400", hooks: hooks.lifestyle },
+            { label: " Cybersécurité", color: "border-blue-500/30 bg-blue-500/5", accent: "text-blue-400", hooks: hooks.cyber },
+            { label: " Sport & Fitness", color: "border-pink-500/30 bg-pink-500/5", accent: "text-pink-400", hooks: hooks.sport },
+            { label: " Lifestyle", color: "border-violet-500/30 bg-violet-500/5", accent: "text-violet-400", hooks: hooks.lifestyle },
           ].map((cat) => (
             <div key={cat.label} className={`border-2 ${cat.color} rounded-3xl p-6 space-y-4`}>
               <p className={`text-xs font-black tracking-widest uppercase ${cat.accent}`}>{cat.label}</p>
@@ -234,7 +234,7 @@ export default function Landing() {
         <p className="text-gray-400 mb-8">Commence gratuitement. Upgrade quand tu veux.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-            ⚡ Essayer gratuitement
+             Essayer gratuitement
           </a>
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
             Voir les tarifs →
