@@ -199,7 +199,7 @@ export default function Landing() {
                 </div>
                 <div>
                   <p className="text-white font-bold">{t.name}</p>
-                  <p className="text-gray-500 text-xs">{t.handle} · {t.niche}</p>
+                  <p className="text-gray-500 text-xs"> · {t.niche}</p>
                 </div>
                 <div className={`ml-auto bg-gradient-to-r ${t.color} text-white text-xs font-black px-3 py-1 rounded-full shrink-0`}>
                   {t.stat}
