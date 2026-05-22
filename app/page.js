@@ -883,6 +883,13 @@ export default function Home() {
         {tab === "saved" && <SavedTab user={user} t={t} />}
         {tab === "top" && <TopHooksTab t={t} />}
       </div>
+      {/* Footer */}
+<div className="text-center py-6 space-x-4 text-xs text-gray-600">
+  <a href="/cgu" className="hover:text-gray-400 transition">CGU</a>
+  <a href="/privacy" className="hover:text-gray-400 transition">Confidentialité</a>
+  <a href="/mentions" className="hover:text-gray-400 transition">Mentions légales</a>
+  <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">Contact</a>
+</div>
       {/* Bannière Premium */}
 {!(isPremium) && (
   <div className="fixed bottom-0 left-0 right-0 z-50 p-3">
