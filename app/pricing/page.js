@@ -37,17 +37,9 @@ export default function Pricing() {
   };
 
   const PlanCard = ({ planKey, plan, highlight }) => (
-    <div className={`relative border-2 rounded-3xl p-6 flex flex-col gap-4 transition ${highlight ? 'border-pink-500 bg-pink-500/5' : 'border-gray-800 hover:border-gray-600'}`}>
-      {highlight && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-violet-500 text-white text-xs font-black px-4 py-1 rounded-full">
-          ⭐ POPULAIRE
-        </div>
-      )}
-      {plan.save && (
-        <div className="absolute -top-3 right-6 bg-green-500 text-white text-xs font-black px-3 py-1 rounded-full">
-          {plan.save}
-        </div>
-      )}
+    <div className={`relative border-2 rounded-3xl p-6 flex flex-col gap-4 transition ${highlight ? 'border-pink-500 bg-pink-500/5' : 'border-gray-800 bg-black/40 hover:border-gray-600'}`}>
+      {highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-violet-500 text-white text-xs font-black px-4 py-1 rounded-full">⭐ POPULAIRE</div>}
+      {plan.save && <div className="absolute -top-3 right-6 bg-green-500 text-white text-xs font-black px-3 py-1 rounded-full">{plan.save}</div>}
       <div>
         <h3 className="text-white font-black text-lg">{plan.name}</h3>
         <p className="text-gray-500 text-sm mt-1">{plan.desc}</p>
@@ -78,7 +70,7 @@ export default function Pricing() {
   );
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
+    <main className="min-h-screen text-white p-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-10">
           <a href="/" className="text-xs text-gray-500 hover:text-pink-400 transition mb-6 inline-block">← Retour</a>
@@ -86,7 +78,7 @@ export default function Pricing() {
           <p className="text-gray-400">{t.subtitle}</p>
         </div>
 
-        <div className="border-2 border-gray-800 rounded-3xl p-6 mb-6">
+        <div className="border-2 border-gray-800 bg-black/40 rounded-3xl p-6 mb-6">
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div>
               <h3 className="text-white font-black text-lg">Gratuit</h3>
