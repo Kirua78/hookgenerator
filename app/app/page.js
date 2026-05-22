@@ -89,6 +89,39 @@ function TranslateButton({ hook, currentLang, isPremium }) {
   );
 }
 
+
+function LangSelector({ langue, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
+  const current = langues.find(l => l.id === langue);
+  useEffect(() => {
+    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  return (
+    <div className="relative" ref={ref}>
+      <button onClick={() => setOpen(o => !o)}
+        className="text-xl hover:scale-110 transition-transform"
+        title={current?.id}>
+        {current?.flag}
+      </button>
+      {open && (
+        <div className="absolute top-8 left-0 bg-gray-950 border-2 border-gray-800 rounded-2xl overflow-hidden shadow-xl z-20 min-w-max">
+          {langues.map(l => (
+            <button key={l.id} onClick={() => { onChange(l.id); setOpen(false); }}
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm w-full text-left transition ${langue === l.id ? "bg-pink-500/10 text-pink-400" : "text-gray-300 hover:bg-gray-800"}`}>
+              <span>{l.flag}</span><span>{l.id}</span>
+              {langue === l.id && <span className="ml-auto text-pink-400">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
@@ -394,7 +427,7 @@ const T = {
     unlimited: " Générations illimitées",
     noMore: "Tu as atteint ta limite du jour !",
     noMoreSub: "Connecte-toi pour plus de générations", upgrade: "Se connecter →",
-    savedTab: "Sauvegardés", delete: "🗑️",
+    savedTab: "Savés", delete: "🗑️",
     loginToSave: "Connecte-toi pour sauvegarder tes contenus !",
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
@@ -1111,14 +1144,14 @@ export default function Home() {
   };
 
   const hooks = parseHooks(hooksState.result);
-  const tabIds = ["hooks", "legende", "idees", "analyse", "saved", "top", "cal"];
-  const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
+  
 
   return (
     <main className="min-h-screen bg-black/60 text-white p-6 pb-24" style={{ position: 'relative', zIndex: 1 }}>
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <div />
+          {/* Sélecteur de langue — drapeaux flottants */}
+          <LangSelector langue={langue} onChange={handleLangueChange} />
           {user ? (
             <div className="flex items-center gap-3 flex-wrap justify-end">
               {isPremium && (
@@ -1144,21 +1177,23 @@ export default function Home() {
           <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
             {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
           </div>
-          <div className="flex justify-center gap-2 mb-4 flex-wrap">
-            {langues.map((l) => (
-              <button key={l.id} onClick={() => handleLangueChange(l.id)}
-                className={`px-3 py-1 rounded-full text-xs font-bold border-2 transition ${langue === l.id ? "border-pink-500 text-pink-400 bg-pink-500/10" : "border-gray-800 text-gray-500 hover:border-gray-600"}`}>
-                {l.flag} {l.id}
-              </button>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1 bg-gray-900 p-1 rounded-3xl">
-            {tabIds.map((id, i) => (
-              <button key={id} onClick={() => setTab(id)}
-                className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
-                {id === "saved" ? t.savedTab : id === "top" ? t.topTab : id === "cal" ? t.calTab : t.tabs[i]}
-              </button>
-            ))}
+          <div className="space-y-1">
+            <div className="grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-3xl">
+              {["hooks","legende","idees","analyse"].map((id, i) => (
+                <button key={id} onClick={() => setTab(id)}
+                  className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
+                  {t.tabs[i]}
+                </button>
+              ))}
+            </div>
+            <div className="grid grid-cols-3 gap-1 bg-gray-900 p-1 rounded-3xl">
+              {[["saved", t.savedTab], ["top", t.topTab], ["cal", t.calTab]].map(([id, label]) => (
+                <button key={id} onClick={() => setTab(id)}
+                  className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
