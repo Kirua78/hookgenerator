@@ -1231,7 +1231,7 @@ export default function Home() {
                 </span>
               )}
               {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
-              <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 Mon compte</a>
+              <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 {t.monCompteLabel || "Mon compte"}</a>
               <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
             </div>
           ) : (
