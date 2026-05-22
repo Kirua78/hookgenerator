@@ -115,7 +115,7 @@ function toISO(date) {
   return date.toISOString().split('T')[0];
 }
 
-export default function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees }) {
+function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
