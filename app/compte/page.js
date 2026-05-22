@@ -12,10 +12,11 @@ export default function Compte() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { window.location.href = '/auth'; return; }
-      setUser(session.user);
-      const { data } = await supabase.from('user_profiles').select('*').eq('id', session.user.id).single();
+     const { data: { session } } = await supabase.auth.getSession();
+if (!session || !session.user) { window.location.href = '/auth'; return; }
+setUser(session.user);
+const { data } = await supabase.from('user_profiles').select('*').eq('id', session.user.id).single();
+if (!userId || userId === undefined) return;
       setProfile(data);
       setLoading(false);
     };
