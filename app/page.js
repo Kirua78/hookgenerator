@@ -46,39 +46,32 @@ function DemoSection() {
     if (data.error) { setError(data.error); setLoading(false); return; }
     const parsed = data.result.split('\n')
       .map(l => { const m = l.match(/^\d+[\.\)]\s*(.+)$/); return m ? m[1].replace(/\*\*/g, '').trim() : null; })
-      .filter(Boolean)
-      .slice(0, 3);
+      .filter(Boolean).slice(0, 3);
     setHooks(parsed);
     setLoading(false);
   };
 
   const copy = (text, i) => { navigator.clipboard.writeText(text); setCopied(i); setTimeout(() => setCopied(null), 2000); };
-
   const remaining = typeof window !== 'undefined' ? 3 - getLocalGenerations() : 3;
 
   return (
-    <section className="px-6 py-20 max-w-3xl mx-auto">
+    <section className="relative px-6 py-24 max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-black mb-4">
           Essaie <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">maintenant</span>
         </h2>
         <p className="text-gray-400">Tape ta niche et vois ce que l'outil génère en quelques secondes.</p>
       </div>
-
-      <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-4">
+      <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-4 bg-black/60 backdrop-blur-sm">
         <div className="relative">
           <textarea
             className="w-full bg-transparent border-2 border-gray-800 rounded-2xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-24 peer"
-            placeholder="description"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            id="demo-desc"
-          />
+            placeholder="description" value={description}
+            onChange={e => setDescription(e.target.value)} id="demo-desc" />
           <label htmlFor="demo-desc" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">
             Ta vidéo parle de quoi ?
           </label>
         </div>
-
         <div className="flex gap-2 flex-wrap">
           {platforms.map(p => (
             <button key={p} onClick={() => setPlatform(p)}
@@ -87,7 +80,6 @@ function DemoSection() {
             </button>
           ))}
         </div>
-
         {remaining > 0 ? (
           <button onClick={generate} disabled={loading || !description}
             className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-2xl hover:opacity-90 disabled:opacity-50 transition">
@@ -97,21 +89,15 @@ function DemoSection() {
           <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 text-center">
             <p className="text-white font-bold mb-1">Tu as utilisé tes 3 générations gratuites !</p>
             <p className="text-gray-400 text-sm mb-3">Crée un compte gratuit pour continuer.</p>
-            <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">
-              Créer un compte gratuit →
-            </a>
+            <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">Créer un compte gratuit →</a>
           </div>
         )}
-
         {error && (
           <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4 text-center">
             <p className="text-white font-bold mb-1">{error}</p>
-            <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">
-              Créer un compte gratuit →
-            </a>
+            <a href="/auth" className="inline-block mt-2 bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">Créer un compte gratuit →</a>
           </div>
         )}
-
         {hooks.length > 0 && (
           <div className="space-y-3 pt-2">
             <p className="text-xs font-black tracking-widest uppercase text-pink-400">Tes hooks générés</p>
@@ -153,7 +139,7 @@ export default function Landing() {
 
   const features = [
     { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
-    { title: "Brief complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
+    { title: "Brief outil complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
     { title: "Légendes & Hashtags", desc: "Légendes optimisées et hashtags viraux adaptés à chaque plateforme." },
     { title: "Analyseur de hook", desc: "Score sur 10, points forts, faiblesses et version améliorée de ton hook." },
     { title: "Top Hooks de la semaine", desc: "Découvre les hooks les plus likés par la communauté pour t'inspirer." },
@@ -170,7 +156,36 @@ export default function Landing() {
   ];
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-black text-white overflow-hidden">
+
+      {/* Fond gradient animé */}
+      <style>{`
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+          background: linear-gradient(-45deg, #0f0f0f, #1a0a1f, #0f0f1a, #1f0a0f, #0a0f1f, #1a1a0a);
+          background-size: 400% 400%;
+          animation: gradientShift 12s ease infinite;
+        }
+        @keyframes blob {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        .blob { animation: blob 8s infinite; }
+        .blob2 { animation: blob 10s infinite reverse; }
+        .blob3 { animation: blob 12s infinite 2s; }
+      `}</style>
+
+      {/* Blobs de fond */}
+      <div className="fixed inset-0 animated-gradient -z-10" />
+      <div className="fixed top-20 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl blob -z-10" />
+      <div className="fixed top-40 right-10 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl blob2 -z-10" />
+      <div className="fixed bottom-20 left-1/3 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl blob3 -z-10" />
+
       {/* Nav */}
       <nav className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
         <img src="/logo.png" alt="HookGenerator" className="h-10 object-contain" />
@@ -205,6 +220,9 @@ export default function Landing() {
         </div>
         <p className="text-xs text-gray-600 mt-4">3 générations gratuites · Sans carte bancaire</p>
       </section>
+
+      {/* Démo interactive */}
+      <DemoSection />
 
       {/* Plateformes */}
       <section className="px-6 py-10 max-w-4xl mx-auto">
@@ -243,11 +261,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Démo interactive */}
-      <DemoSection />
-
       {/* Fonctionnalités */}
-      <section className="px-6 py-20 bg-gray-950/50 max-w-full">
+      <section className="px-6 py-20 bg-black/40 backdrop-blur-sm max-w-full">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-black mb-4">Tout ce dont tu as besoin pour <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">exploser sur les réseaux</span></h2>
@@ -255,7 +270,7 @@ export default function Landing() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => (
-              <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-3xl p-6 transition group">
+              <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-3xl p-6 transition group bg-black/40 backdrop-blur-sm">
                 <h3 className="text-white font-black text-lg mb-2 group-hover:text-pink-400 transition">{f.title}</h3>
                 <p className="text-gray-400 text-sm">{f.desc}</p>
               </div>
