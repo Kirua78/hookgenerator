@@ -3,6 +3,21 @@ export const dynamic = 'force-dynamic';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 
+function StatBox({ label, userId, table }) {
+  const [count, setCount] = useState('...');
+  useEffect(() => {
+    if (!userId) return;
+    supabase.from(table).select('id', { count: 'exact' }).eq('user_id', userId)
+      .then(({ count }) => setCount(count || 0));
+  }, [userId, table]);
+  return (
+    <div>
+      <p className="text-2xl font-black text-white">{count}</p>
+      <p className="text-xs text-gray-500 mt-1">{label}</p>
+    </div>
+  );
+}
+
 export default function Compte() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -12,13 +27,23 @@ export default function Compte() {
 
   useEffect(() => {
     const fetchData = async () => {
-     const { data: { session } } = await supabase.auth.getSession();
-if (!session || !session.user) { window.location.href = '/auth'; return; }
-setUser(session.user);
-const { data } = await supabase.from('user_profiles').select('*').eq('id', session.user.id).single();
-if (!userId || userId === undefined) return;
-      setProfile(data);
-      setLoading(false);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session || !session.user) {
+          window.location.href = '/auth';
+          return;
+        }
+        setUser(session.user);
+        const { data } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+        setProfile(data || {});
+        setLoading(false);
+      } catch (e) {
+        window.location.href = '/auth';
+      }
     };
     fetchData();
   }, []);
@@ -29,8 +54,8 @@ if (!userId || userId === undefined) return;
   };
 
   const handleDelete = async () => {
+    if (!user) return;
     setDeleting(true);
-    // Supprimer les données utilisateur
     await supabase.from('liked_hooks').delete().eq('user_id', user.id);
     await supabase.from('liked_idees').delete().eq('user_id', user.id);
     await supabase.from('liked_legendes').delete().eq('user_id', user.id);
@@ -41,10 +66,10 @@ if (!userId || userId === undefined) return;
 
   const getBadge = (plan) => {
     switch(plan) {
-      case 'annuel': return { label: '🥇 Pro Creator', color: 'from-yellow-500 to-yellow-300', text: 'Or' };
-      case 'mensuel': return { label: '🥈 Pro Creator', color: 'from-gray-400 to-gray-300', text: 'Argent' };
+      case 'annuel': return { label: '🥇 Pro Creator', color: 'from-yellow-500 to-yellow-300' };
+      case 'mensuel': return { label: '🥈 Pro Creator', color: 'from-gray-400 to-gray-300' };
       case 'pack200':
-      case 'pack500': return { label: '🥉 Pro Creator', color: 'from-orange-700 to-orange-500', text: 'Bronze' };
+      case 'pack500': return { label: '🥉 Pro Creator', color: 'from-orange-700 to-orange-500' };
       default: return null;
     }
   };
@@ -69,7 +94,7 @@ if (!userId || userId === undefined) return;
   const metadata = user?.user_metadata || {};
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
+    <main className="min-h-screen bg-black text-white p-6 pb-24">
       <div className="max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-8">
           <a href="/" className="text-xs text-gray-500 hover:text-pink-400 transition">← Retour</a>
@@ -104,7 +129,6 @@ if (!userId || userId === undefined) return;
         {/* Plan */}
         <div className="border-2 border-gray-800 rounded-3xl p-6 mb-4 space-y-4">
           <p className="text-xs font-black tracking-widest uppercase text-pink-400">Mon Plan</p>
-          
           <div className="flex items-center justify-between">
             <div>
               <p className="text-white font-bold">{getPlanLabel(profile?.plan)}</p>
@@ -126,7 +150,6 @@ if (!userId || userId === undefined) return;
             )}
           </div>
 
-          {/* Barre de progression pour les packs */}
           {(profile?.plan === 'pack200' || profile?.plan === 'pack500') && (
             <div>
               <div className="flex justify-between text-xs text-gray-500 mb-1">
@@ -143,7 +166,7 @@ if (!userId || userId === undefined) return;
           )}
 
           <a href="/pricing" className="block w-full text-center border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 hover:text-pink-300 py-3 rounded-2xl transition text-sm font-medium">
-            {profile?.plan === 'free' ? '⭐ Passer au Premium' : '🔄 Changer de plan'}
+            {!profile?.plan || profile?.plan === 'free' ? '⭐ Passer au Premium' : '🔄 Changer de plan'}
           </a>
         </div>
 
@@ -192,20 +215,5 @@ if (!userId || userId === undefined) return;
         </div>
       </div>
     </main>
-  );
-}
-
-function StatBox({ label, userId, table }) {
-  const [count, setCount] = useState('...');
-  useEffect(() => {
-    if (!userId) return;
-    supabase.from(table).select('id', { count: 'exact' }).eq('user_id', userId)
-      .then(({ count }) => setCount(count || 0));
-  }, [userId, table]);
-  return (
-    <div>
-      <p className="text-2xl font-black text-white">{count}</p>
-      <p className="text-xs text-gray-500 mt-1">{label}</p>
-    </div>
   );
 }
