@@ -791,7 +791,7 @@ export default function Home() {
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
+    <main className="min-h-screen bg-black text-white p-6 pb-24">
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div />
@@ -883,6 +883,26 @@ export default function Home() {
         {tab === "saved" && <SavedTab user={user} t={t} />}
         {tab === "top" && <TopHooksTab t={t} />}
       </div>
+      {/* Bannière Premium */}
+{!(isPremium) && (
+  <div className="fixed bottom-0 left-0 right-0 z-50 p-3">
+    <a href="/pricing" className="flex items-center justify-between bg-gradient-to-r from-pink-500 to-violet-500 text-white rounded-2xl px-5 py-3 shadow-2xl hover:opacity-90 transition max-w-2xl mx-auto">
+      <div>
+        <p className="font-black text-sm">
+          {!user && "🚀 Passe au Premium"}
+          {user && !isPremium && "⭐ Deviens Pro Creator"}
+          {user && isPremium && "🥇 Passe à l'annuel · Économise 33%"}
+        </p>
+        <p className="text-xs text-white/80">
+          {!user && "Générations illimitées · Sauvegarde · dès 4,99€/mois"}
+          {user && !isPremium && "Générations illimitées · Brief IA · dès 4,99€/mois"}
+          {user && isPremium && "39,99€/an soit 3,33€/mois"}
+        </p>
+      </div>
+      <span className="text-white font-black text-lg shrink-0">→</span>
+    </a>
+  </div>
+)}
     </main>
   );
 }
