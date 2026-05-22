@@ -24,21 +24,23 @@ export default function Compte() {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editForm, setEditForm] = useState({ prenom: '', nom: '', surnom: '' });
+  const [saveMsg, setSaveMsg] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session || !session.user) {
-          window.location.href = '/auth';
-          return;
-        }
+        if (!session || !session.user) { window.location.href = '/auth'; return; }
         setUser(session.user);
-        const { data } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
+        setEditForm({
+          prenom: session.user.user_metadata?.prenom || '',
+          nom: session.user.user_metadata?.nom || '',
+          surnom: session.user.user_metadata?.surnom || '',
+        });
+        const { data } = await supabase.from('user_profiles').select('*').eq('id', session.user.id).single();
         setProfile(data || {});
         setLoading(false);
       } catch (e) {
@@ -47,6 +49,25 @@ export default function Compte() {
     };
     fetchData();
   }, []);
+
+  const handleSaveProfil = async () => {
+    setSaving(true); setSaveMsg('');
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        prenom: editForm.prenom,
+        nom: editForm.nom,
+        surnom: editForm.surnom,
+      }
+    });
+    if (error) setSaveMsg('Erreur lors de la sauvegarde.');
+    else {
+      setSaveMsg('✅ Profil mis à jour !');
+      setUser(prev => ({ ...prev, user_metadata: { ...prev.user_metadata, ...editForm } }));
+      setEditing(false);
+    }
+    setSaving(false);
+    setTimeout(() => setSaveMsg(''), 3000);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -105,25 +126,79 @@ export default function Compte() {
 
         {/* Profil */}
         <div className="border-2 border-gray-800 rounded-3xl p-6 mb-4 space-y-4">
-          <p className="text-xs font-black tracking-widest uppercase text-pink-400">Profil</p>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <p className="text-xs text-gray-500 mb-1">Prénom</p>
-              <p className="text-white font-medium">{metadata.prenom || '—'}</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-500 mb-1">Nom</p>
-              <p className="text-white font-medium">{metadata.nom || '—'}</p>
-            </div>
+          <div className="flex justify-between items-center">
+            <p className="text-xs font-black tracking-widest uppercase text-pink-400">Profil</p>
+            {!editing ? (
+              <button onClick={() => setEditing(true)} className="text-xs border-2 border-gray-700 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1 rounded-full transition">✏️ Éditer</button>
+            ) : (
+              <div className="flex gap-2">
+                <button onClick={() => { setEditing(false); setSaveMsg(''); }} className="text-xs border-2 border-gray-700 text-gray-400 px-3 py-1 rounded-full transition hover:border-gray-500">Annuler</button>
+                <button onClick={handleSaveProfil} disabled={saving} className="text-xs bg-gradient-to-r from-pink-500 to-violet-500 text-white px-3 py-1 rounded-full transition disabled:opacity-50">
+                  {saving ? '⏳' : '✅ Sauvegarder'}
+                </button>
+              </div>
+            )}
           </div>
-          <div>
-            <p className="text-xs text-gray-500 mb-1">Surnom</p>
-            <p className="text-white font-medium">{metadata.surnom || '—'}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-500 mb-1">Email</p>
-            <p className="text-white font-medium">{user?.email}</p>
-          </div>
+
+          {!editing ? (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Prénom</p>
+                  <p className="text-white font-medium">{metadata.prenom || '—'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Nom</p>
+                  <p className="text-white font-medium">{metadata.nom || '—'}</p>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Surnom</p>
+                <p className="text-white font-medium">{metadata.surnom || '—'}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Email</p>
+                <p className="text-white font-medium">{user?.email}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Prénom</p>
+                  <input
+                    type="text"
+                    value={editForm.prenom}
+                    onChange={(e) => setEditForm(f => ({ ...f, prenom: e.target.value }))}
+                    className="w-full bg-transparent border-2 border-gray-700 focus:border-pink-500 rounded-2xl px-4 py-2 text-white text-sm focus:outline-none transition"
+                  />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Nom</p>
+                  <input
+                    type="text"
+                    value={editForm.nom}
+                    onChange={(e) => setEditForm(f => ({ ...f, nom: e.target.value }))}
+                    className="w-full bg-transparent border-2 border-gray-700 focus:border-pink-500 rounded-2xl px-4 py-2 text-white text-sm focus:outline-none transition"
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Surnom</p>
+                <input
+                  type="text"
+                  value={editForm.surnom}
+                  onChange={(e) => setEditForm(f => ({ ...f, surnom: e.target.value }))}
+                  className="w-full bg-transparent border-2 border-gray-700 focus:border-pink-500 rounded-2xl px-4 py-2 text-white text-sm focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Email</p>
+                <p className="text-white font-medium">{user?.email}</p>
+              </div>
+              {saveMsg && <p className="text-sm text-center text-green-400">{saveMsg}</p>}
+            </>
+          )}
         </div>
 
         {/* Plan */}
@@ -138,9 +213,7 @@ export default function Compte() {
                 </p>
               )}
               {(profile?.plan === 'pack200' || profile?.plan === 'pack500') && (
-                <p className="text-xs text-gray-500 mt-1">
-                  {profile?.hooks_remaining || 0} hooks restants
-                </p>
+                <p className="text-xs text-gray-500 mt-1">{profile?.hooks_remaining || 0} hooks restants</p>
               )}
             </div>
             {badge && (
@@ -157,10 +230,8 @@ export default function Compte() {
                 <span>{profile?.plan === 'pack200' ? '200' : '500'} total</span>
               </div>
               <div className="w-full bg-gray-800 rounded-full h-2">
-                <div
-                  className="bg-gradient-to-r from-pink-500 to-violet-500 h-2 rounded-full transition-all"
-                  style={{ width: `${((profile?.hooks_remaining || 0) / (profile?.plan === 'pack200' ? 200 : 500)) * 100}%` }}
-                />
+                <div className="bg-gradient-to-r from-pink-500 to-violet-500 h-2 rounded-full transition-all"
+                  style={{ width: `${((profile?.hooks_remaining || 0) / (profile?.plan === 'pack200' ? 200 : 500)) * 100}%` }} />
               </div>
             </div>
           )}
