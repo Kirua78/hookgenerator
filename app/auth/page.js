@@ -25,7 +25,7 @@ export default function Auth() {
   return (
     <main className='min-h-screen bg-black text-white flex items-center justify-center p-6'>
       <div className='w-full max-w-sm'>
-        <h1 className='text-4xl font-black text-center mb-2 bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent'>HookGenerator</h1>
+        <img src="/logo.png" alt="HookGenerator" className="h-100 mx-auto mb-2" />
         <p className='text-gray-400 text-center mb-8'>{isLogin ? 'Connexion' : 'Créer un compte'}</p>
         <div className='space-y-4'>
           <div className='relative'>
