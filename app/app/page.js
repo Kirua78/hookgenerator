@@ -89,6 +89,284 @@ function TranslateButton({ hook, currentLang, isPremium }) {
   );
 }
 
+const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+const TYPE_CONFIG = {
+  hook: { label: 'Hook', color: 'bg-pink-500/20 border-pink-500/40 text-pink-400', dot: 'bg-pink-500' },
+  idee: { label: 'Idée', color: 'bg-violet-500/20 border-violet-500/40 text-violet-400', dot: 'bg-violet-500' },
+  legende: { label: 'Légende', color: 'bg-blue-500/20 border-blue-500/40 text-blue-400', dot: 'bg-blue-500' },
+  note: { label: 'Note', color: 'bg-gray-500/20 border-gray-500/40 text-gray-400', dot: 'bg-gray-500' },
+};
+
+function getWeekDates(baseDate) {
+  const d = new Date(baseDate);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(d.setDate(diff));
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    return date;
+  });
+}
+
+function toISO(date) {
+  return date.toISOString().split('T')[0];
+}
+
+export default function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees }) {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [form, setForm] = useState({ type: 'hook', content: '', platform: '', note: '' });
+  const [saving, setSaving] = useState(false);
+
+  const weekDates = getWeekDates(currentDate);
+  const weekStart = toISO(weekDates[0]);
+  const weekEnd = toISO(weekDates[6]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetchEvents();
+  }, [user, weekStart]);
+
+  const fetchEvents = async () => {
+    setLoading(true);
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await fetch(`/api/calendar?start=${weekStart}&end=${weekEnd}`, {
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+    });
+    const data = await res.json();
+    setEvents(data.events || []);
+    setLoading(false);
+  };
+
+  const openAdd = (date) => {
+    setSelectedDate(toISO(date));
+    setSelectedEvent(null);
+    setForm({ type: 'hook', content: '', platform: '', note: '' });
+    setShowModal(true);
+  };
+
+  const openEdit = (event, e) => {
+    e.stopPropagation();
+    setSelectedEvent(event);
+    setSelectedDate(event.date);
+    setForm({ type: event.type, content: event.content, platform: event.platform || '', note: event.note || '' });
+    setShowModal(true);
+  };
+
+  const saveEvent = async () => {
+    if (!form.content) return;
+    setSaving(true);
+    const { data: { session } } = await supabase.auth.getSession();
+    await fetch('/api/calendar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+      body: JSON.stringify({ date: selectedDate, ...form }),
+    });
+    await fetchEvents();
+    setShowModal(false);
+    setSaving(false);
+  };
+
+  const deleteEvent = async (id, e) => {
+    e.stopPropagation();
+    const { data: { session } } = await supabase.auth.getSession();
+    await fetch(`/api/calendar?id=${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+    });
+    setEvents(prev => prev.filter(ev => ev.id !== id));
+  };
+
+  const prevWeek = () => { const d = new Date(currentDate); d.setDate(d.getDate() - 7); setCurrentDate(d); };
+  const nextWeek = () => { const d = new Date(currentDate); d.setDate(d.getDate() + 7); setCurrentDate(d); };
+  const goToday = () => setCurrentDate(new Date());
+
+  const getEventsForDate = (date) => events.filter(e => e.date === toISO(date));
+  const isToday = (date) => toISO(date) === toISO(new Date());
+
+  const getSavedContent = () => {
+    if (form.type === 'hook') return savedHooks || [];
+    if (form.type === 'idee') return savedIdees || [];
+    if (form.type === 'legende') return savedLegendees || [];
+    return [];
+  };
+
+  if (!user) return (
+    <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+      <p className="text-4xl mb-4">📅</p>
+      <p className="text-white font-bold mb-2">Calendrier éditorial</p>
+      <p className="text-gray-400 text-sm mb-4">Connecte-toi pour planifier tes contenus</p>
+      <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">Se connecter →</a>
+    </div>
+  );
+
+  if (!isPremium) return (
+    <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+      <p className="text-4xl mb-4">📅</p>
+      <p className="text-white font-bold mb-2">Calendrier éditorial</p>
+      <p className="text-gray-400 text-sm mb-4">Planifie tes hooks, idées et légendes sur la semaine</p>
+      <a href="/pricing" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">⭐ Passer Premium →</a>
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      {/* Header navigation */}
+      <div className="flex items-center justify-between">
+        <button onClick={prevWeek} className="border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-2 rounded-2xl transition text-sm">←</button>
+        <div className="text-center">
+          <p className="text-white font-black text-sm">
+            {weekDates[0].getDate()} {MONTHS[weekDates[0].getMonth()]} — {weekDates[6].getDate()} {MONTHS[weekDates[6].getMonth()]} {weekDates[6].getFullYear()}
+          </p>
+          <button onClick={goToday} className="text-xs text-gray-500 hover:text-pink-400 transition mt-1">Aujourd&apos;hui</button>
+        </div>
+        <button onClick={nextWeek} className="border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-2 rounded-2xl transition text-sm">→</button>
+      </div>
+
+      {/* Légende */}
+      <div className="flex gap-3 flex-wrap">
+        {Object.entries(TYPE_CONFIG).map(([type, cfg]) => (
+          <div key={type} className="flex items-center gap-1.5">
+            <div className={`w-2 h-2 rounded-full ${cfg.dot}`} />
+            <span className="text-xs text-gray-500">{cfg.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Grille 7 jours */}
+      <div className="space-y-2">
+        {weekDates.map((date, i) => {
+          const dayEvents = getEventsForDate(date);
+          return (
+            <div
+              key={i}
+              onClick={() => openAdd(date)}
+              className={`border-2 rounded-2xl p-3 cursor-pointer transition ${isToday(date) ? 'border-pink-500/50 bg-pink-500/5' : 'border-gray-800 hover:border-gray-700'}`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs font-black ${isToday(date) ? 'text-pink-400' : 'text-gray-500'}`}>{DAYS[i]}</span>
+                  <span className={`text-sm font-black ${isToday(date) ? 'text-white' : 'text-gray-400'}`}>{date.getDate()}</span>
+                  {isToday(date) && <span className="text-xs bg-pink-500 text-white px-2 py-0.5 rounded-full">Aujourd&apos;hui</span>}
+                </div>
+                <span className="text-xs text-gray-700 hover:text-gray-500">+ Ajouter</span>
+              </div>
+              {dayEvents.length > 0 && (
+                <div className="space-y-1.5">
+                  {dayEvents.map(ev => (
+                    <div
+                      key={ev.id}
+                      onClick={(e) => openEdit(ev, e)}
+                      className={`border rounded-xl px-3 py-2 text-xs flex justify-between items-start gap-2 ${TYPE_CONFIG[ev.type]?.color}`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <span className="font-bold uppercase tracking-widest text-xs opacity-70">{TYPE_CONFIG[ev.type]?.label}</span>
+                        <p className="truncate mt-0.5">{ev.content}</p>
+                        {ev.platform && <p className="opacity-60 mt-0.5">{ev.platform}</p>}
+                      </div>
+                      <button
+                        onClick={(e) => deleteEvent(ev.id, e)}
+                        className="shrink-0 opacity-50 hover:opacity-100 transition text-xs"
+                      >🗑️</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Modal ajout/édition */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4" onClick={() => setShowModal(false)}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg bg-gray-950 border-2 border-gray-800 rounded-3xl p-6 space-y-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center">
+              <p className="text-white font-black">
+                {selectedDate && new Date(selectedDate + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
+              </p>
+              <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-white transition text-xl">✕</button>
+            </div>
+
+            {/* Type */}
+            <div className="grid grid-cols-4 gap-2">
+              {Object.entries(TYPE_CONFIG).map(([type, cfg]) => (
+                <button key={type} onClick={() => setForm(f => ({ ...f, type, content: '' }))}
+                  className={`py-2 rounded-2xl text-xs font-bold border-2 transition ${form.type === type ? `${cfg.color} border-opacity-100` : 'border-gray-800 text-gray-500 hover:border-gray-600'}`}>
+                  {cfg.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Contenu — sélecteur si hook/idée/légende */}
+            {form.type !== 'note' && getSavedContent().length > 0 && (
+              <div>
+                <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">Depuis tes sauvegardes</p>
+                <div className="max-h-32 overflow-y-auto space-y-1.5">
+                  {getSavedContent().slice(0, 10).map((item, i) => {
+                    const text = item.hook || item.idee || item.legende || '';
+                    return (
+                      <div key={i} onClick={() => setForm(f => ({ ...f, content: text }))}
+                        className={`border rounded-xl px-3 py-2 text-xs cursor-pointer transition ${form.content === text ? 'border-pink-500 bg-pink-500/10 text-white' : 'border-gray-800 text-gray-400 hover:border-gray-600'}`}>
+                        {text.slice(0, 80)}{text.length > 80 ? '...' : ''}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Texte libre */}
+            <div className="relative">
+              <textarea
+                className="w-full bg-transparent border-2 border-gray-800 focus:border-pink-500 rounded-2xl px-4 pt-6 pb-3 text-white text-sm focus:outline-none transition resize-none h-24 peer placeholder-transparent"
+                placeholder="Contenu"
+                value={form.content}
+                onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+                id="cal-content"
+              />
+              <label htmlFor="cal-content" className="absolute left-4 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">
+                {form.type === 'note' ? 'Ta note' : 'Contenu'}
+              </label>
+            </div>
+
+            {/* Plateforme */}
+            {form.type !== 'note' && (
+              <select
+                value={form.platform}
+                onChange={e => setForm(f => ({ ...f, platform: e.target.value }))}
+                className="w-full bg-gray-900 border-2 border-gray-800 focus:border-pink-500 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none transition"
+              >
+                <option value="">Plateforme (optionnel)</option>
+                {['TikTok', 'Instagram Reels', 'YouTube Shorts', 'LinkedIn', 'Twitter / X', 'Snapchat'].map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            )}
+
+            <button
+              onClick={saveEvent}
+              disabled={saving || !form.content}
+              className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-2xl hover:opacity-90 disabled:opacity-50 transition"
+            >
+              {saving ? '⏳ Enregistrement...' : '✅ Planifier'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 const T = {
   Français: {
     subtitle: "Génère des hooks viraux pour tes vidéos en quelques secondes ",
@@ -123,6 +401,7 @@ const T = {
     premium: "⭐ Premium",
     topTab: " Top", topTitle: "Top Hooks", topWeek: "Cette semaine", topMonth: "Ce mois",
     topEmpty: "Pas encore de hooks cette période. Génère et like des hooks pour les voir apparaître !",
+    calTab: "📅 Calendrier",
     topLikes: "like",
   },
   English: {
@@ -157,6 +436,7 @@ const T = {
     premium: "⭐ Premium",
     topTab: " Top", topTitle: "Top Hooks", topWeek: "This week", topMonth: "This month",
     topEmpty: "No hooks yet this period. Generate and like hooks to see them here!",
+    calTab: "📅 Calendar",
     topLikes: "like",
   },
   Español: {
@@ -191,6 +471,7 @@ const T = {
     premium: "⭐ Premium",
     topTab: " Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mes",
     topEmpty: "Sin hooks aún este periodo. Genera y dale like a hooks para verlos aquí!",
+    calTab: "📅 Calendario",
     topLikes: "like",
   },
   Português: {
@@ -225,6 +506,7 @@ const T = {
     premium: "⭐ Premium",
     topTab: " Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mês",
     topEmpty: "Sem hooks ainda neste período. Gere e curta hooks para vê-los aqui!",
+    calTab: "📅 Calendário",
     topLikes: "like",
   },
 };
@@ -829,7 +1111,7 @@ export default function Home() {
   };
 
   const hooks = parseHooks(hooksState.result);
-  const tabIds = ["hooks", "legende", "idees", "analyse", "saved", "top"];
+  const tabIds = ["hooks", "legende", "idees", "analyse", "saved", "top", "cal"];
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
   return (
@@ -874,7 +1156,7 @@ export default function Home() {
             {tabIds.map((id, i) => (
               <button key={id} onClick={() => setTab(id)}
                 className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
-                {id === "saved" ? t.savedTab : id === "top" ? t.topTab : t.tabs[i]}
+                {id === "saved" ? t.savedTab : id === "top" ? t.topTab : id === "cal" ? t.calTab : t.tabs[i]}
               </button>
             ))}
           </div>
@@ -928,6 +1210,7 @@ export default function Home() {
         {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} state={analyseState} setState={setAnalyseState} />}
         {tab === "saved" && <SavedTab user={user} t={t} isPremium={isPremium} langue={langue} />}
         {tab === "top" && <TopHooksTab t={t} />}
+        {tab === "cal" && <CalendarTab user={user} isPremium={isPremium} savedHooks={[]} savedIdees={[]} savedLegendees={[]} />}
       </div>
 
       <div className="text-center py-6 space-x-4 text-xs text-gray-600 max-w-2xl mx-auto">
