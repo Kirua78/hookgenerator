@@ -19,7 +19,7 @@ export default function Pricing() {
     pack500: { name: "Pack 500 Hooks", price: "9,99€", period: "une fois", desc: "Le pack créateur sérieux", badge: "🥉 Pro Creator", badgeColor: "from-orange-700 to-orange-500", features: ["500 hooks individuels", "Fonctionnalités premium incluses", "Valable jusqu'à épuisement", "Badge Pro Creator Bronze"] },
     cta: "Choisir ce plan",
     ctaLoading: "Redirection...",
-    freeFeatures: ["3 générations/jour", "Accès aux 7 outils", "4 langues disponibles"],
+    freeFeatures: ["3 générations/jour", "Accès aux 4 outils", "4 langues disponibles"],
   };
 
   const checkout = async (priceKey) => {
