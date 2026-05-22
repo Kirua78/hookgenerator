@@ -62,7 +62,7 @@ function DemoSection() {
         <h2 className="text-3xl md:text-4xl font-black mb-4">
           Essaie <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">maintenant</span>
         </h2>
-        <p className="text-gray-400">Tape ta niche et vois ce que l'IA génère en quelques secondes.</p>
+        <p className="text-gray-400">Tape ta niche et vois ce que l'outil génère en quelques secondes.</p>
       </div>
 
       <div className="border-2 border-gray-800 rounded-3xl p-6 space-y-4">
@@ -153,7 +153,7 @@ export default function Landing() {
 
   const features = [
     { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
-    { title: "Brief IA complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
+    { title: "Brief complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
     { title: "Légendes & Hashtags", desc: "Légendes optimisées et hashtags viraux adaptés à chaque plateforme." },
     { title: "Analyseur de hook", desc: "Score sur 10, points forts, faiblesses et version améliorée de ton hook." },
     { title: "Top Hooks de la semaine", desc: "Découvre les hooks les plus likés par la communauté pour t'inspirer." },
@@ -193,7 +193,7 @@ export default function Landing() {
           <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent"> hook qui déchire</span>
         </h1>
         <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-          L'IA qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
+          L'outil qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
