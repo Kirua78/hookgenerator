@@ -50,6 +50,7 @@ export default function Auth() {
             plan: 'free',
           });
        setMessage('Vérifie ton email pour confirmer ton compte !');
+        setMessage('Vérifie ton email pour confirmer ton compte !');
         await fetch('/api/send-welcome', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
