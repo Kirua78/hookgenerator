@@ -6,6 +6,7 @@ import { supabase } from '../../lib/supabase';
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
   const [surnom, setSurnom] = useState('');
@@ -25,16 +26,23 @@ export default function Auth() {
         setLoading(false);
         return;
       }
+      if (password !== confirmPassword) {
+        setMessage('Les mots de passe ne correspondent pas.');
+        setLoading(false);
+        return;
+      }
+      if (password.length < 6) {
+        setMessage('Le mot de passe doit contenir au moins 6 caractères.');
+        setLoading(false);
+        return;
+      }
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: { prenom, nom, surnom }
-        }
+        options: { data: { prenom, nom, surnom } }
       });
       if (error) setMessage(error.message);
       else {
-        // Créer le profil dans user_profiles
         if (data?.user) {
           await supabase.from('user_profiles').upsert({
             id: data.user.id,
@@ -52,16 +60,16 @@ export default function Auth() {
     setIsLogin(!isLogin);
     setMessage('');
     setPrenom(''); setNom(''); setSurnom('');
+    setPassword(''); setConfirmPassword('');
   };
 
   return (
     <main className='min-h-screen bg-black text-white flex items-center justify-center p-6'>
       <div className='w-full max-w-sm'>
-        <img src="/logo.png" alt="HookGenerator" className="h-24 mx-auto mb-2 object-contain" />
+        <img src="/logo.png" alt="HookGenerator" className="h-24 mx-auto mb-4 object-contain" />
         <p className='text-gray-400 text-center mb-8'>{isLogin ? 'Connexion' : 'Créer un compte'}</p>
         <div className='space-y-4'>
 
-          {/* Champs inscription uniquement */}
           {!isLogin && (
             <>
               <div className='grid grid-cols-2 gap-3'>
@@ -90,7 +98,6 @@ export default function Auth() {
             </>
           )}
 
-          {/* Email & Password */}
           <input
             type='email'
             placeholder='Email'
@@ -105,8 +112,21 @@ export default function Auth() {
             onChange={(e) => setPassword(e.target.value)}
             className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
           />
+          {!isLogin && (
+            <input
+              type='password'
+              placeholder='Confirmer le mot de passe'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
+            />
+          )}
 
-          {message && <p className='text-sm text-center text-pink-400'>{message}</p>}
+          {message && (
+            <p className={`text-sm text-center ${message.includes('Vérifie') ? 'text-green-400' : 'text-pink-400'}`}>
+              {message}
+            </p>
+          )}
 
           <button
             onClick={handle}
