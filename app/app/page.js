@@ -23,14 +23,14 @@ function incrementLocalGenerations() {
 
 const T = {
   Français: {
-    subtitle: "Génère des hooks viraux pour tes vidéos en quelques secondes ⚡",
-    tabs: ["⚡ Hooks", "📝 Légende", "💡 Idées", "🔍 Analyser"],
+    subtitle: "Génère des hooks viraux pour tes vidéos en quelques secondes ",
+    tabs: [" Hooks", " Légende", " Idées", " Analyser"],
     platform: "Plateforme", tone: "Ton",
     tones: ["Divertissant", "Inspirant", "Éducatif", "Choquant", "Émotionnel", "Storytelling"],
-    videoAbout: "Ta vidéo parle de quoi ?", generateHooks: "⚡ Générer mes hooks",
-    generating: "⏳ Génération en cours...", generateLegende: "📝 Générer la légende",
-    generateIdees: "💡 Générer des idées", analyzeHook: "🔍 Analyser mon hook",
-    analyzing: "⏳ Analyse en cours...", whatIsHook: "💡 C'est quoi un hook ?",
+    videoAbout: "Ta vidéo parle de quoi ?", generateHooks: " Générer mes hooks",
+    generating: " Génération en cours...", generateLegende: " Générer la légende",
+    generateIdees: " Générer des idées", analyzeHook: " Analyser mon hook",
+    analyzing: " Analyse en cours...", whatIsHook: " C'est quoi un hook ?",
     hookExplain1: "Un hook c'est l'accroche des 3 premières secondes de ta vidéo.",
     hookExplain2: "C'est la phrase qui fait que l'utilisateur arrête de scroller.",
     hookExplain3: "Sans bon hook personne ne regarde. Avec un bon hook l'algorithme te pousse.",
@@ -41,31 +41,31 @@ const T = {
     swipe: "Glisse pour passer · Like pour garder", legende: "Légende", hashtags: "Hashtags",
     copy: "📋 Copier", copied: "✅ Copié !", niche: "Ta niche (ex: fitness, finance...)",
     tenIdeas: "10 idées de vidéos 💡", pasteHook: "Colle ton hook ici", note: "Note",
-    strengths: "✅ Points forts", weaknesses: "❌ Points faibles", improved: "🚀 Version améliorée",
+    strengths: "✅ Points forts", weaknesses: "❌ Points faibles", improved: " Version améliorée",
     login: "Se connecter", logout: "Déconnexion",
     limitFree: "générations gratuites restantes aujourd'hui",
     limitConnected: "générations restantes aujourd'hui",
-    unlimited: "✨ Générations illimitées",
+    unlimited: " Générations illimitées",
     noMore: "Tu as atteint ta limite du jour !",
     noMoreSub: "Connecte-toi pour plus de générations", upgrade: "Se connecter →",
-    savedTab: "💾 Sauvegardés", delete: "🗑️",
+    savedTab: " Sauvegardés", delete: "🗑️",
     loginToSave: "Connecte-toi pour sauvegarder tes contenus !",
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
     premium: "⭐ Premium",
-    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "Cette semaine", topMonth: "Ce mois",
+    topTab: " Top", topTitle: "Top Hooks", topWeek: "Cette semaine", topMonth: "Ce mois",
     topEmpty: "Pas encore de hooks cette période. Génère et like des hooks pour les voir apparaître !",
     topLikes: "like",
   },
   English: {
-    subtitle: "Generate viral hooks for your videos in seconds ⚡",
-    tabs: ["⚡ Hooks", "📝 Caption", "💡 Ideas", "🔍 Analyze"],
+    subtitle: "Generate viral hooks for your videos in seconds ",
+    tabs: [" Hooks", " Caption", " Ideas", " Analyze"],
     platform: "Platform", tone: "Tone",
     tones: ["Entertaining", "Inspiring", "Educational", "Shocking", "Emotional", "Storytelling"],
-    videoAbout: "What is your video about?", generateHooks: "⚡ Generate my hooks",
-    generating: "⏳ Generating...", generateLegende: "📝 Generate caption",
-    generateIdees: "💡 Generate ideas", analyzeHook: "🔍 Analyze my hook",
-    analyzing: "⏳ Analyzing...", whatIsHook: "💡 What is a hook?",
+    videoAbout: "What is your video about?", generateHooks: " Generate my hooks",
+    generating: " Generating...", generateLegende: " Generate caption",
+    generateIdees: " Generate ideas", analyzeHook: " Analyze my hook",
+    analyzing: " Analyzing...", whatIsHook: "💡 What is a hook?",
     hookExplain1: "A hook is the opening of the first 3 seconds of your video.",
     hookExplain2: "It makes the user stop scrolling and watch your content to the end.",
     hookExplain3: "No good hook means nobody watches. Good hook means the algorithm pushes you.",
@@ -76,10 +76,10 @@ const T = {
     swipe: "Swipe to pass · Like to keep", legende: "Caption", hashtags: "Hashtags",
     copy: "📋 Copy", copied: "✅ Copied!", niche: "Your niche (e.g: fitness, finance...)",
     tenIdeas: "10 video ideas 💡", pasteHook: "Paste your hook here", note: "Score",
-    strengths: "✅ Strengths", weaknesses: "❌ Weaknesses", improved: "🚀 Improved version",
+    strengths: "✅ Strengths", weaknesses: "❌ Weaknesses", improved: " Improved version",
     login: "Login", logout: "Logout",
     limitFree: "free generations left today", limitConnected: "generations left today",
-    unlimited: "✨ Unlimited generations",
+    unlimited: " Unlimited generations",
     noMore: "You have reached your daily limit!", noMoreSub: "Login for more generations",
     upgrade: "Login →",
     savedTab: "💾 Saved", delete: "🗑️",
@@ -87,19 +87,19 @@ const T = {
     savedLegendes: "Saved captions", savedIdees: "Saved ideas", savedHooksTitle: "Saved hooks",
     saveSuccess: "✅ Saved!", saveBrief: "💾 Save brief", saveLegende: "💾 Save",
     premium: "⭐ Premium",
-    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "This week", topMonth: "This month",
+    topTab: " Top", topTitle: "Top Hooks", topWeek: "This week", topMonth: "This month",
     topEmpty: "No hooks yet this period. Generate and like hooks to see them here!",
     topLikes: "like",
   },
   Español: {
-    subtitle: "Genera hooks virales para tus videos en segundos ⚡",
-    tabs: ["⚡ Hooks", "📝 Leyenda", "💡 Ideas", "🔍 Analizar"],
+    subtitle: "Genera hooks virales para tus videos en segundos ",
+    tabs: [" Hooks", " Leyenda", " Ideas", " Analizar"],
     platform: "Plataforma", tone: "Tono",
     tones: ["Entretenido", "Inspirador", "Educativo", "Impactante", "Emocional", "Storytelling"],
-    videoAbout: "De que trata tu video?", generateHooks: "⚡ Generar mis hooks",
-    generating: "⏳ Generando...", generateLegende: "📝 Generar leyenda",
-    generateIdees: "💡 Generar ideas", analyzeHook: "🔍 Analizar mi hook",
-    analyzing: "⏳ Analizando...", whatIsHook: "Que es un hook?",
+    videoAbout: "De que trata tu video?", generateHooks: " Generar mis hooks",
+    generating: " Generando...", generateLegende: "Generar leyenda",
+    generateIdees: " Generar ideas", analyzeHook: " Analizar mi hook",
+    analyzing: " Analizando...", whatIsHook: "Que es un hook?",
     hookExplain1: "Un hook es la introduccion de los primeros 3 segundos de tu video.",
     hookExplain2: "Es la frase que hace que el usuario deje de hacer scroll.",
     hookExplain3: "Sin buen hook nadie mira. Con buen hook el algoritmo te impulsa.",
@@ -110,30 +110,30 @@ const T = {
     swipe: "Desliza para pasar · Like para guardar", legende: "Leyenda", hashtags: "Hashtags",
     copy: "📋 Copiar", copied: "✅ Copiado!", niche: "Tu nicho (ej: fitness, finanzas...)",
     tenIdeas: "10 ideas de videos 💡", pasteHook: "Pega tu hook aqui", note: "Puntuacion",
-    strengths: "✅ Puntos fuertes", weaknesses: "❌ Puntos debiles", improved: "🚀 Version mejorada",
+    strengths: "✅ Puntos fuertes", weaknesses: "❌ Puntos debiles", improved: " Version mejorada",
     login: "Iniciar sesion", logout: "Cerrar sesion",
     limitFree: "generaciones gratuitas hoy", limitConnected: "generaciones restantes hoy",
-    unlimited: "✨ Generaciones ilimitadas",
+    unlimited: " Generaciones ilimitadas",
     noMore: "Has alcanzado tu limite diario!", noMoreSub: "Inicia sesion para mas generaciones",
     upgrade: "Iniciar sesion →",
-    savedTab: "💾 Guardados", delete: "🗑️",
+    savedTab: " Guardados", delete: "🗑️",
     loginToSave: "Inicia sesion para guardar tu contenido!",
     savedLegendes: "Leyendas guardadas", savedIdees: "Ideas guardadas", savedHooksTitle: "Hooks guardados",
-    saveSuccess: "✅ Guardado!", saveBrief: "💾 Guardar brief", saveLegende: "💾 Guardar",
+    saveSuccess: "✅ Guardado!", saveBrief: " Guardar brief", saveLegende: " Guardar",
     premium: "⭐ Premium",
-    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mes",
+    topTab: " Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mes",
     topEmpty: "Sin hooks aún este periodo. Genera y dale like a hooks para verlos aquí!",
     topLikes: "like",
   },
   Português: {
-    subtitle: "Gere hooks virais para seus videos em segundos ⚡",
-    tabs: ["⚡ Hooks", "📝 Legenda", "💡 Ideias", "🔍 Analisar"],
+    subtitle: "Gere hooks virais para seus videos em segundos ",
+    tabs: [" Hooks", " Legenda", " Ideias", " Analisar"],
     platform: "Plataforma", tone: "Tom",
     tones: ["Divertido", "Inspirador", "Educativo", "Chocante", "Emocional", "Storytelling"],
-    videoAbout: "Do que e o seu video?", generateHooks: "⚡ Gerar meus hooks",
-    generating: "⏳ Gerando...", generateLegende: "📝 Gerar legenda",
-    generateIdees: "💡 Gerar ideias", analyzeHook: "🔍 Analisar meu hook",
-    analyzing: "⏳ Analisando...", whatIsHook: "O que e um hook?",
+    videoAbout: "Do que e o seu video?", generateHooks: " Gerar meus hooks",
+    generating: " Gerando...", generateLegende: " Gerar legenda",
+    generateIdees: " Gerar ideias", analyzeHook: " Analisar meu hook",
+    analyzing: " Analisando...", whatIsHook: "O que e um hook?",
     hookExplain1: "Um hook e a introducao dos primeiros 3 segundos do seu video.",
     hookExplain2: "E a frase que faz o usuario parar de rolar e assistir seu conteudo.",
     hookExplain3: "Sem bom hook ninguem assiste. Com bom hook o algoritmo te impulsiona.",
@@ -143,19 +143,19 @@ const T = {
     pass: "👎 Passar", like: "❤️ Curtir",
     swipe: "Deslize para passar · Curta para guardar", legende: "Legenda", hashtags: "Hashtags",
     copy: "📋 Copiar", copied: "✅ Copiado!", niche: "Seu nicho (ex: fitness, financas...)",
-    tenIdeas: "10 ideias de videos 💡", pasteHook: "Cole seu hook aqui", note: "Nota",
-    strengths: "✅ Pontos fortes", weaknesses: "❌ Pontos fracos", improved: "🚀 Versao melhorada",
+    tenIdeas: "10 ideias de videos ", pasteHook: "Cole seu hook aqui", note: "Nota",
+    strengths: "✅ Pontos fortes", weaknesses: "❌ Pontos fracos", improved: " Versao melhorada",
     login: "Entrar", logout: "Sair",
     limitFree: "geracoes gratuitas restantes hoje", limitConnected: "geracoes restantes hoje",
-    unlimited: "✨ Geracoes ilimitadas",
+    unlimited: " Geracoes ilimitadas",
     noMore: "Voce atingiu seu limite diario!", noMoreSub: "Entre para mais geracoes",
     upgrade: "Entrar →",
-    savedTab: "💾 Salvos", delete: "🗑️",
+    savedTab: " Salvos", delete: "🗑️",
     loginToSave: "Entre para salvar seu conteudo!",
     savedLegendes: "Legendas salvas", savedIdees: "Ideias salvas", savedHooksTitle: "Hooks salvos",
-    saveSuccess: "✅ Salvo!", saveBrief: "💾 Salvar brief", saveLegende: "💾 Salvar",
+    saveSuccess: "✅ Salvo!", saveBrief: " Salvar brief", saveLegende: " Salvar",
     premium: "⭐ Premium",
-    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mês",
+    topTab: " Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mês",
     topEmpty: "Sem hooks ainda neste período. Gere e curta hooks para vê-los aqui!",
     topLikes: "like",
   },
@@ -165,10 +165,10 @@ function PlatformSelect({ value, onChange, t }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const categories = [
-    { label: "📱 Social", options: ["TikTok", "Instagram Reels", "Snapchat", "Facebook", "Pinterest"] },
-    { label: "💼 Pro", options: ["LinkedIn"] },
-    { label: "🎬 Video", options: ["YouTube Shorts"] },
-    { label: "💬 Micro", options: ["Twitter / X"] },
+    { label: " Social", options: ["TikTok", "Instagram Reels", "Snapchat", "Facebook", "Pinterest"] },
+    { label: " Pro", options: ["LinkedIn"] },
+    { label: " Video", options: ["YouTube Shorts"] },
+    { label: " Micro", options: ["Twitter / X"] },
   ];
   useEffect(() => {
     const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
@@ -470,10 +470,10 @@ function IdeesTab({ platform, langue, t, user, state, setState }) {
   const idees = result ? result.split("\n").map((l) => { const m = l.match(/^\d+[\.\)]\s*(.+)$/); return m ? m[1].replace(/\*\*/g, "").trim() : null; }).filter(Boolean) : [];
   const { hook, angle, structure, cta, astuce } = parsePrompt(prompt);
   const labels = {
-    Français: { hook: "🎣 Hook", angle: "🎯 Angle", structure: "📋 Structure", cta: "📣 Call to action", astuce: "💡 Astuce viralité", back: "← Retour aux idées", generating: "⏳ Génération...", copyAll: "📋 Tout copier" },
-    English: { hook: "🎣 Hook", angle: "🎯 Angle", structure: "📋 Structure", cta: "📣 Call to action", astuce: "💡 Virality tip", back: "← Back to ideas", generating: "⏳ Generating...", copyAll: "📋 Copy all" },
-    Español: { hook: "🎣 Hook", angle: "🎯 Ángulo", structure: "📋 Estructura", cta: "📣 Call to action", astuce: "💡 Consejo viral", back: "← Volver a ideas", generating: "⏳ Generando...", copyAll: "📋 Copiar todo" },
-    Português: { hook: "🎣 Hook", angle: "🎯 Ângulo", structure: "📋 Estrutura", cta: "📣 Call to action", astuce: "💡 Dica viral", back: "← Voltar às ideias", generating: "⏳ Gerando...", copyAll: "📋 Copiar tudo" },
+    Français: { hook: " Hook", angle: " Angle", structure: " Structure", cta: " Call to action", astuce: "💡 Astuce viralité", back: "← Retour aux idées", generating: "⏳ Génération...", copyAll: "📋 Tout copier" },
+    English: { hook: " Hook", angle: " Angle", structure: " Structure", cta: " Call to action", astuce: "💡 Virality tip", back: "← Back to ideas", generating: "⏳ Generating...", copyAll: "📋 Copy all" },
+    Español: { hook: " Hook", angle: " Ángulo", structure: " Estructura", cta: " Call to action", astuce: "💡 Consejo viral", back: "← Volver a ideas", generating: "⏳ Generando...", copyAll: "📋 Copiar todo" },
+    Português: { hook: " Hook", angle: " Ângulo", structure: " Estrutura", cta: " Call to action", astuce: "💡 Dica viral", back: "← Voltar às ideias", generating: "⏳ Gerando...", copyAll: "📋 Copiar tudo" },
   };
   const l = labels[langue] || labels["Français"];
   return (
@@ -605,7 +605,7 @@ function SavedTab({ user, t }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-3 gap-1 bg-gray-900 p-1 rounded-3xl">
-        {[["hooks", `🎣 (${hooks.length})`], ["idees", `💡 (${idees.length})`], ["legendes", `📝 (${legendes.length})`]].map(([id, label]) => (
+        {[["hooks", ` (${hooks.length})`], ["idees", ` (${idees.length})`], ["legendes", ` (${legendes.length})`]].map(([id, label]) => (
           <button key={id} onClick={() => setSection(id)} className={`py-2.5 rounded-3xl text-xs font-bold transition ${section === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>{label}</button>
         ))}
       </div>
@@ -877,7 +877,7 @@ export default function Home() {
           <a href="/pricing" className="flex items-center justify-between bg-gradient-to-r from-pink-500 to-violet-500 text-white rounded-2xl px-5 py-3 shadow-2xl hover:opacity-90 transition max-w-2xl mx-auto">
             <div>
               <p className="font-black text-sm">
-                {!user ? "🚀 Passe au Premium" : "⭐ Deviens Pro Creator"}
+                {!user ? " Passe au Premium" : " Deviens Pro Creator"}
               </p>
               <p className="text-xs text-white/80">
                 {!user ? "Générations illimitées · Sauvegarde · dès 4,99€/mois" : "Générations illimitées · Brief IA · dès 4,99€/mois"}
