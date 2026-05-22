@@ -45,3 +45,8 @@ body {
 .blob { animation: blob 8s infinite; }
 .blob2 { animation: blob 10s infinite reverse; }
 .blob3 { animation: blob 12s infinite 2s; }
+
+main {
+  position: relative;
+  z-index: 1;
+}
