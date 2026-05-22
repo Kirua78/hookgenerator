@@ -1,22 +1,17 @@
 ﻿import { createClient } from '@supabase/supabase-js';
 
-// Rate limiting par IP pour les non-connectés
 const rateLimitMap = new Map();
-const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000; // 24h
-const RATE_LIMIT_MAX_ANONYMOUS = 3; // 3 générations/jour pour les non-connectés
-const RATE_LIMIT_MAX_CONNECTED = 5; // 5 appels/minute anti-bot pour les connectés
+const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000;
+const RATE_LIMIT_MAX_ANONYMOUS = 3;
 
 const botLimitMap = new Map();
-const BOT_WINDOW = 60 * 1000; // 1 minute
+const BOT_WINDOW = 60 * 1000;
 const BOT_MAX = 5;
 
 function checkAnonymousLimit(ip) {
   const now = Date.now();
   const entry = rateLimitMap.get(ip) || { count: 0, start: now };
-  if (now - entry.start > RATE_LIMIT_WINDOW) {
-    rateLimitMap.set(ip, { count: 1, start: now });
-    return true;
-  }
+  if (now - entry.start > RATE_LIMIT_WINDOW) { rateLimitMap.set(ip, { count: 1, start: now }); return true; }
   if (entry.count >= RATE_LIMIT_MAX_ANONYMOUS) return false;
   rateLimitMap.set(ip, { count: entry.count + 1, start: entry.start });
   return true;
@@ -25,10 +20,7 @@ function checkAnonymousLimit(ip) {
 function checkBotLimit(ip) {
   const now = Date.now();
   const entry = botLimitMap.get(ip) || { count: 0, start: now };
-  if (now - entry.start > BOT_WINDOW) {
-    botLimitMap.set(ip, { count: 1, start: now });
-    return true;
-  }
+  if (now - entry.start > BOT_WINDOW) { botLimitMap.set(ip, { count: 1, start: now }); return true; }
   if (entry.count >= BOT_MAX) return false;
   botLimitMap.set(ip, { count: entry.count + 1, start: entry.start });
   return true;
@@ -39,12 +31,10 @@ const CONNECTED_DAILY_LIMIT = 3;
 export async function POST(req) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
 
-  // Anti-bot pour tout le monde
   if (!checkBotLimit(ip)) {
     return Response.json({ error: 'Trop de requêtes. Réessaie dans une minute.' }, { status: 429 });
   }
 
-  // Validation des inputs
   const body = await req.json();
   const { description, platform, tone, langue } = body;
   if (!description || !platform || !tone || !langue) {
@@ -56,14 +46,12 @@ export async function POST(req) {
 
   const authHeader = req.headers.get('authorization');
 
-  // CAS 1 : Non connecté → rate limit par IP sur 24h
   if (!authHeader) {
     if (!checkAnonymousLimit(ip)) {
       return Response.json({ error: 'Limite gratuite atteinte. Crée un compte pour continuer.', limitReached: true }, { status: 429 });
     }
   }
 
-  // CAS 2 : Connecté → vérification en base Supabase
   if (authHeader) {
     const token = authHeader.replace('Bearer ', '');
     const supabase = createClient(
@@ -73,21 +61,20 @@ export async function POST(req) {
     );
 
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return Response.json({ error: 'Token invalide.' }, { status: 401 });
-    }
+    if (!user) return Response.json({ error: 'Token invalide.' }, { status: 401 });
 
-    // Vérifier si premium
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('is_premium')
+      .select('is_premium, plan, hooks_remaining')
       .eq('id', user.id)
       .single();
 
     const isPremium = profile?.is_premium === true;
+    const plan = profile?.plan || 'free';
+    const hooksRemaining = profile?.hooks_remaining || 0;
 
     if (!isPremium) {
-      // Vérifier le compteur du jour
+      // Plan gratuit → limite journalière
       const { data: genData } = await supabase
         .from('daily_generations')
         .select('count')
@@ -96,18 +83,34 @@ export async function POST(req) {
         .single();
 
       const currentCount = genData?.count || 0;
-
       if (currentCount >= CONNECTED_DAILY_LIMIT) {
         return Response.json({ error: 'Limite journalière atteinte.', limitReached: true }, { status: 429 });
       }
-
-      // Incrémenter le compteur en base
       await supabase.rpc('increment_generation', { p_user_id: user.id });
+
+    } else if (plan === 'pack200' || plan === 'pack500') {
+      // Pack one-shot → vérifier et décrémenter hooks_remaining
+      if (hooksRemaining <= 0) {
+        // Pack épuisé → repasser en free
+        await supabase.from('user_profiles').update({
+          is_premium: false,
+          plan: 'free',
+          hooks_remaining: 0,
+        }).eq('id', user.id);
+        return Response.json({ error: 'Ton pack est épuisé. Recharge un pack pour continuer.', limitReached: true, packEmpty: true }, { status: 429 });
+      }
+      // Décrémenter de 10 (1 génération = 10 hooks individuels)
+      const newRemaining = Math.max(0, hooksRemaining - 10);
+      await supabase.from('user_profiles').update({
+        hooks_remaining: newRemaining,
+        // Si épuisé, repasser en free
+        ...(newRemaining === 0 ? { is_premium: false, plan: 'free' } : {}),
+      }).eq('id', user.id);
+
     }
-    // Si premium → pas de limite, on passe directement
+    // Plan mensuel/annuel → illimité, rien à faire
   }
 
-  // Génération OpenAI
   const toneInstructions = {
     "Divertissant": "hooks amusants, légers, avec humour et énergie positive",
     "Inspirant": "hooks motivants, qui donnent envie de se dépasser, citations puissantes",
