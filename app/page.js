@@ -796,14 +796,18 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <div />
           {user ? (
-            <div className="flex items-center gap-3">
-              {isPremium && <span className="text-xs bg-gradient-to-r from-pink-500 to-violet-500 text-white px-2 py-1 rounded-full font-bold">{t.premium}</span>}
-              <span className="text-xs text-gray-400">{user.email}</span>
-              <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
-            </div>
-          ) : (
-            <a href="/auth" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.login}</a>
-          )}
+  <div className="flex items-center gap-3">
+    {isPremium && <span className="text-xs bg-gradient-to-r from-pink-500 to-violet-500 text-white px-2 py-1 rounded-full font-bold">{t.premium}</span>}
+    {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
+    <span className="text-xs text-gray-400">{user.email}</span>
+    <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
+  </div>
+) : (
+  <div className="flex items-center gap-3">
+    <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>
+    <a href="/auth" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.login}</a>
+  </div>
+)}
         </div>
 
         <div className="text-center mb-8">
