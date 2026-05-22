@@ -235,8 +235,8 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
     <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
       <p className="text-4xl mb-4">📅</p>
       <p className="text-white font-bold mb-2">Calendrier éditorial</p>
-      <p className="text-gray-400 text-sm mb-4">{t.calLogin}</p>
-      <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.calConnect}</a>
+      <p className="text-gray-400 text-sm mb-4">{t.calLogin || 'Connecte-toi pour planifier tes contenus'}</p>
+      <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.calConnect || 'Se connecter →'}</a>
     </div>
   );
 
@@ -244,8 +244,8 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
     <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
       <p className="text-4xl mb-4">📅</p>
       <p className="text-white font-bold mb-2">Calendrier éditorial</p>
-      <p className="text-gray-400 text-sm mb-4">{t.calPremiumMsg}</p>
-      <a href="/pricing" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.calGoPremium}</a>
+      <p className="text-gray-400 text-sm mb-4">{t.calPremiumMsg || 'Planifie tes hooks, idées et légendes sur la semaine'}</p>
+      <a href="/pricing" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.calGoPremium || '⭐ Passer Premium →'}</a>
     </div>
   );
 
@@ -256,9 +256,9 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
         <button onClick={prevWeek} className="border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-2 rounded-2xl transition text-sm">←</button>
         <div className="text-center">
           <p className="text-white font-black text-sm">
-            {weekDates[0].getDate()} {t.months[weekDates[0].getMonth()]} — {weekDates[6].getDate()} {t.months[weekDates[6].getMonth()]} {weekDates[6].getFullYear()}
+            {weekDates[0].getDate()} {(t.months || ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'])[weekDates[0].getMonth()]} — {weekDates[6].getDate()} {(t.months || ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'])[weekDates[6].getMonth()]} {weekDates[6].getFullYear()}
           </p>
-          <button onClick={goToday} className="text-xs text-gray-500 hover:text-pink-400 transition mt-1">{t.today}</button>
+          <button onClick={goToday} className="text-xs text-gray-500 hover:text-pink-400 transition mt-1">{t.today || "Aujourd'hui"}</button>
         </div>
         <button onClick={nextWeek} className="border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-2 rounded-2xl transition text-sm">→</button>
       </div>
@@ -285,11 +285,11 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-black ${isToday(date) ? 'text-pink-400' : 'text-gray-500'}`}>{t.days[i]}</span>
+                  <span className={`text-xs font-black ${isToday(date) ? 'text-pink-400' : 'text-gray-500'}`}>{(t.days || ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'])[i]}</span>
                   <span className={`text-sm font-black ${isToday(date) ? 'text-white' : 'text-gray-400'}`}>{date.getDate()}</span>
-                  {isToday(date) && <span className="text-xs bg-pink-500 text-white px-2 py-0.5 rounded-full">{t.today}</span>}
+                  {isToday(date) && <span className="text-xs bg-pink-500 text-white px-2 py-0.5 rounded-full">{t.today || "Aujourd'hui"}</span>}
                 </div>
-                <span className="text-xs text-gray-700 hover:text-gray-500">{t.addEvent}</span>
+                <span className="text-xs text-gray-700 hover:text-gray-500">{t.addEvent || '+ Ajouter'}</span>
               </div>
               {dayEvents.length > 0 && (
                 <div className="space-y-1.5">
@@ -342,7 +342,7 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
             {/* Contenu — sélecteur si hook/idée/légende */}
             {form.type !== 'note' && getSavedContent().length > 0 && (
               <div>
-                <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{t.calFrom}</p>
+                <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{t.calFrom || 'Depuis tes sauvegardes'}</p>
                 <div className="max-h-32 overflow-y-auto space-y-1.5">
                   {getSavedContent().slice(0, 10).map((item, i) => {
                     const text = item.hook || item.idee || item.legende || '';
@@ -378,7 +378,7 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
                 onChange={e => setForm(f => ({ ...f, platform: e.target.value }))}
                 className="w-full bg-gray-900 border-2 border-gray-800 focus:border-pink-500 rounded-2xl px-4 py-3 text-white text-sm focus:outline-none transition"
               >
-                <option value="">{t.calPlatform}</option>
+                <option value="">{t.calPlatform || 'Plateforme (optionnel)'}</option>
                 {['TikTok', 'Instagram Reels', 'YouTube Shorts', 'LinkedIn', 'Twitter / X', 'Snapchat'].map(p => (
                   <option key={p} value={p}>{p}</option>
                 ))}
@@ -390,7 +390,7 @@ function CalendarTab({ user, isPremium, savedHooks, savedIdees, savedLegendees, 
               disabled={saving || !form.content}
               className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-2xl hover:opacity-90 disabled:opacity-50 transition"
             >
-              {saving ? t.calSaving : t.calSave}
+              {saving ? (t.calSaving || '⏳ Enregistrement...') : (t.calSave || '✅ Planifier')}
             </button>
           </div>
         </div>
