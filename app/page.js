@@ -53,6 +53,12 @@ const T = {
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
     premium: "⭐ Premium",
+    topTab: "🏆 Top",
+    topTitle: "Top Hooks",
+    topWeek: "Cette semaine",
+    topMonth: "Ce mois",
+    topEmpty: "Pas encore de hooks cette période. Génère et like des hooks pour les voir apparaître !",
+    topLikes: "like",
   },
   English: {
     subtitle: "Generate viral hooks for your videos in seconds ⚡",
@@ -84,6 +90,12 @@ const T = {
     savedLegendes: "Saved captions", savedIdees: "Saved ideas", savedHooksTitle: "Saved hooks",
     saveSuccess: "✅ Saved!", saveBrief: "💾 Save brief", saveLegende: "💾 Save",
     premium: "⭐ Premium",
+    topTab: "🏆 Top",
+    topTitle: "Top Hooks",
+    topWeek: "This week",
+    topMonth: "This month",
+    topEmpty: "No hooks yet this period. Generate and like hooks to see them here!",
+    topLikes: "like",
   },
   Español: {
     subtitle: "Genera hooks virales para tus videos en segundos ⚡",
@@ -115,6 +127,12 @@ const T = {
     savedLegendes: "Leyendas guardadas", savedIdees: "Ideas guardadas", savedHooksTitle: "Hooks guardados",
     saveSuccess: "✅ Guardado!", saveBrief: "💾 Guardar brief", saveLegende: "💾 Guardar",
     premium: "⭐ Premium",
+    topTab: "🏆 Top",
+    topTitle: "Top Hooks",
+    topWeek: "Esta semana",
+    topMonth: "Este mes",
+    topEmpty: "Sin hooks aún este periodo. Genera y dale like a hooks para verlos aquí!",
+    topLikes: "like",
   },
   Português: {
     subtitle: "Gere hooks virais para seus videos em segundos ⚡",
@@ -146,6 +164,12 @@ const T = {
     savedLegendes: "Legendas salvas", savedIdees: "Ideias salvas", savedHooksTitle: "Hooks salvos",
     saveSuccess: "✅ Salvo!", saveBrief: "💾 Salvar brief", saveLegende: "💾 Salvar",
     premium: "⭐ Premium",
+    topTab: "🏆 Top",
+    topTitle: "Top Hooks",
+    topWeek: "Esta semana",
+    topMonth: "Este mês",
+    topEmpty: "Sem hooks ainda neste período. Gere e curta hooks para vê-los aqui!",
+    topLikes: "like",
   },
 };
 
@@ -227,16 +251,21 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   const mu = () => { if (drag > 80) hl(); else if (drag < -80) hp(); setDrag(0); setDragging(false); };
   const ts = (e) => { startX.current = e.touches[0].clientX; setDragging(true); };
   const tm = (e) => { if (!dragging) return; setDrag(e.touches[0].clientX - startX.current); };
-  const saveHookToSupabase = async (hookText) => {
+
+  const saveHook = async (hookText) => {
     if (!user) return;
+    // Sauvegarder dans liked_hooks
     await supabase.from("liked_hooks").insert({ user_id: user.id, hook: hookText, platform, tone, langue });
+    // Incrémenter dans top_hooks
+    await supabase.rpc('upsert_top_hook', { p_hook: hookText, p_platform: platform, p_tone: tone, p_langue: langue });
   };
+
   const hl = () => {
     if (current >= hooks.length) return;
     setDirection("right");
     const hookText = hooks[current];
     onLike(hookText);
-    saveHookToSupabase(hookText);
+    saveHook(hookText);
     setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300);
   };
   const hp = () => {
@@ -245,6 +274,7 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
     setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300);
   };
   const copy = (text) => navigator.clipboard.writeText(text);
+
   if (current >= hooks.length) {
     return (
       <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
@@ -294,6 +324,89 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
         <button onClick={hp} className="flex-1 border-2 border-gray-800 hover:border-red-400 text-gray-400 hover:text-red-400 py-4 rounded-3xl font-bold transition text-xl">{t.pass}</button>
         <button onClick={hl} className="flex-1 border-2 border-gray-800 hover:border-green-400 text-gray-400 hover:text-green-400 py-4 rounded-3xl font-bold transition text-xl">{t.like}</button>
       </div>
+    </div>
+  );
+}
+
+function TopHooksTab({ t }) {
+  const [period, setPeriod] = useState("week");
+  const [hooks, setHooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(null);
+
+  useEffect(() => {
+    fetchTopHooks();
+  }, [period]);
+
+  const fetchTopHooks = async () => {
+    setLoading(true);
+    const now = new Date();
+    const week = getWeekNumber(now);
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+
+    let query = supabase.from("top_hooks").select("*").eq("year", year).order("likes", { ascending: false }).limit(10);
+    if (period === "week") query = query.eq("week", week);
+    else query = query.eq("month", month);
+
+    const { data } = await query;
+    setHooks(data || []);
+    setLoading(false);
+  };
+
+  const getWeekNumber = (date) => {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  };
+
+  const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
+
+  const medals = ["🥇", "🥈", "🥉"];
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-1 bg-gray-900 p-1 rounded-3xl">
+        {[["week", t.topWeek], ["month", t.topMonth]].map(([id, label]) => (
+          <button key={id} onClick={() => setPeriod(id)} className={`py-2.5 rounded-3xl text-xs font-bold transition ${period === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>{label}</button>
+        ))}
+      </div>
+
+      <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.topTitle} — {period === "week" ? t.topWeek : t.topMonth}</p>
+
+      {loading && <div className="text-center text-gray-500 py-12">⏳</div>}
+
+      {!loading && hooks.length === 0 && (
+        <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+          <p className="text-4xl mb-4">🏆</p>
+          <p className="text-gray-400 text-sm">{t.topEmpty}</p>
+        </div>
+      )}
+
+      {!loading && hooks.length > 0 && (
+        <div className="space-y-3">
+          {hooks.map((h, i) => (
+            <div key={h.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl shrink-0">{medals[i] || `${i + 1}.`}</span>
+                <div className="flex-1">
+                  <p className="text-white text-sm font-medium mb-2">{h.hook}</p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2 flex-wrap">
+                      {h.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{h.platform}</span>}
+                      {h.tone && <span className="text-xs bg-pink-500/10 text-pink-400 px-2 py-1 rounded-full">{h.tone}</span>}
+                      <span className="text-xs bg-violet-500/10 text-violet-400 px-2 py-1 rounded-full">❤️ {h.likes} {t.topLikes}{h.likes > 1 ? "s" : ""}</span>
+                    </div>
+                    <button onClick={() => copy(h.hook, h.id)} className="text-xs text-gray-500 hover:text-pink-400 transition px-2 py-1">{copied === h.id ? "✅" : "📋"}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -621,7 +734,7 @@ export default function Home() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
       if (session?.user) fetchProfile(session.user.id);
-      else { setIsPremium(false); }
+      else setIsPremium(false);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -632,7 +745,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (isPremium) setGenerationsLeft(null); // null = illimité
+    if (isPremium) setGenerationsLeft(null);
     else if (user) setGenerationsLeft(CONNECTED_LIMIT);
     else setGenerationsLeft(FREE_LIMIT - getLocalGenerations());
   }, [user, isPremium]);
@@ -654,7 +767,6 @@ export default function Home() {
     if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
     else if (!isPremium) setGenerationsLeft((g) => Math.max(0, g - 1));
 
-    // Récupérer le token session
     const { data: { session } } = await supabase.auth.getSession();
     const headers = { "Content-Type": "application/json" };
     if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
@@ -675,7 +787,7 @@ export default function Home() {
   };
 
   const hooks = parseHooks(hooksState.result);
-  const tabIds = ["hooks", "legende", "idees", "analyse", "saved"];
+  const tabIds = ["hooks", "legende", "idees", "analyse", "saved", "top"];
   const langues = [{ id: "Français", flag: "🇫🇷" }, { id: "English", flag: "🇬🇧" }, { id: "Español", flag: "🇪🇸" }, { id: "Português", flag: "🇧🇷" }];
 
   return (
@@ -708,11 +820,11 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-5 gap-1 bg-gray-900 p-1 rounded-3xl">
+          <div className="grid grid-cols-6 gap-1 bg-gray-900 p-1 rounded-3xl">
             {tabIds.map((id, i) => (
               <button key={id} onClick={() => setTab(id)}
                 className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
-                {id === "saved" ? t.savedTab : t.tabs[i]}
+                {id === "saved" ? t.savedTab : id === "top" ? t.topTab : t.tabs[i]}
               </button>
             ))}
           </div>
@@ -765,6 +877,7 @@ export default function Home() {
         {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} user={user} state={ideesState} setState={setIdeesState} />}
         {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} state={analyseState} setState={setAnalyseState} />}
         {tab === "saved" && <SavedTab user={user} t={t} />}
+        {tab === "top" && <TopHooksTab t={t} />}
       </div>
     </main>
   );
