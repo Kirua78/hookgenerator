@@ -716,6 +716,7 @@ export default function Home() {
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
+  const [plan, setPlan] = useState('free');
   const [generationsLeft, setGenerationsLeft] = useState(null);
   const [loadingHooks, setLoadingHooks] = useState(false);
 
@@ -739,10 +740,15 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const fetchProfile = async (userId) => {
-    const { data } = await supabase.from("user_profiles").select("is_premium").eq("id", userId).single();
-    if (data) setIsPremium(data.is_premium === true);
-  };
+ const fetchProfile = async (userId) => {
+  const { data } = await supabase.from("user_profiles").select("is_premium, plan").eq("id", userId).single();
+  if (data) {
+    setIsPremium(data.is_premium === true);
+    setPlan(data.plan || 'free');
+  }
+};
+  
+};
 
   useEffect(() => {
     if (isPremium) setGenerationsLeft(null);
@@ -797,7 +803,15 @@ export default function Home() {
           <div />
           {user ? (
   <div className="flex items-center gap-3">
-    {isPremium && <span className="text-xs bg-gradient-to-r from-pink-500 to-violet-500 text-white px-2 py-1 rounded-full font-bold">{t.premium}</span>}
+    {isPremium && (
+  <span className={`text-xs bg-gradient-to-r ${
+    plan === 'annuel' ? 'from-yellow-500 to-yellow-300' :
+    plan === 'mensuel' ? 'from-gray-400 to-gray-300' :
+    'from-orange-700 to-orange-500'
+  } text-white px-2 py-1 rounded-full font-bold`}>
+    {plan === 'annuel' ? '🥇 Pro Creator' : plan === 'mensuel' ? '🥈 Pro Creator' : '🥉 Pro Creator'}
+  </span>
+)}
     {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
     <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 Mon compte</a>
     <span className="text-xs text-gray-400">{user.email}</span>
