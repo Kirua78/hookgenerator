@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const STORAGE_KEY = "hg_generations";
 
@@ -18,6 +18,84 @@ function incrementLocalGenerations() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count }));
 }
 
+// ─── Grille tech animée ────────────────────────────────────────────────────────
+function GridBackground() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const CELL = 48;
+    let frame = 0;
+    let id;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      frame++;
+
+      const cols = Math.ceil(canvas.width / CELL) + 1;
+      const rows = Math.ceil(canvas.height / CELL) + 1;
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * CELL;
+          const y = r * CELL;
+          const dist = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
+          const wave = Math.sin(dist / 60 - frame / 40);
+          const alpha = ((wave + 1) / 2) * 0.2 + 0.02;
+
+          ctx.strokeStyle = `rgba(124, 77, 255, ${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.rect(x, y, CELL, CELL);
+          ctx.stroke();
+
+          if (Math.random() < 0.0015) {
+            ctx.fillStyle = 'rgba(224, 64, 251, 0.85)';
+            ctx.fillRect(x + CELL / 2 - 1.5, y + CELL / 2 - 1.5, 3, 3);
+          }
+        }
+      }
+
+      id = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        display: 'block',
+        zIndex: 0,
+      }}
+    />
+  );
+}
+
+// ─── Demo section ──────────────────────────────────────────────────────────────
 function DemoSection() {
   const [description, setDescription] = useState('');
   const [platform, setPlatform] = useState('TikTok');
@@ -55,7 +133,7 @@ function DemoSection() {
   const remaining = typeof window !== 'undefined' ? 3 - getLocalGenerations() : 3;
 
   return (
-    <section className="relative px-6 py-24 max-w-3xl mx-auto">
+    <section className="relative px-6 py-24 max-w-3xl mx-auto" style={{ zIndex: 1 }}>
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-black mb-4">
           Essaie <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">maintenant</span>
@@ -118,6 +196,7 @@ function DemoSection() {
   );
 }
 
+// ─── Page principale ───────────────────────────────────────────────────────────
 export default function Landing() {
   const hooks = {
     cyber: [
@@ -158,14 +237,11 @@ export default function Landing() {
   return (
     <main className="min-h-screen bg-black text-white overflow-hidden">
 
-      {/* Blobs de fond */}
-      <div className="fixed inset-0 animated-gradient -z-10" />
-      <div className="fixed top-20 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl blob -z-10" />
-      <div className="fixed top-40 right-10 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl blob2 -z-10" />
-      <div className="fixed bottom-20 left-1/3 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl blob3 -z-10" />
+      {/* Grille tech animée — remplace les blobs */}
+      <GridBackground />
 
       {/* Nav */}
-      <nav className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
+      <nav className="relative flex justify-between items-center px-6 py-4 max-w-6xl mx-auto" style={{ zIndex: 1 }}>
         <img src="/logo.png" alt="HookGenerator" className="h-10 object-contain" />
         <div className="flex items-center gap-4">
           <a href="/pricing" className="text-sm text-gray-400 hover:text-white transition">Tarifs</a>
@@ -177,7 +253,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="text-center px-6 py-20 max-w-4xl mx-auto">
+      <section className="relative text-center px-6 py-20 max-w-4xl mx-auto" style={{ zIndex: 1 }}>
         <div className="inline-flex items-center gap-2 bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold px-4 py-2 rounded-full mb-6">
           Plus de 50 000 hooks générés ce mois
         </div>
@@ -186,7 +262,7 @@ export default function Landing() {
           <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent"> hook qui déchire</span>
         </h1>
         <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-          L'outil qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
+          L&apos;outil qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
@@ -203,7 +279,7 @@ export default function Landing() {
       <DemoSection />
 
       {/* Plateformes */}
-      <section className="px-6 py-10 max-w-4xl mx-auto">
+      <section className="relative px-6 py-10 max-w-4xl mx-auto" style={{ zIndex: 1 }}>
         <p className="text-center text-xs text-gray-600 uppercase tracking-widest font-bold mb-8">Compatible avec toutes les plateformes</p>
         <div className="flex flex-wrap justify-center gap-4">
           {platforms.map(p => (
@@ -216,7 +292,7 @@ export default function Landing() {
       </section>
 
       {/* Exemples de hooks */}
-      <section className="px-6 py-20 max-w-6xl mx-auto">
+      <section className="relative px-6 py-20 max-w-6xl mx-auto" style={{ zIndex: 1 }}>
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-black mb-4">Des hooks qui font <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">arrêter de scroller</span></h2>
           <p className="text-gray-400">Générés en quelques secondes. Adaptés à ta niche.</p>
@@ -231,7 +307,7 @@ export default function Landing() {
               <p className={`text-xs font-black tracking-widest uppercase ${cat.accent}`}>{cat.label}</p>
               {cat.hooks.map((hook, i) => (
                 <div key={i} className="border border-gray-800 rounded-2xl p-4 bg-black/50">
-                  <p className="text-white text-sm leading-relaxed">"{hook}"</p>
+                  <p className="text-white text-sm leading-relaxed">&ldquo;{hook}&rdquo;</p>
                 </div>
               ))}
             </div>
@@ -240,7 +316,7 @@ export default function Landing() {
       </section>
 
       {/* Fonctionnalités */}
-      <section className="px-6 py-20 bg-black/40 backdrop-blur-sm max-w-full">
+      <section className="relative px-6 py-20 bg-black/40 backdrop-blur-sm max-w-full" style={{ zIndex: 1 }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-black mb-4">Tout ce dont tu as besoin pour <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">exploser sur les réseaux</span></h2>
@@ -258,7 +334,7 @@ export default function Landing() {
       </section>
 
       {/* Stats */}
-      <section className="px-6 py-16 bg-gradient-to-r from-pink-500/10 to-violet-500/10 border-y border-gray-800">
+      <section className="relative px-6 py-16 bg-gradient-to-r from-pink-500/10 to-violet-500/10 border-y border-gray-800" style={{ zIndex: 1 }}>
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { stat: "50K+", label: "Hooks générés" },
@@ -274,8 +350,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing CTA */}
-      <section className="px-6 py-20 max-w-4xl mx-auto text-center">
+      {/* CTA final */}
+      <section className="relative px-6 py-20 max-w-4xl mx-auto text-center" style={{ zIndex: 1 }}>
         <h2 className="text-3xl md:text-4xl font-black mb-4">Prêt à créer des hooks qui <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">font la différence ?</span></h2>
         <p className="text-gray-400 mb-8">Commence gratuitement. Upgrade quand tu veux.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -290,7 +366,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 px-6 py-8">
+      <footer className="relative border-t border-gray-800 px-6 py-8" style={{ zIndex: 1 }}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <img src="/logo.png" alt="HookGenerator" className="h-8 object-contain" />
           <div className="flex gap-6 text-xs text-gray-600">
