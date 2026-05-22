@@ -21,6 +21,74 @@ function incrementLocalGenerations() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count }));
 }
 
+const FLAGS = { Français: "🇫🇷", English: "🇬🇧", Español: "🇪🇸", Português: "🇧🇷" };
+const ALL_LANGS = ["Français", "English", "Español", "Português"];
+
+function TranslateButton({ hook, currentLang, isPremium }) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(null);
+  const [translations, setTranslations] = useState({});
+  const [copied, setCopied] = useState(null);
+
+  const translate = async (targetLang) => {
+    if (translations[targetLang]) return;
+    setLoading(targetLang);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session.access_token}` },
+        body: JSON.stringify({ hook, targetLang }),
+      });
+      const data = await res.json();
+      if (data.translated) setTranslations(t => ({ ...t, [targetLang]: data.translated }));
+    } catch (e) { console.error(e); }
+    setLoading(null);
+  };
+
+  const copy = (text, lang) => { navigator.clipboard.writeText(text); setCopied(lang); setTimeout(() => setCopied(null), 2000); };
+  const otherLangs = ALL_LANGS.filter(l => l !== currentLang);
+
+  if (!isPremium) return (
+    <div className="mt-2">
+      <a href="/pricing" className="text-xs text-gray-600 hover:text-violet-400 transition flex items-center gap-1">
+        🌍 Traduire <span className="text-xs bg-violet-500/10 text-violet-400 px-1.5 py-0.5 rounded-full">Premium</span>
+      </a>
+    </div>
+  );
+
+  return (
+    <div className="mt-2">
+      <button onClick={() => setOpen(o => !o)} className="text-xs text-gray-500 hover:text-violet-400 transition flex items-center gap-1">
+        🌍 Traduire {open ? "▲" : "▼"}
+      </button>
+      {open && (
+        <div className="mt-2 space-y-2">
+          <div className="flex gap-2 flex-wrap">
+            {otherLangs.map(lang => (
+              <button key={lang} onClick={() => translate(lang)} disabled={loading === lang}
+                className={`px-3 py-1 rounded-full text-xs font-bold border-2 transition ${translations[lang] ? "border-violet-500 text-violet-400 bg-violet-500/10" : "border-gray-800 text-gray-500 hover:border-violet-500 hover:text-violet-400"} disabled:opacity-50`}>
+                {loading === lang ? "⏳" : FLAGS[lang]} {lang}
+              </button>
+            ))}
+          </div>
+          {otherLangs.map(lang => translations[lang] && (
+            <div key={lang} className="border-2 border-violet-500/30 bg-violet-500/5 rounded-2xl p-3 flex justify-between items-start gap-2">
+              <div>
+                <p className="text-xs font-bold text-violet-400 mb-1">{FLAGS[lang]} {lang}</p>
+                <p className="text-white text-sm">{translations[lang]}</p>
+              </div>
+              <button onClick={() => copy(translations[lang], lang)} className="text-gray-500 hover:text-violet-400 transition shrink-0 text-sm">
+                {copied === lang ? "✅" : "📋"}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const T = {
   Français: {
     subtitle: "Génère des hooks viraux pour tes vidéos en quelques secondes ",
@@ -228,7 +296,7 @@ function CustomSelect({ value, onChange, options, label }) {
   );
 }
 
-function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
+function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue, isPremium }) {
   const [current, setCurrent] = useState(0);
   const [drag, setDrag] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -275,8 +343,12 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
           <div className="space-y-3 text-left">
             <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-3">{t.likedHooks}</p>
             {liked.map((h, i) => (
-              <div key={i} onClick={() => copy(h)} className="border-2 border-pink-500/30 bg-pink-500/5 hover:border-pink-500 rounded-2xl p-4 text-sm text-white cursor-pointer transition flex justify-between items-center gap-3">
-                <span>{h}</span><span className="text-gray-500 text-lg shrink-0">📋</span>
+              <div key={i} className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4">
+                <div onClick={() => copy(h)} className="flex justify-between items-center gap-3 cursor-pointer hover:border-pink-500 transition">
+                  <span className="text-white text-sm">{h}</span>
+                  <span className="text-gray-500 text-lg shrink-0">📋</span>
+                </div>
+                <TranslateButton hook={h} currentLang={langue} isPremium={isPremium} />
               </div>
             ))}
           </div>
@@ -301,7 +373,8 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
         <div className="absolute top-6 right-6 border-4 border-red-400 text-red-400 font-black text-2xl px-3 py-1 rounded-xl rotate-[20deg]" style={{ opacity: po }}>PASS 👎</div>
         <div className="text-center mb-6"><span className="text-2xl font-black text-pink-400">Hook #{current + 1}</span></div>
         <p className="text-white text-xl font-bold leading-relaxed text-center min-h-32 flex items-center justify-center border-2 border-gray-800 rounded-3xl px-6 py-4 w-full">{hooks[current]}</p>
-        <p className="text-gray-600 text-xs text-center mt-6">{t.swipe}</p>
+        <TranslateButton hook={hooks[current]} currentLang={langue} isPremium={isPremium} />
+        <p className="text-gray-600 text-xs text-center mt-4">{t.swipe}</p>
       </div>
       <div className="flex gap-4 mt-4">
         <button onClick={hp} className="flex-1 border-2 border-gray-800 hover:border-red-400 text-gray-400 hover:text-red-400 py-4 rounded-3xl font-bold transition text-xl">{t.pass}</button>
@@ -568,7 +641,7 @@ function AnalyseTab({ platform, langue, t, state, setState }) {
   );
 }
 
-function SavedTab({ user, t }) {
+function SavedTab({ user, t, isPremium, langue }) {
   const [hooks, setHooks] = useState([]);
   const [idees, setIdees] = useState([]);
   const [legendes, setLegendees] = useState([]);
@@ -616,7 +689,8 @@ function SavedTab({ user, t }) {
           {hooks.map((h) => (
             <div key={h.id} className="border-2 border-gray-800 hover:border-pink-500 rounded-2xl p-4 transition">
               <p className="text-white text-sm mb-3">{h.hook}</p>
-              <div className="flex justify-between items-center">
+              <TranslateButton hook={h.hook} currentLang={h.langue || langue} isPremium={isPremium} />
+              <div className="flex justify-between items-center mt-3">
                 <div className="flex gap-2 flex-wrap">
                   {h.platform && <span className="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded-full">{h.platform}</span>}
                   {h.tone && <span className="text-xs bg-pink-500/10 text-pink-400 px-2 py-1 rounded-full">{h.tone}</span>}
@@ -844,7 +918,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-4">
-              <TinderCard hooks={hooks} onLike={(h) => setHooksState(s => ({ ...s, liked: [...s.liked, h] }))} liked={hooksState.liked} t={t} user={user} platform={platform} tone={tone} langue={langue} />
+              <TinderCard hooks={hooks} onLike={(h) => setHooksState(s => ({ ...s, liked: [...s.liked, h] }))} liked={hooksState.liked} t={t} user={user} platform={platform} tone={tone} langue={langue} isPremium={isPremium} />
               <button onClick={() => setHooksState(s => ({ ...s, result: "" }))} className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-3 rounded-3xl transition text-sm font-medium">{t.restart}</button>
             </div>
           )
@@ -852,7 +926,7 @@ export default function Home() {
         {tab === "legende" && <LegendeTab platform={platform} langue={langue} t={t} user={user} state={legendeState} setState={setLegendeState} />}
         {tab === "idees" && <IdeesTab platform={platform} langue={langue} t={t} user={user} state={ideesState} setState={setIdeesState} />}
         {tab === "analyse" && <AnalyseTab platform={platform} langue={langue} t={t} state={analyseState} setState={setAnalyseState} />}
-        {tab === "saved" && <SavedTab user={user} t={t} />}
+        {tab === "saved" && <SavedTab user={user} t={t} isPremium={isPremium} langue={langue} />}
         {tab === "top" && <TopHooksTab t={t} />}
       </div>
 
