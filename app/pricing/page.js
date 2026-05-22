@@ -1,16 +1,3 @@
-// À coller en haut de app/pricing/page.js (avant le composant)
-
-export const metadata = {
-  title: 'Tarifs — HookGenerator',
-  description: 'Découvre nos offres : gratuit, mensuel 4,99€, annuel 39,99€ ou packs de hooks. Génère des hooks viraux sans limite.',
-  alternates: { canonical: 'https://hookgenerator.eu/pricing' },
-  openGraph: {
-    title: 'Tarifs HookGenerator — À partir de 4,99€/mois',
-    description: 'Offre mensuelle, annuelle ou packs one-shot. Génère des hooks viraux sans limite pour TikTok, Instagram, YouTube.',
-    url: 'https://hookgenerator.eu/pricing',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
-  },
-};
 'use client';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
@@ -18,26 +5,22 @@ import { supabase } from '../../lib/supabase';
 export default function Pricing() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(null);
-  const [langue, setLangue] = useState('fr');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user ?? null));
   }, []);
 
-  const plans = {
-    fr: {
-      title: "Choisis ton plan",
-      subtitle: "Débloque tout le potentiel de HookGenerator",
-      monthly: { name: "Pro Mensuel", price: "4,99€", period: "/mois", desc: "Parfait pour commencer", badge: "🥈 Pro Creator", badgeColor: "from-gray-400 to-gray-300", features: ["Générations illimitées", "Sauvegarde des hooks", "Brief IA pour chaque idée", "Top Hooks de la semaine", "Badge Pro Creator Argent"] },
-      annual: { name: "Pro Annuel", price: "39,99€", period: "/an", priceMonth: "3,33€/mois", save: "Économise 33%", desc: "Le meilleur rapport qualité/prix", badge: "🥇 Pro Creator", badgeColor: "from-yellow-500 to-yellow-300", popular: true, features: ["Tout du plan mensuel", "2 mois offerts", "Badge Pro Creator Or", "Accès prioritaire aux nouvelles fonctionnalités"] },
-      pack200: { name: "Pack 200 Hooks", price: "6,99€", period: "une fois", desc: "Pour tester sans engagement", badge: "🥉 Pro Creator", badgeColor: "from-orange-700 to-orange-500", features: ["200 hooks individuels", "Fonctionnalités premium incluses", "Valable jusqu'à épuisement", "Badge Pro Creator Bronze"] },
-      pack500: { name: "Pack 500 Hooks", price: "9,99€", period: "une fois", desc: "Le pack créateur sérieux", badge: "🥉 Pro Creator", badgeColor: "from-orange-700 to-orange-500", features: ["500 hooks individuels", "Fonctionnalités premium incluses", "Valable jusqu'à épuisement", "Badge Pro Creator Bronze"] },
-      cta: "Choisir ce plan", ctaLoading: "Redirection...", free: "Gratuit pour toujours", freeFeatures: ["3 générations/jour", "Accès aux 4 outils", "4 langues disponibles"],
-      freeTitle: "Gratuit", freePeriod: "", loginRequired: "Connecte-toi pour continuer",
-    },
+  const t = {
+    title: "Choisis ton plan",
+    subtitle: "Débloque tout le potentiel de HookGenerator",
+    monthly: { name: "Pro Mensuel", price: "4,99€", period: "/mois", desc: "Parfait pour commencer", badge: "🥈 Pro Creator", badgeColor: "from-gray-400 to-gray-300", features: ["Générations illimitées", "Sauvegarde des hooks", "Brief IA pour chaque idée", "Top Hooks de la semaine", "Badge Pro Creator Argent"] },
+    annual: { name: "Pro Annuel", price: "39,99€", period: "/an", priceMonth: "3,33€/mois", save: "Économise 33%", desc: "Le meilleur rapport qualité/prix", badge: "🥇 Pro Creator", badgeColor: "from-yellow-500 to-yellow-300", popular: true, features: ["Tout du plan mensuel", "2 mois offerts", "Badge Pro Creator Or", "Accès prioritaire aux nouvelles fonctionnalités"] },
+    pack200: { name: "Pack 200 Hooks", price: "6,99€", period: "une fois", desc: "Pour tester sans engagement", badge: "🥉 Pro Creator", badgeColor: "from-orange-700 to-orange-500", features: ["200 hooks individuels", "Fonctionnalités premium incluses", "Valable jusqu'à épuisement", "Badge Pro Creator Bronze"] },
+    pack500: { name: "Pack 500 Hooks", price: "9,99€", period: "une fois", desc: "Le pack créateur sérieux", badge: "🥉 Pro Creator", badgeColor: "from-orange-700 to-orange-500", features: ["500 hooks individuels", "Fonctionnalités premium incluses", "Valable jusqu'à épuisement", "Badge Pro Creator Bronze"] },
+    cta: "Choisir ce plan",
+    ctaLoading: "Redirection...",
+    freeFeatures: ["3 générations/jour", "Accès aux 4 outils", "4 langues disponibles"],
   };
-
-  const t = plans.fr;
 
   const checkout = async (priceKey) => {
     if (!user) { window.location.href = '/auth'; return; }
@@ -55,24 +38,28 @@ export default function Pricing() {
 
   const PlanCard = ({ planKey, plan, highlight }) => (
     <div className={`relative border-2 rounded-3xl p-6 flex flex-col gap-4 transition ${highlight ? 'border-pink-500 bg-pink-500/5' : 'border-gray-800 hover:border-gray-600'}`}>
-      {highlight && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-violet-500 text-white text-xs font-black px-4 py-1 rounded-full">⭐ POPULAIRE</div>}
-      {plan.save && <div className="absolute -top-3 right-6 bg-green-500 text-white text-xs font-black px-3 py-1 rounded-full">{plan.save}</div>}
-      
+      {highlight && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-violet-500 text-white text-xs font-black px-4 py-1 rounded-full">
+          ⭐ POPULAIRE
+        </div>
+      )}
+      {plan.save && (
+        <div className="absolute -top-3 right-6 bg-green-500 text-white text-xs font-black px-3 py-1 rounded-full">
+          {plan.save}
+        </div>
+      )}
       <div>
         <h3 className="text-white font-black text-lg">{plan.name}</h3>
         <p className="text-gray-500 text-sm mt-1">{plan.desc}</p>
       </div>
-
       <div className="flex items-end gap-1">
         <span className="text-4xl font-black text-white">{plan.price}</span>
         <span className="text-gray-400 text-sm mb-1">{plan.period}</span>
       </div>
       {plan.priceMonth && <p className="text-green-400 text-xs -mt-2">soit {plan.priceMonth}</p>}
-
       <div className={`inline-flex items-center gap-1 self-start bg-gradient-to-r ${plan.badgeColor} text-white text-xs font-black px-3 py-1 rounded-full`}>
         {plan.badge}
       </div>
-
       <ul className="space-y-2 flex-1">
         {plan.features.map((f, i) => (
           <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
@@ -80,7 +67,6 @@ export default function Pricing() {
           </li>
         ))}
       </ul>
-
       <button
         onClick={() => checkout(planKey)}
         disabled={loading === planKey}
@@ -100,7 +86,6 @@ export default function Pricing() {
           <p className="text-gray-400">{t.subtitle}</p>
         </div>
 
-        {/* Plan gratuit */}
         <div className="border-2 border-gray-800 rounded-3xl p-6 mb-6">
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div>
@@ -118,19 +103,19 @@ export default function Pricing() {
           </ul>
         </div>
 
-        {/* Plans premium */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <PlanCard planKey="mensuel" plan={t.monthly} />
           <PlanCard planKey="annuel" plan={t.annual} highlight />
         </div>
 
-        {/* Packs one shot */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <PlanCard planKey="pack200" plan={t.pack200} />
           <PlanCard planKey="pack500" plan={t.pack500} />
         </div>
 
-        <p className="text-center text-gray-600 text-xs mt-8">Paiement sécurisé par Stripe · Annulation à tout moment pour les abonnements</p>
+        <p className="text-center text-gray-600 text-xs mt-8">
+          Paiement sécurisé par Stripe · Annulation à tout moment pour les abonnements
+        </p>
       </div>
     </main>
   );
