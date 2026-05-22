@@ -19,7 +19,7 @@ export default function Auth() {
     if (isLogin) {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setMessage(error.message);
-      else window.location.href = '/';
+      else window.location.href = '/app';
     } else {
       if (!prenom || !nom || !surnom) {
         setMessage('Merci de remplir tous les champs.');
@@ -41,21 +41,22 @@ export default function Auth() {
         password,
         options: { data: { prenom, nom, surnom } }
       });
-      if (error) setMessage(error.message);
-      else {
+      if (error) {
+        setMessage(error.message);
+      } else {
         if (data?.user) {
           await supabase.from('user_profiles').upsert({
             id: data.user.id,
             is_premium: false,
             plan: 'free',
           });
-       setMessage('Vérifie ton email pour confirmer ton compte !');
+          await fetch('/api/send-welcome', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, prenom }),
+          });
+        }
         setMessage('Vérifie ton email pour confirmer ton compte !');
-        await fetch('/api/send-welcome', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, prenom }),
-        });
       }
     }
     setLoading(false);
@@ -74,73 +75,35 @@ export default function Auth() {
         <img src="/logo.png" alt="HookGenerator" className="h-24 mx-auto mb-4 object-contain" />
         <p className='text-gray-400 text-center mb-8'>{isLogin ? 'Connexion' : 'Créer un compte'}</p>
         <div className='space-y-4'>
-
           {!isLogin && (
             <>
               <div className='grid grid-cols-2 gap-3'>
-                <input
-                  type='text'
-                  placeholder='Prénom'
-                  value={prenom}
-                  onChange={(e) => setPrenom(e.target.value)}
-                  className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
-                />
-                <input
-                  type='text'
-                  placeholder='Nom'
-                  value={nom}
-                  onChange={(e) => setNom(e.target.value)}
-                  className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
-                />
+                <input type='text' placeholder='Prénom' value={prenom} onChange={(e) => setPrenom(e.target.value)}
+                  className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition' />
+                <input type='text' placeholder='Nom' value={nom} onChange={(e) => setNom(e.target.value)}
+                  className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition' />
               </div>
-              <input
-                type='text'
-                placeholder='Surnom (ex: @tonpseudo)'
-                value={surnom}
-                onChange={(e) => setSurnom(e.target.value)}
-                className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
-              />
+              <input type='text' placeholder='Surnom (ex: @tonpseudo)' value={surnom} onChange={(e) => setSurnom(e.target.value)}
+                className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition' />
             </>
           )}
-
-          <input
-            type='email'
-            placeholder='Email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
-          />
-          <input
-            type='password'
-            placeholder='Mot de passe'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
-          />
+          <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}
+            className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition' />
+          <input type='password' placeholder='Mot de passe' value={password} onChange={(e) => setPassword(e.target.value)}
+            className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition' />
           {!isLogin && (
-            <input
-              type='password'
-              placeholder='Confirmer le mot de passe'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition'
-            />
+            <input type='password' placeholder='Confirmer le mot de passe' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+              className='w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 py-4 text-white focus:outline-none focus:border-pink-500 transition' />
           )}
-
           {message && (
             <p className={`text-sm text-center ${message.includes('Vérifie') ? 'text-green-400' : 'text-pink-400'}`}>
               {message}
             </p>
           )}
-
-          <button
-            onClick={handle}
-            disabled={loading || !email || !password}
-            className='w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition'
-          >
+          <button onClick={handle} disabled={loading || !email || !password}
+            className='w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition'>
             {loading ? '⏳...' : isLogin ? 'Se connecter' : 'Créer mon compte'}
           </button>
-
           <button onClick={switchMode} className='w-full text-gray-400 hover:text-white text-sm transition'>
             {isLogin ? 'Pas encore de compte ? Créer un compte' : 'Déjà un compte ? Se connecter'}
           </button>
