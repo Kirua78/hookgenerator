@@ -866,6 +866,7 @@ export default function Home() {
 
       <div className="text-center py-6 space-x-4 text-xs text-gray-600 max-w-2xl mx-auto">
         <a href="/cgu" className="hover:text-gray-400 transition">CGU</a>
+        <a href="/landing" className="hover:text-gray-400 transition">À propos</a>
         <a href="/privacy" className="hover:text-gray-400 transition">Confidentialité</a>
         <a href="/mentions" className="hover:text-gray-400 transition">Mentions légales</a>
         <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">Contact</a>
