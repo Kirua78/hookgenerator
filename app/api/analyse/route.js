@@ -28,7 +28,28 @@ export async function POST(req) {
   if (!hook || !platform || !langue) return Response.json({ error: 'Paramètres manquants.' }, { status: 400 });
   if (hook.length > 500) return Response.json({ error: 'Hook trop long.' }, { status: 400 });
 
-  const prompt = 'Tu es un expert en hooks viraux sur ' + platform + '. Analyse ce hook : "' + hook + '". Langue : ' + langue + '. Format strict sans asterisques:\nNOTE: [X/10]\nPOINTS FORTS:\n[points forts]\nPOINTS FAIBLES:\n[points faibles]\nVERSION AMELIOREE:\n[version améliorée]';
+  const prompt = `Tu es un expert en hooks viraux et en création de contenu sur ${platform}.
+
+Analyse ce hook de manière OBJECTIVE et CRITIQUE : "${hook}"
+
+Critères d'évaluation stricts (sois honnête, pas complaisant) :
+- Accroche émotionnelle (0-2 pts) : est-ce que ça crée une émotion forte ?
+- Curiosité/suspense (0-2 pts) : est-ce que ça donne envie de voir la suite ?
+- Clarté (0-2 pts) : est-ce que c'est compréhensible en 3 secondes ?
+- Originalité (0-2 pts) : est-ce différent des hooks habituels ?
+- Optimisation ${platform} (0-2 pts) : est-ce adapté à la plateforme ?
+
+Un hook moyen mérite 5/10. Un excellent hook mérite 9-10/10. Sois sévère et honnête.
+
+Langue de réponse : ${langue}
+Format strict sans astérisques :
+NOTE: [X/10]
+POINTS FORTS:
+[2-3 points forts précis]
+POINTS FAIBLES:
+[2-3 points faibles précis]
+VERSION AMELIOREE:
+[version améliorée du hook]`;
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
