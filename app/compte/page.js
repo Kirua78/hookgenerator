@@ -125,7 +125,9 @@ export default function Compte() {
 
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <a href="/app" className="text-xs text-gray-500 hover:text-pink-400 transition flex items-center gap-1">← App</a>
+         <a href="/app" className="flex items-center gap-2 border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-4 py-2 rounded-full transition font-bold text-sm">
+  ← Retour à l&apos;app
+</a>
           <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">
             Déconnexion
           </button>
