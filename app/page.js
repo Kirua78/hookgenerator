@@ -48,7 +48,7 @@ const TL = {
     hooksSub: "Générés en quelques secondes. Adaptés à ta niche.",
     featuresTitle: "Tout ce dont tu as besoin pour",
     featuresTitleAccent: "exploser sur les réseaux",
-    featuresSub: "4 outils puissants. 1 seule plateforme.",
+    featuresSub: "7 outils puissants. 1 seule plateforme.",
     ctaTitle: "Prêt à créer des hooks qui",
     ctaTitleAccent: "font la différence ?",
     ctaSub: "Commence gratuitement. Upgrade quand tu veux.",
@@ -88,7 +88,7 @@ const TL = {
     hooksSub: "Generated in seconds. Adapted to your niche.",
     featuresTitle: "Everything you need to",
     featuresTitleAccent: "blow up on social media",
-    featuresSub: "4 powerful tools. 1 platform.",
+    featuresSub: "7 powerful tools. 1 platform.",
     ctaTitle: "Ready to create hooks that",
     ctaTitleAccent: "make a difference?",
     ctaSub: "Start for free. Upgrade whenever you want.",
@@ -128,7 +128,7 @@ const TL = {
     hooksSub: "Generados en segundos. Adaptados a tu nicho.",
     featuresTitle: "Todo lo que necesitas para",
     featuresTitleAccent: "explotar en redes sociales",
-    featuresSub: "4 herramientas potentes. 1 plataforma.",
+    featuresSub: "7 herramientas potentes. 1 plataforma.",
     ctaTitle: "¿Listo para crear hooks que",
     ctaTitleAccent: "marcan la diferencia?",
     ctaSub: "Empieza gratis. Actualiza cuando quieras.",
@@ -168,7 +168,7 @@ const TL = {
     hooksSub: "Gerados em segundos. Adaptados ao seu nicho.",
     featuresTitle: "Tudo que você precisa para",
     featuresTitleAccent: "explodir nas redes sociais",
-    featuresSub: "4 ferramentas poderosas. 1 plataforma.",
+    featuresSub: "7 ferramentas poderosas. 1 plataforma.",
     ctaTitle: "Pronto para criar hooks que",
     ctaTitleAccent: "fazem a diferença?",
     ctaSub: "Comece grátis. Atualize quando quiser.",
@@ -340,14 +340,41 @@ export default function Landing() {
     ],
   };
 
-  const features = [
-    { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs." },
-    { title: "Brief outil complet", desc: "Hook, angle, structure, CTA et astuce viralité pour chaque idée de vidéo." },
-    { title: "Légendes & Hashtags", desc: "Légendes optimisées et hashtags viraux adaptés à chaque plateforme." },
-    { title: "Analyseur de hook", desc: "Score sur 10, points forts, faiblesses et version améliorée de ton hook." },
-    { title: "Top Hooks de la semaine", desc: "Découvre les hooks les plus likés par la communauté pour t'inspirer." },
-    { title: "Sauvegarde illimitée", desc: "Retrouve tous tes hooks likés, idées et légendes dans ton espace personnel." },
-  ];
+  const featuresByLang = {
+    Français: [
+      { title: "Hooks viraux en 5 secondes", desc: "10 hooks percutants générés instantanément. Style Tinder pour garder les meilleurs.", premium: false },
+      { title: "Légendes & Hashtags", desc: "Légendes optimisées et hashtags viraux adaptés à chaque plateforme.", premium: false },
+      { title: "Analyseur de hook", desc: "Score sur 10, points forts, faiblesses et version améliorée de ton hook.", premium: false },
+      { title: "Traduction automatique", desc: "Traduis tes hooks en 4 langues en un clic. Touche une audience mondiale sans effort.", premium: true },
+      { title: "Calendrier éditorial", desc: "Planifie tes hooks, idées et légendes à la semaine. Ajoute des notes libres.", premium: true },
+      { title: "Top Hooks communauté", desc: "Découvre les hooks les plus likés par la communauté pour t'inspirer.", premium: false },
+    ],
+    English: [
+      { title: "Viral hooks in 5 seconds", desc: "10 powerful hooks generated instantly. Tinder style to keep the best ones.", premium: false },
+      { title: "Captions & Hashtags", desc: "Optimized captions and viral hashtags adapted to each platform.", premium: false },
+      { title: "Hook analyzer", desc: "Score out of 10, strengths, weaknesses and improved version of your hook.", premium: false },
+      { title: "Auto translation", desc: "Translate your hooks into 4 languages in one click. Reach a global audience effortlessly.", premium: true },
+      { title: "Editorial calendar", desc: "Plan your hooks, ideas and captions for the week. Add free notes.", premium: true },
+      { title: "Community top hooks", desc: "Discover the most liked hooks in the community to inspire yourself.", premium: false },
+    ],
+    Español: [
+      { title: "Hooks virales en 5 segundos", desc: "10 hooks potentes generados al instante. Estilo Tinder para quedarte con los mejores.", premium: false },
+      { title: "Leyendas & Hashtags", desc: "Leyendas optimizadas y hashtags virales adaptados a cada plataforma.", premium: false },
+      { title: "Analizador de hook", desc: "Puntuación sobre 10, puntos fuertes, débiles y versión mejorada de tu hook.", premium: false },
+      { title: "Traducción automática", desc: "Traduce tus hooks a 4 idiomas en un clic. Llega a una audiencia global sin esfuerzo.", premium: true },
+      { title: "Calendario editorial", desc: "Planifica tus hooks, ideas y leyendas por semana. Añade notas libres.", premium: true },
+      { title: "Top Hooks comunidad", desc: "Descubre los hooks más populares de la comunidad para inspirarte.", premium: false },
+    ],
+    Português: [
+      { title: "Hooks virais em 5 segundos", desc: "10 hooks poderosos gerados instantaneamente. Estilo Tinder para guardar os melhores.", premium: false },
+      { title: "Legendas & Hashtags", desc: "Legendas otimizadas e hashtags virais adaptados a cada plataforma.", premium: false },
+      { title: "Analisador de hook", desc: "Pontuação de 10, pontos fortes, fraquezas e versão melhorada do seu hook.", premium: false },
+      { title: "Tradução automática", desc: "Traduza seus hooks para 4 idiomas com um clique. Alcance um público global sem esforço.", premium: true },
+      { title: "Calendário editorial", desc: "Planeje seus hooks, ideias e legendas para a semana. Adicione notas livres.", premium: true },
+      { title: "Top Hooks comunidade", desc: "Descubra os hooks mais curtidos da comunidade para se inspirar.", premium: false },
+    ],
+  };
+  const features = featuresByLang[langue] || featuresByLang["Français"];
 
   const platforms = [
     { name: "TikTok", svg: <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.78a4.85 4.85 0 01-1.02-.09z"/></svg> },
@@ -461,7 +488,10 @@ export default function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((f, i) => (
               <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-3xl p-6 transition group bg-black/40 backdrop-blur-sm">
-                <h3 className="text-white font-black text-lg mb-2 group-hover:text-pink-400 transition">{f.title}</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="text-white font-black text-lg group-hover:text-pink-400 transition">{f.title}</h3>
+                  {f.premium && <span className="text-xs bg-gradient-to-r from-pink-500 to-violet-500 text-white px-2 py-0.5 rounded-full font-bold shrink-0">Premium</span>}
+                </div>
                 <p className="text-gray-400 text-sm">{f.desc}</p>
               </div>
             ))}
