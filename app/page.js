@@ -53,10 +53,7 @@ const T = {
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
     premium: "⭐ Premium",
-    topTab: "🏆 Top",
-    topTitle: "Top Hooks",
-    topWeek: "Cette semaine",
-    topMonth: "Ce mois",
+    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "Cette semaine", topMonth: "Ce mois",
     topEmpty: "Pas encore de hooks cette période. Génère et like des hooks pour les voir apparaître !",
     topLikes: "like",
   },
@@ -90,10 +87,7 @@ const T = {
     savedLegendes: "Saved captions", savedIdees: "Saved ideas", savedHooksTitle: "Saved hooks",
     saveSuccess: "✅ Saved!", saveBrief: "💾 Save brief", saveLegende: "💾 Save",
     premium: "⭐ Premium",
-    topTab: "🏆 Top",
-    topTitle: "Top Hooks",
-    topWeek: "This week",
-    topMonth: "This month",
+    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "This week", topMonth: "This month",
     topEmpty: "No hooks yet this period. Generate and like hooks to see them here!",
     topLikes: "like",
   },
@@ -127,10 +121,7 @@ const T = {
     savedLegendes: "Leyendas guardadas", savedIdees: "Ideas guardadas", savedHooksTitle: "Hooks guardados",
     saveSuccess: "✅ Guardado!", saveBrief: "💾 Guardar brief", saveLegende: "💾 Guardar",
     premium: "⭐ Premium",
-    topTab: "🏆 Top",
-    topTitle: "Top Hooks",
-    topWeek: "Esta semana",
-    topMonth: "Este mes",
+    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mes",
     topEmpty: "Sin hooks aún este periodo. Genera y dale like a hooks para verlos aquí!",
     topLikes: "like",
   },
@@ -164,10 +155,7 @@ const T = {
     savedLegendes: "Legendas salvas", savedIdees: "Ideias salvas", savedHooksTitle: "Hooks salvos",
     saveSuccess: "✅ Salvo!", saveBrief: "💾 Salvar brief", saveLegende: "💾 Salvar",
     premium: "⭐ Premium",
-    topTab: "🏆 Top",
-    topTitle: "Top Hooks",
-    topWeek: "Esta semana",
-    topMonth: "Este mês",
+    topTab: "🏆 Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mês",
     topEmpty: "Sem hooks ainda neste período. Gere e curta hooks para vê-los aqui!",
     topLikes: "like",
   },
@@ -251,15 +239,11 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
   const mu = () => { if (drag > 80) hl(); else if (drag < -80) hp(); setDrag(0); setDragging(false); };
   const ts = (e) => { startX.current = e.touches[0].clientX; setDragging(true); };
   const tm = (e) => { if (!dragging) return; setDrag(e.touches[0].clientX - startX.current); };
-
   const saveHook = async (hookText) => {
     if (!user) return;
-    // Sauvegarder dans liked_hooks
     await supabase.from("liked_hooks").insert({ user_id: user.id, hook: hookText, platform, tone, langue });
-    // Incrémenter dans top_hooks
     await supabase.rpc('upsert_top_hook', { p_hook: hookText, p_platform: platform, p_tone: tone, p_langue: langue });
   };
-
   const hl = () => {
     if (current >= hooks.length) return;
     setDirection("right");
@@ -274,7 +258,6 @@ function TinderCard({ hooks, onLike, liked, t, user, platform, tone, langue }) {
     setTimeout(() => { setCurrent((c) => c + 1); setDirection(null); }, 300);
   };
   const copy = (text) => navigator.clipboard.writeText(text);
-
   if (current >= hooks.length) {
     return (
       <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
@@ -333,27 +316,20 @@ function TopHooksTab({ t }) {
   const [hooks, setHooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(null);
-
-  useEffect(() => {
-    fetchTopHooks();
-  }, [period]);
-
+  useEffect(() => { fetchTopHooks(); }, [period]);
   const fetchTopHooks = async () => {
     setLoading(true);
     const now = new Date();
     const week = getWeekNumber(now);
     const month = now.getMonth() + 1;
     const year = now.getFullYear();
-
     let query = supabase.from("top_hooks").select("*").eq("year", year).order("likes", { ascending: false }).limit(10);
     if (period === "week") query = query.eq("week", week);
     else query = query.eq("month", month);
-
     const { data } = await query;
     setHooks(data || []);
     setLoading(false);
   };
-
   const getWeekNumber = (date) => {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const dayNum = d.getUTCDay() || 7;
@@ -361,11 +337,8 @@ function TopHooksTab({ t }) {
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
   };
-
   const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
-
   const medals = ["🥇", "🥈", "🥉"];
-
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-1 bg-gray-900 p-1 rounded-3xl">
@@ -373,18 +346,14 @@ function TopHooksTab({ t }) {
           <button key={id} onClick={() => setPeriod(id)} className={`py-2.5 rounded-3xl text-xs font-bold transition ${period === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>{label}</button>
         ))}
       </div>
-
       <p className="text-xs font-black tracking-widest uppercase text-pink-400">{t.topTitle} — {period === "week" ? t.topWeek : t.topMonth}</p>
-
       {loading && <div className="text-center text-gray-500 py-12">⏳</div>}
-
       {!loading && hooks.length === 0 && (
         <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
           <p className="text-4xl mb-4">🏆</p>
           <p className="text-gray-400 text-sm">{t.topEmpty}</p>
         </div>
       )}
-
       {!loading && hooks.length > 0 && (
         <div className="space-y-3">
           {hooks.map((h, i) => (
@@ -740,15 +709,13 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, []);
 
- const fetchProfile = async (userId) => {
-  const { data } = await supabase.from("user_profiles").select("is_premium, plan").eq("id", userId).single();
-  if (data) {
-    setIsPremium(data.is_premium === true);
-    setPlan(data.plan || 'free');
-  }
-};
-  
-};
+  const fetchProfile = async (userId) => {
+    const { data } = await supabase.from("user_profiles").select("is_premium, plan").eq("id", userId).single();
+    if (data) {
+      setIsPremium(data.is_premium === true);
+      setPlan(data.plan || 'free');
+    }
+  };
 
   useEffect(() => {
     if (isPremium) setGenerationsLeft(null);
@@ -772,11 +739,9 @@ export default function Home() {
     setHooksState(s => ({ ...s, result: "", liked: [] }));
     if (!user) { incrementLocalGenerations(); setGenerationsLeft(FREE_LIMIT - getLocalGenerations()); }
     else if (!isPremium) setGenerationsLeft((g) => Math.max(0, g - 1));
-
     const { data: { session } } = await supabase.auth.getSession();
     const headers = { "Content-Type": "application/json" };
     if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
-
     const res = await fetch("/api/generate", {
       method: "POST",
       headers,
@@ -802,31 +767,31 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <div />
           {user ? (
-  <div className="flex items-center gap-3">
-    {isPremium && (
-  <span className={`text-xs bg-gradient-to-r ${
-    plan === 'annuel' ? 'from-yellow-500 to-yellow-300' :
-    plan === 'mensuel' ? 'from-gray-400 to-gray-300' :
-    'from-orange-700 to-orange-500'
-  } text-white px-2 py-1 rounded-full font-bold`}>
-    {plan === 'annuel' ? '🥇 Pro Creator' : plan === 'mensuel' ? '🥈 Pro Creator' : '🥉 Pro Creator'}
-  </span>
-)}
-    {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
-    <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 Mon compte</a>
-    <span className="text-xs text-gray-400">{user.email}</span>
-    <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
-  </div>
-) : (
-  <div className="flex items-center gap-3">
-    <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>
-    <a href="/auth" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.login}</a>
-  </div>
-)}
+            <div className="flex items-center gap-3">
+              {isPremium && (
+                <span className={`text-xs bg-gradient-to-r ${
+                  plan === 'annuel' ? 'from-yellow-500 to-yellow-300' :
+                  plan === 'mensuel' ? 'from-gray-400 to-gray-300' :
+                  'from-orange-700 to-orange-500'
+                } text-white px-2 py-1 rounded-full font-bold`}>
+                  {plan === 'annuel' ? '🥇 Pro Creator' : plan === 'mensuel' ? '🥈 Pro Creator' : '🥉 Pro Creator'}
+                </span>
+              )}
+              {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
+              <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 Mon compte</a>
+              <span className="text-xs text-gray-400">{user.email}</span>
+              <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>
+              <a href="/auth" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.login}</a>
+            </div>
+          )}
         </div>
 
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="HookGenerator" className="h-100 mx-auto mb-2 object-contain" />
+          <img src="/logo.png" alt="HookGenerator" className="h-24 mx-auto mb-2 object-contain" />
           <p className="text-gray-400 mb-4">{t.subtitle}</p>
           <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
             {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
@@ -898,33 +863,29 @@ export default function Home() {
         {tab === "saved" && <SavedTab user={user} t={t} />}
         {tab === "top" && <TopHooksTab t={t} />}
       </div>
-      {/* Footer */}
-<div className="text-center py-6 space-x-4 text-xs text-gray-600">
-  <a href="/cgu" className="hover:text-gray-400 transition">CGU</a>
-  <a href="/privacy" className="hover:text-gray-400 transition">Confidentialité</a>
-  <a href="/mentions" className="hover:text-gray-400 transition">Mentions légales</a>
-  <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">Contact</a>
-</div>
-      {/* Bannière Premium */}
-{!(isPremium) && (
-  <div className="fixed bottom-0 left-0 right-0 z-50 p-3">
-    <a href="/pricing" className="flex items-center justify-between bg-gradient-to-r from-pink-500 to-violet-500 text-white rounded-2xl px-5 py-3 shadow-2xl hover:opacity-90 transition max-w-2xl mx-auto">
-      <div>
-        <p className="font-black text-sm">
-          {!user && "🚀 Passe au Premium"}
-          {user && !isPremium && "⭐ Deviens Pro Creator"}
-          {user && isPremium && "🥇 Passe à l'annuel · Économise 33%"}
-        </p>
-        <p className="text-xs text-white/80">
-          {!user && "Générations illimitées · Sauvegarde · dès 4,99€/mois"}
-          {user && !isPremium && "Générations illimitées · Brief IA · dès 4,99€/mois"}
-          {user && isPremium && "39,99€/an soit 3,33€/mois"}
-        </p>
+
+      <div className="text-center py-6 space-x-4 text-xs text-gray-600 max-w-2xl mx-auto">
+        <a href="/cgu" className="hover:text-gray-400 transition">CGU</a>
+        <a href="/privacy" className="hover:text-gray-400 transition">Confidentialité</a>
+        <a href="/mentions" className="hover:text-gray-400 transition">Mentions légales</a>
+        <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">Contact</a>
       </div>
-      <span className="text-white font-black text-lg shrink-0">→</span>
-    </a>
-  </div>
-)}
+
+      {!isPremium && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 p-3">
+          <a href="/pricing" className="flex items-center justify-between bg-gradient-to-r from-pink-500 to-violet-500 text-white rounded-2xl px-5 py-3 shadow-2xl hover:opacity-90 transition max-w-2xl mx-auto">
+            <div>
+              <p className="font-black text-sm">
+                {!user ? "🚀 Passe au Premium" : "⭐ Deviens Pro Creator"}
+              </p>
+              <p className="text-xs text-white/80">
+                {!user ? "Générations illimitées · Sauvegarde · dès 4,99€/mois" : "Générations illimitées · Brief IA · dès 4,99€/mois"}
+              </p>
+            </div>
+            <span className="text-white font-black text-lg shrink-0">→</span>
+          </a>
+        </div>
+      )}
     </main>
   );
 }
