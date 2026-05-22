@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 export default function Landing() {
   const hooks = {
     cyber: [
@@ -20,42 +18,10 @@ export default function Landing() {
   };
 
   const testimonials = [
-    {
-      name: "Mathieu R.",
-      handle: "@mathieu_fitness",
-      avatar: "MR",
-      niche: "Fitness · 84K abonnés",
-      quote: "Avant HookGenerator, je passais 2h à écrire mes accroches. Maintenant 5 minutes. Mon taux de complétion a augmenté de 340% en un mois.",
-      stat: "+340% de complétion",
-      color: "from-pink-500 to-rose-500",
-    },
-    {
-      name: "Sarah L.",
-      handle: "@sarahinvest",
-      avatar: "SL",
-      niche: "Finance · 127K abonnés",
-      quote: "Mon premier hook généré a fait 2,1M de vues sur TikTok. Je n'aurais jamais écrit ça toute seule. L'outil comprend vraiment ce qui fait scroller.",
-      stat: "2,1M de vues",
-      color: "from-violet-500 to-purple-500",
-    },
-    {
-      name: "Kevin T.",
-      handle: "@kevintech_fr",
-      avatar: "KT",
-      niche: "Tech · 52K abonnés",
-      quote: "Le ton Storytelling a complètement changé ma façon de créer. Mes vidéos durent plus longtemps dans le feed et l'algo me pousse naturellement.",
-      stat: "x4 portée organique",
-      color: "from-blue-500 to-cyan-500",
-    },
-    {
-      name: "Léa M.",
-      handle: "@lea_lifestyle",
-      avatar: "LM",
-      niche: "Lifestyle · 213K abonnés",
-      quote: "J'utilise le brief IA pour chaque idée de vidéo. C'est comme avoir un directeur créatif dans ma poche. Mes sponsors ont remarqué la différence.",
-      stat: "+89% d'engagement",
-      color: "from-emerald-500 to-teal-500",
-    },
+    { name: "Mathieu R.", handle: "@mathieu_fitness", avatar: "MR", niche: "Fitness · 84K abonnés", quote: "Avant HookGenerator, je passais 2h à écrire mes accroches. Maintenant 5 minutes. Mon taux de complétion a augmenté de 340% en un mois.", stat: "+340% de complétion", color: "from-pink-500 to-rose-500" },
+    { name: "Sarah L.", handle: "@sarahinvest", avatar: "SL", niche: "Finance · 127K abonnés", quote: "Mon premier hook généré a fait 2,1M de vues sur TikTok. Je n'aurais jamais écrit ça toute seule. L'outil comprend vraiment ce qui fait scroller.", stat: "2,1M de vues", color: "from-violet-500 to-purple-500" },
+    { name: "Kevin T.", handle: "@kevintech_fr", avatar: "KT", niche: "Tech · 52K abonnés", quote: "Le ton Storytelling a complètement changé ma façon de créer. Mes vidéos durent plus longtemps dans le feed et l'algo me pousse naturellement.", stat: "x4 portée organique", color: "from-blue-500 to-cyan-500" },
+    { name: "Léa M.", handle: "@lea_lifestyle", avatar: "LM", niche: "Lifestyle · 213K abonnés", quote: "J'utilise le brief IA pour chaque idée de vidéo. C'est comme avoir un directeur créatif dans ma poche. Mes sponsors ont remarqué la différence.", stat: "+89% d'engagement", color: "from-emerald-500 to-teal-500" },
   ];
 
   const features = [
@@ -67,7 +33,62 @@ export default function Landing() {
     { icon: "💾", title: "Sauvegarde illimitée", desc: "Retrouve tous tes hooks likés, idées et légendes dans ton espace personnel." },
   ];
 
-  const platforms = ["TikTok", "Instagram", "YouTube", "LinkedIn", "Twitter/X", "Snapchat"];
+  const platforms = [
+    {
+      name: "TikTok",
+      color: "#000000",
+      svg: (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.78a4.85 4.85 0 01-1.02-.09z"/>
+        </svg>
+      ),
+    },
+    {
+      name: "Instagram",
+      color: "#E1306C",
+      svg: (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+      ),
+    },
+    {
+      name: "YouTube",
+      color: "#FF0000",
+      svg: (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+          <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+        </svg>
+      ),
+    },
+    {
+      name: "LinkedIn",
+      color: "#0A66C2",
+      svg: (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      ),
+    },
+    {
+      name: "Twitter/X",
+      color: "#000000",
+      svg: (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      ),
+    },
+    {
+      name: "Snapchat",
+      color: "#FFFC00",
+      svg: (
+        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+          <path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.317 4.814-.04.752-.081 1.15.157 1.292.374.213 1.05-.023 1.738-.584.211-.172.455-.268.698-.268.374 0 .698.2.806.5.14.37-.005.818-.414 1.164-.271.23-1.878 1.348-1.878 2.387 0 .18.033.36.098.528 0 0 .55 1.553 2.39 2.643.27.16.387.5.28.79-.1.28-.37.46-.67.46-.05 0-.11-.01-.16-.02-.07-.01-.16-.02-.25-.03-.52-.07-1.38-.19-2.45.04-.43.09-.83.27-1.21.44-1.29.57-2.73 1.21-5.54 1.21-2.8 0-4.24-.64-5.54-1.21-.38-.17-.78-.35-1.21-.44-1.07-.23-1.93-.11-2.45-.04-.09.01-.18.02-.25.03-.05.01-.11.02-.16.02-.3 0-.57-.18-.67-.46-.11-.29.01-.63.28-.79 1.84-1.09 2.39-2.643 2.39-2.643.065-.168.098-.348.098-.528 0-1.04-1.607-2.157-1.878-2.387-.409-.346-.554-.793-.414-1.164.108-.3.432-.5.806-.5.243 0 .487.096.698.268.688.561 1.364.797 1.738.584.238-.142.197-.54.157-1.292-.086-1.595-.212-3.621.317-4.814C7.859 1.07 11.216.793 12.206.793z"/>
+        </svg>
+      ),
+    },
+  ];
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -107,12 +128,15 @@ export default function Landing() {
         <p className="text-xs text-gray-600 mt-4">3 générations gratuites · Sans carte bancaire</p>
       </section>
 
-      {/* Plateformes */}
-      <section className="px-6 py-6 max-w-4xl mx-auto">
-        <p className="text-center text-xs text-gray-600 uppercase tracking-widest font-bold mb-6">Compatible avec toutes les plateformes</p>
-        <div className="flex flex-wrap justify-center gap-3">
+      {/* Plateformes avec logos */}
+      <section className="px-6 py-10 max-w-4xl mx-auto">
+        <p className="text-center text-xs text-gray-600 uppercase tracking-widest font-bold mb-8">Compatible avec toutes les plateformes</p>
+        <div className="flex flex-wrap justify-center gap-4">
           {platforms.map(p => (
-            <span key={p} className="border border-gray-800 text-gray-400 text-sm px-4 py-2 rounded-full">{p}</span>
+            <div key={p.name} className="flex items-center gap-3 border border-gray-800 hover:border-gray-600 bg-gray-900/50 px-5 py-3 rounded-2xl transition group">
+              <span className="text-gray-400 group-hover:text-white transition">{p.svg}</span>
+              <span className="text-gray-400 group-hover:text-white text-sm font-medium transition">{p.name}</span>
+            </div>
           ))}
         </div>
       </section>
@@ -193,7 +217,7 @@ export default function Landing() {
           {[
             { stat: "50K+", label: "Hooks générés" },
             { stat: "4", label: "Langues supportées" },
-            { stat: "8", label: "Plateformes" },
+            { stat: "6", label: "Plateformes" },
             { stat: "4.9/5", label: "Note moyenne" },
           ].map((s, i) => (
             <div key={i}>
