@@ -811,7 +811,7 @@ export default function Home() {
         </div>
 
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="HookGenerator" className="h-100 mx-auto mb-2" />
+          <img src="/logo.png" alt="HookGenerator" className="h-100 mx-auto mb-2 object-contain" />
           <p className="text-gray-400 mb-4">{t.subtitle}</p>
           <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
             {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
