@@ -49,8 +49,12 @@ export default function Auth() {
             is_premium: false,
             plan: 'free',
           });
-        }
-        setMessage('Vérifie ton email pour confirmer ton compte !');
+       setMessage('Vérifie ton email pour confirmer ton compte !');
+        await fetch('/api/send-welcome', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, prenom }),
+        });
       }
     }
     setLoading(false);
