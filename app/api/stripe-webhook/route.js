@@ -1,9 +1,6 @@
 export const dynamic = 'force-dynamic';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-// ... reste du code
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
