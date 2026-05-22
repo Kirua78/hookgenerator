@@ -427,7 +427,7 @@ const T = {
     unlimited: " Générations illimitées",
     noMore: "Tu as atteint ta limite du jour !",
     noMoreSub: "Connecte-toi pour plus de générations", upgrade: "Se connecter →",
-    savedTab: "Savés", delete: "🗑️",
+    savedTab: "Sauvegardés", delete: "🗑️",
     loginToSave: "Connecte-toi pour sauvegarder tes contenus !",
     savedLegendes: "Légendes sauvegardées", savedIdees: "Idées sauvegardées", savedHooksTitle: "Hooks sauvegardés",
     saveSuccess: "✅ Sauvegardé !", saveBrief: "💾 Sauvegarder le brief", saveLegende: "💾 Sauvegarder",
@@ -436,12 +436,6 @@ const T = {
     topEmpty: "Pas encore de hooks cette période. Génère et like des hooks pour les voir apparaître !",
     calTab: "Calendrier",
     topLikes: "like",
-    compte: "Mon compte",
-    cgu: "CGU",
-    confidentialite: "Confidentialité",
-    mentions: "Mentions légales",
-    contact: "Contact",
-    accueil: "Accueil",
   },
   English: {
     subtitle: "Generate viral hooks for your videos in seconds ",
@@ -477,12 +471,6 @@ const T = {
     topEmpty: "No hooks yet this period. Generate and like hooks to see them here!",
     calTab: "Calendar",
     topLikes: "like",
-    compte: "My account",
-    cgu: "Terms",
-    confidentialite: "Privacy",
-    mentions: "Legal",
-    contact: "Contact",
-    accueil: "Home",
   },
   Español: {
     subtitle: "Genera hooks virales para tus videos en segundos ",
@@ -518,12 +506,6 @@ const T = {
     topEmpty: "Sin hooks aún este periodo. Genera y dale like a hooks para verlos aquí!",
     calTab: "Calendario",
     topLikes: "like",
-    compte: "Mi cuenta",
-    cgu: "CGU",
-    confidentialite: "Privacidad",
-    mentions: "Legal",
-    contact: "Contacto",
-    accueil: "Inicio",
   },
   Português: {
     subtitle: "Gere hooks virais para seus videos em segundos ",
@@ -559,6 +541,12 @@ const T = {
     topEmpty: "Sem hooks ainda neste período. Gere e curta hooks para vê-los aqui!",
     calTab: "Calendário",
     topLikes: "like",
+    compte: "Minha conta",
+    cgu: "Termos",
+    confidentialite: "Privacidade",
+    mentions: "Legal",
+    contact: "Contato",
+    accueil: "Início",
   },
 };
 
@@ -1178,7 +1166,7 @@ export default function Home() {
                 </span>
               )}
               {!isPremium && <a href="/pricing" className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition">⭐ Premium</a>}
-              <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 {t.compte}</a>
+              <a href="/compte" className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">👤 Mon compte</a>
               <button onClick={handleLogout} className="text-xs border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 px-3 py-1.5 rounded-full transition">{t.logout}</button>
             </div>
           ) : (
@@ -1267,11 +1255,11 @@ export default function Home() {
       </div>
 
       <div className="text-center py-6 space-x-4 text-xs text-gray-600 max-w-2xl mx-auto">
-        <a href="/cgu" className="hover:text-gray-400 transition">{t.cgu}</a>
-        <a href="/" className="hover:text-gray-400 transition">{t.accueil}</a>
-        <a href="/privacy" className="hover:text-gray-400 transition">{t.confidentialite}</a>
-        <a href="/mentions" className="hover:text-gray-400 transition">{t.mentions}</a>
-        <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">{t.contact}</a>
+        <a href="/cgu" className="hover:text-gray-400 transition">CGU</a>
+        <a href="/" className="hover:text-gray-400 transition">Accueil</a>
+        <a href="/privacy" className="hover:text-gray-400 transition">Confidentialité</a>
+        <a href="/mentions" className="hover:text-gray-400 transition">Mentions légales</a>
+        <a href="mailto:contact@hookgenerator.eu" className="hover:text-gray-400 transition">Contact</a>
       </div>
 
       {!isPremium && (
