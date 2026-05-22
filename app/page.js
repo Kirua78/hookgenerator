@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 const STORAGE_KEY = "hg_generations";
 
@@ -119,6 +120,14 @@ function DemoSection() {
 }
 
 export default function Landing() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
+
   const hooks = {
     cyber: [
       "J'ai laissé mon mot de passe 'password123' pendant 3 ans. Voilà ce qu'on a volé.",
@@ -163,10 +172,18 @@ export default function Landing() {
         <img src="/logo.png" alt="HookGenerator" className="h-10 object-contain" />
         <div className="flex items-center gap-4">
           <a href="/pricing" className="text-sm text-gray-400 hover:text-white transition">Tarifs</a>
-          <a href="/auth" className="text-sm text-gray-400 hover:text-white transition">Connexion</a>
-          <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
-            Essayer gratuitement
-          </a>
+          {user ? (
+            <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
+              Accéder à l&apos;app →
+            </a>
+          ) : (
+            <>
+              <a href="/auth" className="text-sm text-gray-400 hover:text-white transition">Connexion</a>
+              <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition">
+                Essayer gratuitement
+              </a>
+            </>
+          )}
         </div>
       </nav>
 
@@ -183,9 +200,15 @@ export default function Landing() {
           L&apos;outil qui génère des accroches virales pour TikTok, Instagram, YouTube et plus encore. Stop à la page blanche. Start au scroll.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-            Essayer gratuitement
-          </a>
+          {user ? (
+            <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
+              Accéder à l&apos;app →
+            </a>
+          ) : (
+            <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
+              Essayer gratuitement
+            </a>
+          )}
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
             Voir les tarifs →
           </a>
@@ -273,9 +296,15 @@ export default function Landing() {
         <h2 className="text-3xl md:text-4xl font-black mb-4">Prêt à créer des hooks qui <span className="bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent">font la différence ?</span></h2>
         <p className="text-gray-400 mb-8">Commence gratuitement. Upgrade quand tu veux.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
-            Essayer gratuitement
-          </a>
+          {user ? (
+            <a href="/app" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
+              Accéder à l&apos;app →
+            </a>
+          ) : (
+            <a href="/auth" className="bg-gradient-to-r from-pink-500 to-violet-500 text-white font-black text-lg px-8 py-4 rounded-2xl hover:opacity-90 transition shadow-2xl shadow-pink-500/25">
+              Essayer gratuitement
+            </a>
+          )}
           <a href="/pricing" className="border-2 border-gray-700 text-gray-300 hover:border-pink-500 hover:text-white font-bold text-lg px-8 py-4 rounded-2xl transition">
             Voir les tarifs →
           </a>
