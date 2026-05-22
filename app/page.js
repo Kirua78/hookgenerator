@@ -158,28 +158,6 @@ export default function Landing() {
   return (
     <main className="min-h-screen bg-black text-white overflow-hidden">
 
-      {/* Fond gradient animé */}
-      <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animated-gradient {
-          background: linear-gradient(-45deg, #0f0f0f, #1a0a1f, #0f0f1a, #1f0a0f, #0a0f1f, #1a1a0a);
-          background-size: 400% 400%;
-          animation: gradientShift 12s ease infinite;
-        }
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        .blob { animation: blob 8s infinite; }
-        .blob2 { animation: blob 10s infinite reverse; }
-        .blob3 { animation: blob 12s infinite 2s; }
-      `}</style>
-
       {/* Blobs de fond */}
       <div className="fixed inset-0 animated-gradient -z-10" />
       <div className="fixed top-20 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl blob -z-10" />
