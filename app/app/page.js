@@ -1357,8 +1357,10 @@ function Plan30Tab({ user, isPremium, platform, langue, t }) {
 }
 
 
-function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, handleLangueChange }) {
+function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, handleLangueChange, mobileOpen, setMobileOpen }) {
   const [collapsed, setCollapsed] = useState(false);
+
+  const handleTabClick = (id) => { setTab(id); setMobileOpen(false); };
 
   const mainTabs = [
     { id: 'hooks', label: t.tabs[0] },
@@ -1375,7 +1377,15 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
   ];
 
   return (
-    <div className={`hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-black/80 backdrop-blur-md border-r border-gray-800/50 transition-all duration-300 ${collapsed ? 'w-10' : 'w-52'}`}>
+    <>
+      {/* Overlay mobile */}
+      {mobileOpen && (
+        <div className="fixed inset-0 bg-black/60 z-30 md:hidden" onClick={() => setMobileOpen(false)} />
+      )}
+      <div className={`flex flex-col fixed left-0 top-0 h-full z-40 bg-black/90 backdrop-blur-md border-r border-gray-800/50 transition-all duration-300
+        ${collapsed ? 'md:w-10 w-52' : 'w-52'}
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-800">
         {!collapsed && <img src="/logo.png" alt="HookGenerator" className="h-8 object-contain" />}
@@ -1412,7 +1422,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
         <div className="pt-2">
           {!collapsed && <p className="text-xs font-black tracking-widest uppercase text-gray-600 px-2 mb-1">Gérer</p>}
           {extraTabs.map(({ id, label }) => (
-            <button key={id} onClick={() => setTab(id)}
+            <button key={id} onClick={() => handleTabClick(id)}
               className={`w-full text-left px-3 py-2.5 rounded-2xl text-sm font-medium transition flex items-center justify-between ${tab === id ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}>
               <span>{collapsed ? label[0] : label}</span>
               {!collapsed && (id === 'cal' || id === 'plan30') && !isPremium && (
@@ -1466,6 +1476,7 @@ export default function Home() {
   const [plan, setPlan] = useState('free');
   const [generationsLeft, setGenerationsLeft] = useState(null);
   const [loadingHooks, setLoadingHooks] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const [hooksState, setHooksState] = useState({ description: "", result: "", liked: [] });
   const [legendeState, setLegendeState] = useState({ description: "", result: "", saved: false });
@@ -1538,7 +1549,7 @@ export default function Home() {
   return (
     <div className="min-h-screen text-white flex" style={{ position: 'relative', zIndex: 1 }}>
       {/* Sidebar desktop */}
-      <Sidebar tab={tab} setTab={setTab} t={t} user={user} isPremium={isPremium} plan={plan} handleLogout={handleLogout} langue={langue} handleLangueChange={handleLangueChange} />
+      <Sidebar tab={tab} setTab={setTab} t={t} user={user} isPremium={isPremium} plan={plan} handleLogout={handleLogout} langue={langue} handleLangueChange={handleLangueChange} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       {/* Contenu principal */}
       <main className={`flex-1 transition-all duration-300 min-h-screen p-4 pb-32 md:pb-6 md:ml-52`}>
@@ -1546,24 +1557,10 @@ export default function Home() {
 
           {/* Header mobile */}
           <div className="flex md:hidden justify-between items-center mb-4">
-            <LangSelector langue={langue} onChange={handleLangueChange} />
-            {user ? (
-              <div className="flex items-center gap-2 flex-wrap justify-end">
-                {isPremium && (
-                  <span className={`text-xs bg-gradient-to-r ${plan === 'annuel' ? 'from-yellow-500 to-yellow-300' : plan === 'mensuel' ? 'from-gray-400 to-gray-300' : 'from-orange-700 to-orange-500'} text-white px-2 py-1 rounded-full font-bold`}>
-                    {plan === 'annuel' ? '🥇' : plan === 'mensuel' ? '🥈' : '🥉'}
-                  </span>
-                )}
-                {!isPremium && <a href="/pricing" className="text-xs border border-pink-500/50 text-pink-400 px-2 py-1 rounded-full">⭐</a>}
-                <a href="/compte" className="text-xs border border-gray-800 text-gray-400 px-2 py-1 rounded-full">👤</a>
-                <button onClick={handleLogout} className="text-xs border border-gray-800 text-gray-400 px-2 py-1 rounded-full">{t.logout}</button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <a href="/pricing" className="text-xs border border-pink-500/50 text-pink-400 px-2 py-1 rounded-full">⭐</a>
-                <a href="/auth" className="text-xs border border-gray-800 text-gray-400 px-2 py-1 rounded-full">{t.login}</a>
-              </div>
-            )}
+            <button onClick={() => setMobileOpen(true)} className="text-white text-2xl p-1">☰</button>
+            <img src="/logo.png" alt="HookGenerator" className="h-8 object-contain" />
+            <a href="/auth" className={`text-xs border border-gray-800 text-gray-400 px-2 py-1 rounded-full ${user ? 'hidden' : ''}`}>{t.login}</a>
+            {user && <span className="text-xs text-gray-500">{isPremium ? '⭐' : ''}</span>}
           </div>
 
           <div className="text-center mb-6">
@@ -1573,25 +1570,7 @@ export default function Home() {
               {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
             </div>
 
-            {/* Onglets mobile uniquement */}
-            <div className="md:hidden space-y-1">
-              <div className="grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-3xl">
-                {["hooks","legende","idees","analyse"].map((id, i) => (
-                  <button key={id} onClick={() => setTab(id)}
-                    className={`py-2 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
-                    {t.tabs[i]}
-                  </button>
-                ))}
-              </div>
-              <div className="grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-3xl">
-                {[["saved", t.savedTab], ["top", t.topTab], ["cal", t.calTab], ["plan30", t.plan30Tab]].map(([id, label]) => (
-                  <button key={id} onClick={() => setTab(id)}
-                    className={`py-2 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
+
           </div>
 
         {tab === "hooks" && (
