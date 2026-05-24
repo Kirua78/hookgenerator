@@ -435,6 +435,24 @@ const T = {
     topTab: "Top", topTitle: "Top Hooks", topWeek: "Cette semaine", topMonth: "Ce mois",
     topEmpty: "Pas encore de hooks cette période. Génère et like des hooks pour les voir apparaître !",
     calTab: "Calendrier",
+    plan30Tab: "30 Jours",
+    plan30Title: "Plan 30 jours",
+    plan30Sub: "30 hooks + 30 idées générés pour ta niche",
+    plan30Niche: "Ta niche (ex: fitness, finance...)",
+    plan30Generate: "Générer mon plan 30 jours",
+    plan30Generating: "Génération en cours... (30-60s)",
+    plan30Export: "📅 Exporter dans le calendrier",
+    plan30Exporting: "⏳ Export en cours...",
+    plan30Exported: "✅ Exporté dans le calendrier !",
+    plan30List: "Liste",
+    plan30Grid: "Grille",
+    plan30Day: "Jour",
+    plan30Hook: "Hook",
+    plan30Idea: "Idée",
+    plan30Tone: "Ton",
+    plan30Login: "Connecte-toi pour accéder au plan 30 jours",
+    plan30Premium: "Génère un plan de contenu complet pour 30 jours",
+    plan30GoPremium: "⭐ Passer Premium →",
     topLikes: "like",
     days: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
     months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
@@ -483,6 +501,24 @@ const T = {
     topTab: "Top", topTitle: "Top Hooks", topWeek: "This week", topMonth: "This month",
     topEmpty: "No hooks yet this period. Generate and like hooks to see them here!",
     calTab: "Calendar",
+    plan30Tab: "30 Days",
+    plan30Title: "30-day plan",
+    plan30Sub: "30 hooks + 30 ideas generated for your niche",
+    plan30Niche: "Your niche (e.g: fitness, finance...)",
+    plan30Generate: "Generate my 30-day plan",
+    plan30Generating: "Generating... (30-60s)",
+    plan30Export: "📅 Export to calendar",
+    plan30Exporting: "⏳ Exporting...",
+    plan30Exported: "✅ Exported to calendar!",
+    plan30List: "List",
+    plan30Grid: "Grid",
+    plan30Day: "Day",
+    plan30Hook: "Hook",
+    plan30Idea: "Idea",
+    plan30Tone: "Tone",
+    plan30Login: "Login to access the 30-day plan",
+    plan30Premium: "Generate a complete content plan for 30 days",
+    plan30GoPremium: "⭐ Go Premium →",
     topLikes: "like",
     days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -531,6 +567,24 @@ const T = {
     topTab: "Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mes",
     topEmpty: "Sin hooks aún este periodo. Genera y dale like a hooks para verlos aquí!",
     calTab: "Calendario",
+    plan30Tab: "30 Días",
+    plan30Title: "Plan 30 días",
+    plan30Sub: "30 hooks + 30 ideas generadas para tu nicho",
+    plan30Niche: "Tu nicho (ej: fitness, finanzas...)",
+    plan30Generate: "Generar mi plan 30 días",
+    plan30Generating: "Generando... (30-60s)",
+    plan30Export: "📅 Exportar al calendario",
+    plan30Exporting: "⏳ Exportando...",
+    plan30Exported: "✅ ¡Exportado al calendario!",
+    plan30List: "Lista",
+    plan30Grid: "Cuadrícula",
+    plan30Day: "Día",
+    plan30Hook: "Hook",
+    plan30Idea: "Idea",
+    plan30Tone: "Tono",
+    plan30Login: "Inicia sesión para acceder al plan 30 días",
+    plan30Premium: "Genera un plan de contenido completo para 30 días",
+    plan30GoPremium: "⭐ Ir a Premium →",
     topLikes: "like",
     days: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
     months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
@@ -579,6 +633,24 @@ const T = {
     topTab: "Top", topTitle: "Top Hooks", topWeek: "Esta semana", topMonth: "Este mês",
     topEmpty: "Sem hooks ainda neste período. Gere e curta hooks para vê-los aqui!",
     calTab: "Calendário",
+    plan30Tab: "30 Dias",
+    plan30Title: "Plano 30 dias",
+    plan30Sub: "30 hooks + 30 ideias geradas para o seu nicho",
+    plan30Niche: "Seu nicho (ex: fitness, finanças...)",
+    plan30Generate: "Gerar meu plano 30 dias",
+    plan30Generating: "Gerando... (30-60s)",
+    plan30Export: "📅 Exportar para o calendário",
+    plan30Exporting: "⏳ Exportando...",
+    plan30Exported: "✅ Exportado para o calendário!",
+    plan30List: "Lista",
+    plan30Grid: "Grade",
+    plan30Day: "Dia",
+    plan30Hook: "Hook",
+    plan30Idea: "Ideia",
+    plan30Tone: "Tom",
+    plan30Login: "Entre para acessar o plano 30 dias",
+    plan30Premium: "Gere um plano de conteúdo completo para 30 dias",
+    plan30GoPremium: "⭐ Ir para Premium →",
     topLikes: "like",
     days: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
     months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
@@ -1137,6 +1209,153 @@ function SavedTab({ user, t, isPremium, langue }) {
   );
 }
 
+
+function Plan30Tab({ user, isPremium, platform, langue, t }) {
+  const [niche, setNiche] = useState('');
+  const [days, setDays] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exported, setExported] = useState(false);
+  const [view, setView] = useState('list');
+  const [error, setError] = useState('');
+
+  const generate = async () => {
+    if (!niche) return;
+    setLoading(true); setDays([]); setError(''); setExported(false);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/api/plan30', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+        body: JSON.stringify({ niche, platform, langue }),
+      });
+      const data = await res.json();
+      if (data.error) { setError(data.error); }
+      else { setDays(data.days || []); }
+    } catch (e) { setError('Erreur de génération'); }
+    setLoading(false);
+  };
+
+  const exportToCalendar = async () => {
+    if (!days.length) return;
+    setExporting(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const today = new Date();
+      for (let i = 0; i < days.length; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        const dateStr = date.toISOString().split('T')[0];
+        await fetch('/api/calendar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+          body: JSON.stringify({ date: dateStr, type: 'hook', content: days[i].hook, platform, note: days[i].idea }),
+        });
+      }
+      setExported(true);
+    } catch (e) { setError('Erreur export'); }
+    setExporting(false);
+  };
+
+  if (!user) return (
+    <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+      <p className="text-4xl mb-4">📅</p>
+      <p className="text-white font-bold mb-2">{t.plan30Title}</p>
+      <p className="text-gray-400 text-sm mb-4">{t.plan30Login}</p>
+      <a href="/auth" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.login} →</a>
+    </div>
+  );
+
+  if (!isPremium) return (
+    <div className="border-2 border-gray-800 rounded-3xl p-8 text-center">
+      <p className="text-4xl mb-4">🗓️</p>
+      <p className="text-white font-bold mb-2">{t.plan30Title}</p>
+      <p className="text-gray-400 text-sm mb-4">{t.plan30Premium}</p>
+      <a href="/pricing" className="inline-block bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-2 px-6 rounded-full text-sm">{t.plan30GoPremium}</a>
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center">
+        <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-1">{t.plan30Title}</p>
+        <p className="text-gray-400 text-xs">{t.plan30Sub}</p>
+      </div>
+
+      {!days.length && (
+        <div className="space-y-4">
+          <div className="relative">
+            <textarea id="plan30-niche"
+              className="peer w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-24"
+              placeholder="niche" value={niche} onChange={e => setNiche(e.target.value)} />
+            <label htmlFor="plan30-niche" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">
+              {t.plan30Niche}
+            </label>
+          </div>
+          {error && <p className="text-pink-400 text-sm text-center">{error}</p>}
+          <button onClick={generate} disabled={loading || !niche}
+            className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">
+            {loading ? t.plan30Generating : t.plan30Generate}
+          </button>
+          {loading && <p className="text-gray-500 text-xs text-center">La génération de 30 jours peut prendre 30 à 60 secondes...</p>}
+        </div>
+      )}
+
+      {days.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div className="flex gap-1 bg-gray-900 p-1 rounded-2xl">
+              {[['list', t.plan30List], ['grid', t.plan30Grid]].map(([v, label]) => (
+                <button key={v} onClick={() => setView(v)}
+                  className={`px-4 py-1.5 rounded-2xl text-xs font-bold transition ${view === v ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white' : 'text-gray-400 hover:text-white'}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button onClick={exportToCalendar} disabled={exporting || exported}
+              className="text-xs border-2 border-pink-500/50 hover:border-pink-500 text-pink-400 px-3 py-1.5 rounded-full transition disabled:opacity-50">
+              {exported ? t.plan30Exported : exporting ? t.plan30Exporting : t.plan30Export}
+            </button>
+          </div>
+
+          <button onClick={() => { setDays([]); setNiche(''); setExported(false); }}
+            className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-2 rounded-3xl transition text-xs">
+            ← Recommencer
+          </button>
+
+          {view === 'list' && (
+            <div className="space-y-3">
+              {days.map((d, i) => (
+                <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-2xl p-4 transition">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-black text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full">{t.plan30Day} {d.day}</span>
+                    <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-full">{d.tone}</span>
+                  </div>
+                  <p className="text-white text-sm font-bold mb-1">🎣 {d.hook}</p>
+                  <p className="text-gray-400 text-xs">💡 {d.idea}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {view === 'grid' && (
+            <div className="grid grid-cols-2 gap-2">
+              {days.map((d, i) => (
+                <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-2xl p-3 transition">
+                  <span className="text-xs font-black text-pink-400">{t.plan30Day} {d.day}</span>
+                  <p className="text-white text-xs font-bold mt-1 line-clamp-2">{d.hook}</p>
+                  <p className="text-gray-500 text-xs mt-1 line-clamp-1">{d.idea}</p>
+                  <span className="text-xs text-gray-600">{d.tone}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Home() {
   const [tab, setTab] = useState("hooks");
   const [platform, setPlatform] = useState("TikTok");
@@ -1257,8 +1476,8 @@ export default function Home() {
                 </button>
               ))}
             </div>
-            <div className="grid grid-cols-3 gap-1 bg-gray-900 p-1 rounded-3xl">
-              {[["saved", t.savedTab], ["top", t.topTab], ["cal", t.calTab]].map(([id, label]) => (
+            <div className="grid grid-cols-4 gap-1 bg-gray-900 p-1 rounded-3xl">
+              {[["saved", t.savedTab], ["top", t.topTab], ["cal", t.calTab], ["plan30", t.plan30Tab]].map(([id, label]) => (
                 <button key={id} onClick={() => setTab(id)}
                   className={`py-2.5 rounded-3xl text-xs font-bold transition ${tab === id ? "bg-gradient-to-r from-pink-500 to-violet-500 text-white" : "text-gray-400 hover:text-white"}`}>
                   {label}
@@ -1317,6 +1536,7 @@ export default function Home() {
         {tab === "saved" && <SavedTab user={user} t={t} isPremium={isPremium} langue={langue} />}
         {tab === "top" && <TopHooksTab t={t} />}
         {tab === "cal" && <CalendarTab user={user} isPremium={isPremium} savedHooks={[]} savedIdees={[]} savedLegendees={[]} t={t} />}
+        {tab === "plan30" && <Plan30Tab user={user} isPremium={isPremium} platform={platform} langue={langue} t={t} />}
       </div>
 
       <div className="text-center py-6 space-x-4 text-xs text-gray-600 max-w-2xl mx-auto">
