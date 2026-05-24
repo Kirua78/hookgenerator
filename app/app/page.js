@@ -1616,8 +1616,23 @@ function ChallengeTab({ platform, langue, t }) {
 
 function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, handleLangueChange, mobileOpen, setMobileOpen }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [visited, setVisited] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('hg_visited_tabs') || '[]'); } catch { return []; }
+  });
 
-  const handleTabClick = (id) => { setTab(id); setMobileOpen(false); };
+  const NEW_TABS = ['cal', 'plan30', 'bio', 'challenge'];
+
+  const handleTabClick = (id) => {
+    if (!visited.includes(id)) {
+      const updated = [...visited, id];
+      setVisited(updated);
+      localStorage.setItem('hg_visited_tabs', JSON.stringify(updated));
+    }
+    setTab(id);
+    setMobileOpen(false);
+  };
+
+  const isNew = (id) => NEW_TABS.includes(id) && !visited.includes(id);
 
   const mainTabs = [
     { id: 'hooks', label: t.tabs[0] },
@@ -1684,8 +1699,11 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
             <button key={id} onClick={() => handleTabClick(id)}
               className={`w-full text-left px-3 py-2.5 rounded-2xl text-sm font-medium transition flex items-center justify-between ${tab === id ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}>
               <span>{collapsed ? label[0] : label}</span>
-              {!collapsed && (id === 'cal' || id === 'plan30') && !isPremium && (
-                <span className="text-xs bg-violet-500/20 text-violet-400 px-1.5 py-0.5 rounded-full">⭐</span>
+              {!collapsed && (
+                <span className="flex items-center gap-1">
+                  {isNew(id) && <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold animate-pulse">New</span>}
+                  {(id === 'cal' || id === 'plan30') && !isPremium && <span className="text-xs bg-violet-500/20 text-violet-400 px-1.5 py-0.5 rounded-full">⭐</span>}
+                </span>
               )}
             </button>
           ))}
