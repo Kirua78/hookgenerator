@@ -453,6 +453,24 @@ const T = {
     plan30Login: "Connecte-toi pour accéder au plan 30 jours",
     plan30Premium: "Génère un plan de contenu complet pour 30 jours",
     plan30GoPremium: "⭐ Passer Premium →",
+    bioTab: "Bio",
+    bioTitle: "Générateur de bio",
+    bioNiche: "Ta niche (ex: fitness, finance...)",
+    bioGenerate: "Générer mes bios",
+    bioGenerating: "Génération en cours...",
+    bioCopy: "📋 Copier",
+    bioCopied: "✅ Copié !",
+    challengeTab: "Challenge",
+    challengeTitle: "Générateur de challenge viral",
+    challengeNiche: "Ta niche (ex: fitness, finance...)",
+    challengeGenerate: "Générer mon challenge",
+    challengeGenerating: "Génération en cours...",
+    challengeName: "Nom du challenge",
+    challengeHashtag: "Hashtag",
+    challengeHook: "Hook d'invitation",
+    challengeRules: "Règles",
+    challengeInvitation: "Message d'invitation",
+    challengeWhy: "Pourquoi ça va cartonner",
     topLikes: "like",
     days: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
     months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
@@ -519,6 +537,24 @@ const T = {
     plan30Login: "Login to access the 30-day plan",
     plan30Premium: "Generate a complete content plan for 30 days",
     plan30GoPremium: "⭐ Go Premium →",
+    bioTab: "Bio",
+    bioTitle: "Bio generator",
+    bioNiche: "Your niche (e.g: fitness, finance...)",
+    bioGenerate: "Generate my bios",
+    bioGenerating: "Generating...",
+    bioCopy: "📋 Copy",
+    bioCopied: "✅ Copied!",
+    challengeTab: "Challenge",
+    challengeTitle: "Viral challenge generator",
+    challengeNiche: "Your niche (e.g: fitness, finance...)",
+    challengeGenerate: "Generate my challenge",
+    challengeGenerating: "Generating...",
+    challengeName: "Challenge name",
+    challengeHashtag: "Hashtag",
+    challengeHook: "Invitation hook",
+    challengeRules: "Rules",
+    challengeInvitation: "Invitation message",
+    challengeWhy: "Why it will go viral",
     topLikes: "like",
     days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -585,6 +621,42 @@ const T = {
     plan30Login: "Inicia sesión para acceder al plan 30 días",
     plan30Premium: "Genera un plan de contenido completo para 30 días",
     plan30GoPremium: "⭐ Ir a Premium →",
+    bioTab: "Bio",
+    bioTitle: "Générateur de bio",
+    bioNiche: "Ta niche (ex: fitness, finance...)",
+    bioGenerate: "Générer mes bios",
+    bioGenerating: "Génération en cours...",
+    bioCopy: "📋 Copier",
+    bioCopied: "✅ Copié !",
+    challengeTab: "Challenge",
+    challengeTitle: "Générateur de challenge viral",
+    challengeNiche: "Ta niche (ex: fitness, finance...)",
+    challengeGenerate: "Générer mon challenge",
+    challengeGenerating: "Génération en cours...",
+    challengeName: "Nom du challenge",
+    challengeHashtag: "Hashtag",
+    challengeHook: "Hook d'invitation",
+    challengeRules: "Règles",
+    challengeInvitation: "Message d'invitation",
+    challengeWhy: "Pourquoi ça va cartonner",
+    bioTab: "Bio",
+    bioTitle: "Generador de bio",
+    bioNiche: "Tu nicho (ej: fitness, finanzas...)",
+    bioGenerate: "Generar mis bios",
+    bioGenerating: "Generando...",
+    bioCopy: "📋 Copiar",
+    bioCopied: "✅ Copiado!",
+    challengeTab: "Challenge",
+    challengeTitle: "Generador de challenge viral",
+    challengeNiche: "Tu nicho (ej: fitness, finanzas...)",
+    challengeGenerate: "Generar mi challenge",
+    challengeGenerating: "Generando...",
+    challengeName: "Nombre del challenge",
+    challengeHashtag: "Hashtag",
+    challengeHook: "Hook de invitación",
+    challengeRules: "Reglas",
+    challengeInvitation: "Mensaje de invitación",
+    challengeWhy: "Por qué va a ser viral",
     topLikes: "like",
     days: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
     months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
@@ -651,6 +723,24 @@ const T = {
     plan30Login: "Entre para acessar o plano 30 dias",
     plan30Premium: "Gere um plano de conteúdo completo para 30 dias",
     plan30GoPremium: "⭐ Ir para Premium →",
+    bioTab: "Bio",
+    bioTitle: "Gerador de bio",
+    bioNiche: "Seu nicho (ex: fitness, finanças...)",
+    bioGenerate: "Gerar minhas bios",
+    bioGenerating: "Gerando...",
+    bioCopy: "📋 Copiar",
+    bioCopied: "✅ Copiado!",
+    challengeTab: "Challenge",
+    challengeTitle: "Gerador de challenge viral",
+    challengeNiche: "Seu nicho (ex: fitness, finanças...)",
+    challengeGenerate: "Gerar meu challenge",
+    challengeGenerating: "Gerando...",
+    challengeName: "Nome do challenge",
+    challengeHashtag: "Hashtag",
+    challengeHook: "Hook de convite",
+    challengeRules: "Regras",
+    challengeInvitation: "Mensagem de convite",
+    challengeWhy: "Por que vai viralizar",
     topLikes: "like",
     days: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
     months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
@@ -1357,6 +1447,173 @@ function Plan30Tab({ user, isPremium, platform, langue, t }) {
 }
 
 
+
+function BioTab({ platform, langue, t }) {
+  const [niche, setNiche] = useState('');
+  const [bios, setBios] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(null);
+  const [error, setError] = useState('');
+
+  const generate = async () => {
+    if (!niche) return;
+    setLoading(true); setBios([]); setError('');
+    try {
+      const res = await fetch('/api/bio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ niche, platform, langue }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else setBios(data.bios || []);
+    } catch (e) { setError('Erreur de génération'); }
+    setLoading(false);
+  };
+
+  const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center">
+        <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-1">{t.bioTitle}</p>
+      </div>
+      {!bios.length && (
+        <div className="space-y-4">
+          <div className="relative">
+            <textarea id="bio-niche"
+              className="peer w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-24"
+              placeholder="niche" value={niche} onChange={e => setNiche(e.target.value)} />
+            <label htmlFor="bio-niche" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">{t.bioNiche}</label>
+          </div>
+          {error && <p className="text-pink-400 text-sm text-center">{error}</p>}
+          <button onClick={generate} disabled={loading || !niche}
+            className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">
+            {loading ? t.bioGenerating : t.bioGenerate}
+          </button>
+        </div>
+      )}
+      {bios.length > 0 && (
+        <div className="space-y-3">
+          {bios.map((b, i) => (
+            <div key={i} className="border-2 border-gray-800 hover:border-pink-500/50 rounded-2xl p-4 transition">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-black text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full">{b.style}</span>
+                <button onClick={() => copy(b.bio + '\n' + b.cta, i)} className="text-xs text-gray-500 hover:text-pink-400 transition">
+                  {copied === i ? t.bioCopied : t.bioCopy}
+                </button>
+              </div>
+              <p className="text-white text-sm font-medium mb-2">{b.bio}</p>
+              <p className="text-pink-400 text-xs">{b.cta}</p>
+            </div>
+          ))}
+          <button onClick={() => { setBios([]); setNiche(''); }}
+            className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-2 rounded-3xl transition text-xs">
+            ← Recommencer
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ChallengeTab({ platform, langue, t }) {
+  const [niche, setNiche] = useState('');
+  const [challenge, setChallenge] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(null);
+  const [error, setError] = useState('');
+
+  const generate = async () => {
+    if (!niche) return;
+    setLoading(true); setChallenge(null); setError('');
+    try {
+      const res = await fetch('/api/challenge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ niche, platform, langue }),
+      });
+      const data = await res.json();
+      if (data.error) setError(data.error);
+      else setChallenge(data);
+    } catch (e) { setError('Erreur de génération'); }
+    setLoading(false);
+  };
+
+  const copy = (text, id) => { navigator.clipboard.writeText(text); setCopied(id); setTimeout(() => setCopied(null), 2000); };
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center">
+        <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-1">{t.challengeTitle}</p>
+      </div>
+      {!challenge && (
+        <div className="space-y-4">
+          <div className="relative">
+            <textarea id="challenge-niche"
+              className="peer w-full bg-transparent border-2 border-gray-800 rounded-3xl px-5 pt-7 pb-3 text-white placeholder-transparent focus:outline-none focus:border-pink-500 transition resize-none h-24"
+              placeholder="niche" value={niche} onChange={e => setNiche(e.target.value)} />
+            <label htmlFor="challenge-niche" className="absolute left-5 top-2 text-xs font-black tracking-widest uppercase text-pink-400 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-xs peer-focus:font-black peer-focus:tracking-widest peer-focus:uppercase peer-focus:text-pink-400 transition-all pointer-events-none">{t.challengeNiche}</label>
+          </div>
+          {error && <p className="text-pink-400 text-sm text-center">{error}</p>}
+          <button onClick={generate} disabled={loading || !niche}
+            className="w-full bg-gradient-to-r from-pink-500 to-violet-500 text-white font-bold py-4 rounded-3xl hover:opacity-90 disabled:opacity-50 transition text-lg">
+            {loading ? t.challengeGenerating : t.challengeGenerate}
+          </button>
+        </div>
+      )}
+      {challenge && (
+        <div className="space-y-3">
+          <div className="border-2 border-pink-500/30 bg-pink-500/5 rounded-2xl p-4">
+            <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-1">{t.challengeName}</p>
+            <p className="text-white text-lg font-black">{challenge.name}</p>
+          </div>
+          <div className="border-2 border-violet-500/30 bg-violet-500/5 rounded-2xl p-4 flex justify-between items-center">
+            <div>
+              <p className="text-xs font-black tracking-widest uppercase text-violet-400 mb-1">{t.challengeHashtag}</p>
+              <p className="text-white font-bold">{challenge.hashtag}</p>
+            </div>
+            <button onClick={() => copy(challenge.hashtag, 'hashtag')} className="text-xs text-gray-500 hover:text-violet-400 transition">
+              {copied === 'hashtag' ? '✅' : '📋'}
+            </button>
+          </div>
+          <div className="border-2 border-gray-800 rounded-2xl p-4">
+            <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{t.challengeHook}</p>
+            <p className="text-white text-sm font-bold">{challenge.hook}</p>
+          </div>
+          {challenge.rules && (
+            <div className="border-2 border-gray-800 rounded-2xl p-4">
+              <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{t.challengeRules}</p>
+              <ul className="space-y-1">
+                {challenge.rules.map((r, i) => (
+                  <li key={i} className="text-white text-sm flex gap-2"><span className="text-pink-400">{i+1}.</span>{r}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="border-2 border-gray-800 rounded-2xl p-4 flex justify-between items-start gap-2">
+            <div className="flex-1">
+              <p className="text-xs font-black tracking-widest uppercase text-pink-400 mb-2">{t.challengeInvitation}</p>
+              <p className="text-white text-sm">{challenge.invitation}</p>
+            </div>
+            <button onClick={() => copy(challenge.invitation, 'inv')} className="text-xs text-gray-500 hover:text-pink-400 transition shrink-0">
+              {copied === 'inv' ? '✅' : '📋'}
+            </button>
+          </div>
+          <div className="border-2 border-green-500/30 bg-green-500/5 rounded-2xl p-4">
+            <p className="text-xs font-black tracking-widest uppercase text-green-400 mb-2">{t.challengeWhy}</p>
+            <p className="text-white text-sm">{challenge.why}</p>
+          </div>
+          <button onClick={() => { setChallenge(null); setNiche(''); }}
+            className="w-full border-2 border-gray-800 hover:border-pink-500 text-gray-400 hover:text-pink-400 py-2 rounded-3xl transition text-xs">
+            ← Recommencer
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, handleLangueChange, mobileOpen, setMobileOpen }) {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -1374,6 +1631,8 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
     { id: 'top', label: t.topTab },
     { id: 'cal', label: t.calTab },
     { id: 'plan30', label: t.plan30Tab },
+    { id: 'bio', label: t.bioTab },
+    { id: 'challenge', label: t.challengeTab },
   ];
 
   return (
@@ -1624,6 +1883,8 @@ export default function Home() {
         {tab === "top" && <TopHooksTab t={t} />}
         {tab === "cal" && <CalendarTab user={user} isPremium={isPremium} savedHooks={[]} savedIdees={[]} savedLegendees={[]} t={t} />}
         {tab === "plan30" && <Plan30Tab user={user} isPremium={isPremium} platform={platform} langue={langue} t={t} />}
+        {tab === "bio" && <BioTab platform={platform} langue={langue} t={t} />}
+        {tab === "challenge" && <ChallengeTab platform={platform} langue={langue} t={t} />}
       </div>
 
       <div className="text-center py-6 space-x-4 text-xs text-gray-600 max-w-2xl mx-auto">
