@@ -1462,6 +1462,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
         )}
       </div>
     </div>
+    </>
   );
 }
 
