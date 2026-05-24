@@ -1669,7 +1669,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
       )}
 
       {/* Navigation principale */}
-      <nav className={`flex-1 p-2 space-y-1 mt-2 overflow-y-auto ${collapsed ? "hidden" : ""}`}>
+      <nav className={`flex-1 p-2 space-y-1 mt-2 overflow-y-auto scrollbar-hide ${collapsed ? "hidden" : ""}`}>
         {!collapsed && <p className="text-xs font-black tracking-widest uppercase text-gray-600 px-2 mb-1">Créer</p>}
         {mainTabs.map(({ id, label }) => (
           <button key={id} onClick={() => handleTabClick(id)}
