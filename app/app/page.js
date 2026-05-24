@@ -1375,13 +1375,13 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
   ];
 
   return (
-    <div className={`hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-gray-950 border-r border-gray-800 transition-all duration-300 ${collapsed ? 'w-14' : 'w-52'}`}>
+    <div className={`hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-black/80 backdrop-blur-md border-r border-gray-800/50 transition-all duration-300 ${collapsed ? 'w-14' : 'w-52'}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-800">
         {!collapsed && <img src="/logo.png" alt="HookGenerator" className="h-8 object-contain" />}
         <button onClick={() => setCollapsed(c => !c)}
           className="text-gray-500 hover:text-white transition text-lg ml-auto">
-          {collapsed ? '→' : '←'}
+          {collapsed ? '☰' : '✕'}
         </button>
       </div>
 
@@ -1541,8 +1541,8 @@ export default function Home() {
       <Sidebar tab={tab} setTab={setTab} t={t} user={user} isPremium={isPremium} plan={plan} handleLogout={handleLogout} langue={langue} handleLangueChange={handleLangueChange} />
 
       {/* Contenu principal */}
-      <main className="flex-1 md:ml-52 min-h-screen bg-black/60 p-4 pb-32 md:pb-6 transition-all duration-300">
-        <div className="max-w-2xl mx-auto">
+      <main className="flex-1 md:ml-52 min-h-screen bg-black/40 p-4 pb-32 md:pb-6 transition-all duration-300">
+        <div className="max-w-3xl mx-auto">
 
           {/* Header mobile */}
           <div className="flex md:hidden justify-between items-center mb-4">
