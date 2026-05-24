@@ -1777,7 +1777,7 @@ export default function Home() {
     setAnalyseState({ hook: "", result: "" });
   };
 
-  const handleLogout = async () => { await supabase.auth.signOut(); setUser(null); setIsPremium(false); };
+  const handleLogout = async () => { await supabase.auth.signOut(); setUser(null); setIsPremium(false); window.location.href = "/"; };
   const canGenerate = isPremium || generationsLeft === null || generationsLeft > 0;
 
   const generateHooks = async () => {
