@@ -1375,7 +1375,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
   ];
 
   return (
-    <div className={`hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-black/80 backdrop-blur-md border-r border-gray-800/50 transition-all duration-300 ${collapsed ? 'w-14' : 'w-52'}`}>
+    <div className={`hidden md:flex flex-col fixed left-0 top-0 h-full z-40 bg-black/80 backdrop-blur-md border-r border-gray-800/50 transition-all duration-300 ${collapsed ? 'w-10' : 'w-52'}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-800">
         {!collapsed && <img src="/logo.png" alt="HookGenerator" className="h-8 object-contain" />}
@@ -1400,7 +1400,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
       )}
 
       {/* Navigation principale */}
-      <nav className="flex-1 p-2 space-y-1 mt-2">
+      <nav className={`flex-1 p-2 space-y-1 mt-2 ${collapsed ? "hidden" : ""}`}>
         {!collapsed && <p className="text-xs font-black tracking-widest uppercase text-gray-600 px-2 mb-1">Créer</p>}
         {mainTabs.map(({ id, label }) => (
           <button key={id} onClick={() => setTab(id)}
@@ -1424,7 +1424,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
       </nav>
 
       {/* Footer user */}
-      <div className="p-2 border-t border-gray-800 space-y-1">
+      <div className={`p-2 border-t border-gray-800 space-y-1 ${collapsed ? "hidden" : ""}`}>
         {!isPremium && !collapsed && (
           <a href="/pricing" className="block w-full text-center text-xs border border-pink-500/50 text-pink-400 py-2 rounded-2xl hover:border-pink-500 transition">
             ⭐ Premium
@@ -1536,12 +1536,12 @@ export default function Home() {
   
 
   return (
-    <div className="min-h-screen bg-black/0 text-white flex" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="min-h-screen text-white flex" style={{ position: 'relative', zIndex: 1 }}>
       {/* Sidebar desktop */}
       <Sidebar tab={tab} setTab={setTab} t={t} user={user} isPremium={isPremium} plan={plan} handleLogout={handleLogout} langue={langue} handleLangueChange={handleLangueChange} />
 
       {/* Contenu principal */}
-      <main className="flex-1 md:ml-52 min-h-screen bg-black/40 p-4 pb-32 md:pb-6 transition-all duration-300">
+      <main className={`flex-1 transition-all duration-300 min-h-screen p-4 pb-32 md:pb-6 md:ml-52`}>
         <div className="max-w-3xl mx-auto">
 
           {/* Header mobile */}
