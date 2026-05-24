@@ -1724,6 +1724,9 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
         )}
         {user && (
           <>
+            <a href="/referral" className="block w-full text-center text-xs font-bold py-2 px-3 rounded-2xl bg-gradient-to-r from-pink-500/20 to-violet-500/20 border border-pink-500/40 text-pink-400 hover:from-pink-500/30 hover:to-violet-500/30 hover:border-pink-500 transition mb-1">
+              {collapsed ? '🎁' : '🎁 Parrainer → 1 mois offert'}
+            </a>
             <a href="/compte" className="block w-full text-left px-3 py-2 rounded-2xl text-xs text-gray-400 hover:text-white hover:bg-gray-800 transition">
               {collapsed ? '👤' : `👤 ${t.monCompteLabel || t.compte || 'Mon compte'}`}
             </a>
