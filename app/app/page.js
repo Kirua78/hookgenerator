@@ -1413,7 +1413,7 @@ function Sidebar({ tab, setTab, t, user, isPremium, plan, handleLogout, langue, 
       <nav className={`flex-1 p-2 space-y-1 mt-2 ${collapsed ? "hidden" : ""}`}>
         {!collapsed && <p className="text-xs font-black tracking-widest uppercase text-gray-600 px-2 mb-1">Créer</p>}
         {mainTabs.map(({ id, label }) => (
-          <button key={id} onClick={() => setTab(id)}
+          <button key={id} onClick={() => handleTabClick(id)}
             className={`w-full text-left px-3 py-2.5 rounded-2xl text-sm font-medium transition ${tab === id ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}>
             {collapsed ? label[0] : label}
           </button>
