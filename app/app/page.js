@@ -1856,9 +1856,23 @@ export default function Home() {
               </div>
             )}
 
-            <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
+            <div className={`text-xs mb-2 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
               {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
             </div>
+
+            {/* Titre de l'onglet actif */}
+            <p className="text-white font-black text-2xl mb-4">
+              {tab === "hooks" && t.tabs[0]}
+              {tab === "legende" && t.tabs[1]}
+              {tab === "idees" && t.tabs[2]}
+              {tab === "analyse" && t.tabs[3]}
+              {tab === "saved" && t.savedTab}
+              {tab === "top" && t.topTab}
+              {tab === "cal" && t.calTab}
+              {tab === "plan30" && t.plan30Tab}
+              {tab === "bio" && t.bioTab}
+              {tab === "challenge" && t.challengeTab}
+            </p>
           </div>
 
         {tab === "hooks" && (
