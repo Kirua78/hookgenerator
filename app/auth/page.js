@@ -15,6 +15,12 @@ export default function Auth() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingFacebook, setLoadingFacebook] = useState(false);
   const [message, setMessage] = useState('');
+  const [refCode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('ref') || '';
+    }
+    return '';
+  });
 
   const handleGoogle = async () => {
     setLoadingGoogle(true);
@@ -51,6 +57,9 @@ export default function Auth() {
         if (data?.user) {
           await supabase.from('user_profiles').upsert({ id: data.user.id, is_premium: false, plan: 'free' });
           await fetch('/api/send-welcome', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, prenom }) });
+          if (refCode) {
+            await fetch('/api/referral', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ newUserId: data.user.id, referralCode: refCode }) });
+          }
         }
         setMessage('Vérifie ton email pour confirmer ton compte !');
       }
