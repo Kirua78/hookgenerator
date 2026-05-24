@@ -1861,7 +1861,7 @@ export default function Home() {
             </div>
 
             {/* Titre de l'onglet actif */}
-            <p className="text-white font-black text-2xl mb-4">
+            <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500 font-black text-2xl mb-4">
               {tab === "hooks" && t.tabs[0]}
               {tab === "legende" && t.tabs[1]}
               {tab === "idees" && t.tabs[2]}
