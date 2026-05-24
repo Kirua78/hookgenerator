@@ -1826,11 +1826,21 @@ export default function Home() {
           <div className="text-center mb-6">
             <img src="/logo.png" alt="HookGenerator" className="h-20 mx-auto mb-2 object-contain md:hidden" />
             <p className="text-gray-400 mb-3 md:mt-4">{t.subtitle}</p>
+
+            {/* Badge Pro Creator — visible desktop et mobile */}
+            {isPremium && (
+              <div className="flex justify-center mb-3">
+                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm bg-gradient-to-r ${plan === 'annuel' ? 'from-yellow-500 to-yellow-300' : plan === 'mensuel' ? 'from-gray-400 to-gray-300' : 'from-orange-700 to-orange-500'} text-white shadow-lg`}>
+                  <span>{plan === 'annuel' ? '🥇' : plan === 'mensuel' ? '🥈' : '🥉'}</span>
+                  <span>Pro Creator</span>
+                  <span className="text-xs opacity-80">· {plan === 'annuel' ? 'Annuel' : plan === 'mensuel' ? 'Mensuel' : plan}</span>
+                </div>
+              </div>
+            )}
+
             <div className={`text-xs mb-4 font-medium ${!isPremium && generationsLeft <= 1 ? "text-red-400" : "text-gray-500"}`}>
               {isPremium ? t.unlimited : (canGenerate && generationsLeft !== null ? `${generationsLeft} ${user ? t.limitConnected : t.limitFree}` : "")}
             </div>
-
-
           </div>
 
         {tab === "hooks" && (
